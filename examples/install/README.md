@@ -7,8 +7,8 @@ credentials while running host dependency setup and skipping agent setup.
 ## Setup
 
 ```bash
-# should require operator-provisioned SMUTLORD environment values
-for name in SMUTLORD_EMAIL SMUTLORD_GH_TOKEN SMUTLORD_SSH_KEY SMUTLORD_MEMORY_BINDER SMUTLORD_GOG_CREDENTIALS_JSON SMUTLORD_GOG_TOKEN_JSON SMUTLORD_GOG_KEYRING_PASSWORD; do
+# should require operator-provisioned environment values
+for name in EMAIL GH_TOKEN SSH_KEY MEMORY_BINDER GOG_CREDENTIALS_JSON GOG_TOKEN_JSON GOG_KEYRING_PASSWORD; do
   test -n "${!name:-}"
 done
 

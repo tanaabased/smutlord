@@ -32,17 +32,17 @@ jobs:
 
   hosted-integrations:
     name: Hosted integration (${{ matrix.example }})
-    if: vars.SMUTLORD_HOSTED_EXAMPLES_ENABLED == 'true'
+    if: vars.HOSTED_EXAMPLES_ENABLED == 'true'
     runs-on: macos-26
     env:
       HOMEBREW_NO_AUTO_UPDATE: '1'
-      SMUTLORD_EMAIL: ${{ vars.SMUTLORD_EMAIL }}
-      SMUTLORD_GH_TOKEN: ${{ secrets.SMUTLORD_GH_TOKEN }}
-      SMUTLORD_SSH_KEY: ${{ secrets.SMUTLORD_SSH_KEY }}
-      SMUTLORD_MEMORY_BINDER: ${{ secrets.SMUTLORD_MEMORY_BINDER }}
-      SMUTLORD_GOG_CREDENTIALS_JSON: ${{ secrets.SMUTLORD_GOG_CREDENTIALS_JSON }}
-      SMUTLORD_GOG_TOKEN_JSON: ${{ secrets.SMUTLORD_GOG_TOKEN_JSON }}
-      SMUTLORD_GOG_KEYRING_PASSWORD: ${{ secrets.SMUTLORD_GOG_KEYRING_PASSWORD }}
+      EMAIL: ${{ vars.EMAIL }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      SSH_KEY: ${{ secrets.SSH_KEY }}
+      MEMORY_BINDER: ${{ secrets.MEMORY_BINDER }}
+      GOG_CREDENTIALS_JSON: ${{ secrets.GOG_CREDENTIALS_JSON }}
+      GOG_TOKEN_JSON: ${{ secrets.GOG_TOKEN_JSON }}
+      GOG_KEYRING_PASSWORD: ${{ secrets.GOG_KEYRING_PASSWORD }}
     strategy:
       fail-fast: false
       matrix:

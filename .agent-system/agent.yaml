@@ -4,7 +4,7 @@ agent:
   id: smutlord
   name: SMUTLORD
   email:
-    from-environment: SMUTLORD_EMAIL
+    from-environment: EMAIL
   description: Tanaab agent workspace; persona pending.
   emoji: 🛠️
 
@@ -26,7 +26,7 @@ memory:
   search:
     provider: openai
     model: text-embedding-3-small
-    api-key: SMUTLORD_MEMORY_BINDER
+    api-key: MEMORY_BINDER
 
 backup:
   output: .agent-system/backups
@@ -40,19 +40,19 @@ backup:
 environment:
   # No credential source is inherited from EMORI. Provision these for @smutlord.
   required:
-    - SMUTLORD_EMAIL
-    - SMUTLORD_GH_TOKEN
-    - SMUTLORD_SSH_KEY
-    - SMUTLORD_MEMORY_BINDER
-    - SMUTLORD_GOG_CREDENTIALS_JSON
-    - SMUTLORD_GOG_TOKEN_JSON
-    - SMUTLORD_GOG_KEYRING_PASSWORD
+    - EMAIL
+    - GH_TOKEN
+    - SSH_KEY
+    - MEMORY_BINDER
+    - GOG_CREDENTIALS_JSON
+    - GOG_TOKEN_JSON
+    - GOG_KEYRING_PASSWORD
 
 google:
   credential-encoding: base64
-  oauth-client: SMUTLORD_GOG_CREDENTIALS_JSON
-  oauth-token: SMUTLORD_GOG_TOKEN_JSON
-  keyring-password: SMUTLORD_GOG_KEYRING_PASSWORD
+  oauth-client: GOG_CREDENTIALS_JSON
+  oauth-token: GOG_TOKEN_JSON
+  keyring-password: GOG_KEYRING_PASSWORD
 
 git:
   worktrees:
@@ -63,9 +63,9 @@ git:
         openclaw-agent-system: ~/tanaab/openclaw-agent-system
   ssh:
     private-keys:
-      from-environment: SMUTLORD_SSH_KEY
+      from-environment: SSH_KEY
   signing:
-    key: SMUTLORD_SSH_KEY
+    key: SSH_KEY
     allowed-signers-file: .agent-system/allowed_signers
   policy:
     delete-remote-ref: deny
@@ -74,7 +74,7 @@ git:
 github:
   host: github.com
   username: smutlord
-  token: SMUTLORD_GH_TOKEN
+  token: GH_TOKEN
   config:
     git-protocol: ssh
     spinner: disabled

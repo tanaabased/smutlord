@@ -12,15 +12,23 @@ const allowedSigners = readFileSync(
 );
 
 describe('agent identity isolation', () => {
-  it('requires smutlord-specific environment values without a copied credential source', () => {
+  it('requires operator environment values without a copied credential source', () => {
     assert.equal(manifest.agent.id, 'smutlord');
-    assert.equal(manifest.agent.email['from-environment'], 'SMUTLORD_EMAIL');
+    assert.equal(manifest.agent.email['from-environment'], 'EMAIL');
     assert.equal(manifest.github.username, 'smutlord');
-    assert.equal(manifest.github.token, 'SMUTLORD_GH_TOKEN');
-    assert.equal(manifest.git.ssh['private-keys']['from-environment'], 'SMUTLORD_SSH_KEY');
-    assert.equal(manifest.git.signing.key, 'SMUTLORD_SSH_KEY');
-    assert.equal(manifest.memory.search['api-key'], 'SMUTLORD_MEMORY_BINDER');
-    assert.ok(manifest.environment.required.every((name) => name.startsWith('SMUTLORD_')));
+    assert.equal(manifest.github.token, 'GH_TOKEN');
+    assert.equal(manifest.git.ssh['private-keys']['from-environment'], 'SSH_KEY');
+    assert.equal(manifest.git.signing.key, 'SSH_KEY');
+    assert.equal(manifest.memory.search['api-key'], 'MEMORY_BINDER');
+    assert.deepEqual(manifest.environment.required, [
+      'EMAIL',
+      'GH_TOKEN',
+      'SSH_KEY',
+      'MEMORY_BINDER',
+      'GOG_CREDENTIALS_JSON',
+      'GOG_TOKEN_JSON',
+      'GOG_KEYRING_PASSWORD',
+    ]);
     assert.equal(manifest.environment.op, undefined);
     assert.equal(manifest.environment.set, undefined);
     assert.equal(manifest.github['ssh-keys'], undefined);

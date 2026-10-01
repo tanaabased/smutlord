@@ -41,7 +41,7 @@ The [workspace example](./examples/workspace/README.md) is credential-free but
 requires an isolated OpenClaw profile. The copied install, setup, and backup
 examples are **hosted integration scenarios** requiring separately provisioned
 credentials; their CI job is disabled until the operator provisions its
-`SMUTLORD_*` values and enables `SMUTLORD_HOSTED_EXAMPLES_ENABLED`. Local
+unprefixed environment values and enables `HOSTED_EXAMPLES_ENABLED`. Local
 unit and skill checks do not need live credentials.
 
 [`smutlord-skill-author`](./skills/skill-author/SKILL.md) owns local skill

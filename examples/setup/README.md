@@ -6,8 +6,8 @@ OpenClaw profile and runs every declared setup step.
 ## Setup
 
 ```bash
-# should require operator-provisioned SMUTLORD environment values
-for name in SMUTLORD_EMAIL SMUTLORD_GH_TOKEN SMUTLORD_SSH_KEY SMUTLORD_MEMORY_BINDER SMUTLORD_GOG_CREDENTIALS_JSON SMUTLORD_GOG_TOKEN_JSON SMUTLORD_GOG_KEYRING_PASSWORD; do
+# should require operator-provisioned environment values
+for name in EMAIL GH_TOKEN SSH_KEY MEMORY_BINDER GOG_CREDENTIALS_JSON GOG_TOKEN_JSON GOG_KEYRING_PASSWORD; do
   test -n "${!name:-}"
 done
 
@@ -43,7 +43,7 @@ gog --version
 test -d "$HOME/tanaab/canon/.git"
 cd "$HOME/tanaab/canon"
 openclaw agent-system tool git --agent smutlord -- remote get-url origin | grep -Fx 'git@github.com:tanaabased/canon.git'
-openclaw agent-system tool git --agent smutlord -- var GIT_AUTHOR_IDENT | grep -F "SMUTLORD <$SMUTLORD_EMAIL>"
+openclaw agent-system tool git --agent smutlord -- var GIT_AUTHOR_IDENT | grep -F "SMUTLORD <$EMAIL>"
 cd "$GITHUB_WORKSPACE"
 test ! -e "$HOME/tanaab/openclaw-agent-system"
 
