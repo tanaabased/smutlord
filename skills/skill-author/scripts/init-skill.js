@@ -17,7 +17,7 @@ function usage(code = 0) {
   console.log(
     renderCliHelp({
       usage: `Usage: ${bold('init-skill.js')} ${dim('--type <type> --slug <slug> --display-name <name> --description <text> --emoji <emoji> [options]')}`,
-      summary: 'Initialize an SMUTLORD-local skill from the templates owned by this workspace.',
+      summary: 'Initialize a smutlord-local skill from the templates owned by this workspace.',
       options: [
         `  --type <type>           skill type such as ${dim(formatSkillTypeIds())}`,
         '  --category-tag <tag>    category tag override; must add one tag beyond owner and type',

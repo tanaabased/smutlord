@@ -2,7 +2,7 @@ schema-version: 1
 
 agent:
   id: smutlord
-  name: SMUTLORD
+  name: smutlord
   email:
     from-environment: EMAIL
   description: Tanaab agent workspace; persona pending.

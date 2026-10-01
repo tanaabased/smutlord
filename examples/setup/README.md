@@ -1,6 +1,6 @@
 # Setup
 
-This scenario installs SMUTLORD from his checked-out workspace in an isolated
+This scenario installs smutlord from his checked-out workspace in an isolated
 OpenClaw profile and runs every declared setup step.
 
 ## Setup
@@ -11,7 +11,7 @@ for name in EMAIL GH_TOKEN SSH_KEY MEMORY_BINDER GOG_CREDENTIALS_JSON GOG_TOKEN_
   test -n "${!name:-}"
 done
 
-# should prepare SMUTLORD's checked-out workspace
+# should prepare smutlord's checked-out workspace
 mkdir -p "$HOME/tanaab"
 git clone --no-local "$GITHUB_WORKSPACE" "$HOME/tanaab/smutlord"
 ```
@@ -35,15 +35,15 @@ jq -e '.outcomes[0].component == "setup" and .outcomes[0].stepId == "brew-depend
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "canon-checkout", "canon-plugin", "codex-plugin", "imessage-plugin", "openclaw-config"]' "${TMPDIR}/setup-install.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .status] | all(. == "updated")' "${TMPDIR}/setup-install.json"
 
-# should satisfy SMUTLORD's Brewfile dependencies
+# should satisfy smutlord's Brewfile dependencies
 HOMEBREW_NO_AUTO_UPDATE=1 brew bundle check --verbose --file "$GITHUB_WORKSPACE/Brewfile"
 gog --version
 
-# should clone Canon over SSH and admit it with SMUTLORD's managed Git identity
+# should clone Canon over SSH and admit it with smutlord's managed Git identity
 test -d "$HOME/tanaab/canon/.git"
 cd "$HOME/tanaab/canon"
 openclaw agent-system tool git --agent smutlord -- remote get-url origin | grep -Fx 'git@github.com:tanaabased/canon.git'
-openclaw agent-system tool git --agent smutlord -- var GIT_AUTHOR_IDENT | grep -F "SMUTLORD <$EMAIL>"
+openclaw agent-system tool git --agent smutlord -- var GIT_AUTHOR_IDENT | grep -F "smutlord <$EMAIL>"
 cd "$GITHUB_WORKSPACE"
 test ! -e "$HOME/tanaab/openclaw-agent-system"
 
@@ -78,7 +78,7 @@ openclaw plugins inspect imessage --json | jq -e '
   .install.resolvedName == "@openclaw/imessage"
 '
 
-# should atomically configure SMUTLORD's execution and messaging policy
+# should atomically configure smutlord's execution and messaging policy
 openclaw config get agents.entries.smutlord.tools --json | jq -e '
   .profile == "coding" and
   .exec.mode == "auto" and
@@ -94,7 +94,7 @@ openclaw config get agents.entries.smutlord.tools --json | jq -e '
   (.message | has("crossContext") | not)
 '
 
-# should configure SMUTLORD's iMessage route without changing session scope
+# should configure smutlord's iMessage route without changing session scope
 openclaw config get channels.imessage --json | jq -e '
   .enabled == true and
   .defaultAccount == "smutlord" and
@@ -118,7 +118,7 @@ openclaw config get bindings --json | jq -e '
 # should configure Workshop proposal policy
 openclaw config get skills.workshop.autonomous.mode --json | jq -e '. == "propose"'
 
-# should configure SMUTLORD's memory policy with the installed vector extension
+# should configure smutlord's memory policy with the installed vector extension
 case "$(uname -m)" in
   arm64) SQLITE_VECTOR_PACKAGE="sqlite-vec-darwin-arm64" ;;
   x86_64) SQLITE_VECTOR_PACKAGE="sqlite-vec-darwin-x64" ;;
@@ -162,7 +162,7 @@ openclaw agent-system install --json | tee "${TMPDIR}/setup-reinstall.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "canon-checkout", "canon-plugin", "codex-plugin", "imessage-plugin", "openclaw-config"]' "${TMPDIR}/setup-reinstall.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .status] | all(. == "unchanged")' "${TMPDIR}/setup-reinstall.json"
 
-# should preserve SMUTLORD's clean checkout
+# should preserve smutlord's clean checkout
 test -z "$(git -C "$GITHUB_WORKSPACE" status --short --untracked-files=all)"
 test -z "$(git -C "$HOME/tanaab/smutlord" status --short --untracked-files=all)"
 ```

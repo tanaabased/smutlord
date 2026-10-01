@@ -1,19 +1,19 @@
-# SMUTLORD Recovery
+# smutlord Recovery
 
-This scenario exercises SMUTLORD's checked-out manifest and identity in a disposable
+This scenario exercises smutlord's checked-out manifest and identity in a disposable
 workspace and OpenClaw profile. It does not start or activate a runtime.
 
 ## Setup
 
 ```bash
-# should prepare a disposable SMUTLORD checkout with synthetic private continuity
+# should prepare a disposable smutlord checkout with synthetic private continuity
 set -euo pipefail
 workspace="$TMPDIR/smutlord-workspace"
 git clone --no-local "$GITHUB_WORKSPACE" "$workspace" >/dev/null 2>&1
 git -C "$workspace" fetch -q "$GITHUB_WORKSPACE" HEAD
 git -C "$workspace" checkout -q --detach FETCH_HEAD
 test -f "$workspace/.agent-system/agent.yaml"
-grep -Fx -- '- Name: SMUTLORD' "$workspace/IDENTITY.md" >/dev/null
+grep -Fx -- '- Name: smutlord' "$workspace/IDENTITY.md" >/dev/null
 test ! -e "$workspace/BOOTSTRAP.md"
 mkdir -p "$workspace/memory" "$workspace/.private" "$workspace/.scratch" "$workspace/.temp" "$workspace/node_modules"
 printf 'synthetic continuity\n' > "$workspace/MEMORY.md"
@@ -23,14 +23,14 @@ printf 'synthetic private note\n' > "$workspace/.private/recovery.txt"
 printf 'excluded\n' > "$workspace/.scratch/probe"
 printf 'excluded\n' > "$workspace/.temp/probe"
 printf 'excluded\n' > "$workspace/node_modules/probe"
-openclaw agents add SMUTLORD --workspace "$workspace" --non-interactive --json > "$TMPDIR/agent.json"
+openclaw agents add smutlord --workspace "$workspace" --non-interactive --json > "$TMPDIR/agent.json"
 jq -e '.agentId == "smutlord"' "$TMPDIR/agent.json" >/dev/null
 ```
 
 ## Testing
 
 ```bash
-# should create a backup containing SMUTLORD's private continuity and agent database
+# should create a backup containing smutlord's private continuity and agent database
 set -euo pipefail
 workspace="$TMPDIR/smutlord-workspace"
 node "$GITHUB_WORKSPACE/examples/backup/agent-state-fixture.mjs" seed "$TMPDIR/agent-database-path"

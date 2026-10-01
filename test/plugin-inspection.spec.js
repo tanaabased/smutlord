@@ -22,10 +22,10 @@ describe('lib/setup/plugin', () => {
     writeFileSync(
       join(directory, 'openclaw'),
       `#!/bin/sh
-printf '%s\\n' "$*" >> "$SMUTLORD_TEST_CALLS"
+printf '%s\\n' "$*" >> "$TEST_CALLS"
 if [ "$2" = inspect ]; then
-  /bin/cat "$SMUTLORD_TEST_RESPONSE"
-  exit "$SMUTLORD_TEST_STATUS"
+  /bin/cat "$TEST_RESPONSE"
+  exit "$TEST_STATUS"
 fi
 `,
       { mode: 0o700 },
@@ -44,9 +44,9 @@ fi
       env: {
         ...process.env,
         PATH: directory,
-        SMUTLORD_TEST_CALLS: callsPath,
-        SMUTLORD_TEST_RESPONSE: responsePath,
-        SMUTLORD_TEST_STATUS: String(status),
+        TEST_CALLS: callsPath,
+        TEST_RESPONSE: responsePath,
+        TEST_STATUS: String(status),
       },
     });
     assert.ifError(result.error);

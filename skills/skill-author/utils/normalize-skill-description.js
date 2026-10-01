@@ -1,7 +1,7 @@
-export const SKILL_DESCRIPTION_PREFIX = 'SMUTLORD-based ';
+export const SKILL_DESCRIPTION_PREFIX = 'smutlord-based ';
 
 /**
- * Normalizes a description to the SMUTLORD-local owner prefix.
+ * Normalizes a description to the smutlord-local owner prefix.
  *
  * @param {string} value Raw skill description.
  * @returns {string} Normalized description, or an empty string for empty input.
@@ -36,7 +36,7 @@ export function makeShortDescription(description) {
 /**
  * Creates a default prompt that explicitly names the local skill.
  *
- * @param {string} skillId SMUTLORD-prefixed machine id.
+ * @param {string} skillId smutlord-prefixed machine id.
  * @param {string} description Canonical or unprefixed skill description.
  * @returns {string} Default agent prompt.
  */

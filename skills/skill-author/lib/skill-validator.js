@@ -539,7 +539,7 @@ function buildManualChecks({ expectedType }) {
   const checks = [
     'Check that the description clearly says what the skill does and when to use it.',
     'Check that the skill owns one narrow, concrete surface.',
-    'Check that the skill owns an SMUTLORD-local specialization rather than duplicating a shared Tanaab capability.',
+    'Check that the skill owns a smutlord-local specialization rather than duplicating a shared Tanaab capability.',
     'Check that bundled resources stay local unless they clearly pass the hoist test for a repository-wide contract.',
     'Check that any repo-root resources referenced by the skill still earn hoisted status through proven reuse, repo-wide contract status, or standalone human value.',
     'Check that the OpenClaw emoji and homepage are specific and truthful.',
@@ -584,7 +584,7 @@ export function formatValidationReport(result) {
 }
 
 /**
- * Validates one SMUTLORD-local skill against the workspace contract.
+ * Validates one smutlord-local skill against the workspace contract.
  *
  * @param {string} skillDir Skill directory to validate.
  * @param {object} [options] Validation options.

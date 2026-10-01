@@ -1,20 +1,20 @@
-# SMUTLORD Skill Standard
+# smutlord Skill Standard
 
-This is the contract for SMUTLORD-local skills and their independent scaffolder
+This is the contract for smutlord-local skills and their independent scaffolder
 and validator. Explicit differences from its Tanaab seed are durable local
 decisions, not temporary compatibility gaps.
 
 ## Layering
 
-- SMUTLORD-local skills use `smutlord-*` machine ids and own workflows specific to
+- smutlord-local skills use `smutlord-*` machine ids and own workflows specific to
   this workspace, identity, or operating model.
 - Shared skills use `tanaab-*` machine ids and own reusable Tanaab capabilities
   and canon.
-- When both layers apply, prefer the narrower SMUTLORD skill for its local surface
+- When both layers apply, prefer the narrower smutlord skill for its local surface
   and use the Tanaab skill for everything outside that boundary.
 - A local skill may specialize or depart from shared canon, but it must state
   the local boundary or difference explicitly.
-- `smutlord-skill-author` creates and validates SMUTLORD-local skills only.
+- `smutlord-skill-author` creates and validates smutlord-local skills only.
   `tanaab-skill-author` remains the owner for Tanaab Canon skills.
 
 ## Validation Contract
@@ -31,7 +31,7 @@ decisions, not temporary compatibility gaps.
 - `[error]` Frontmatter `name` must use lowercase letters, digits, and hyphens
   and start with `smutlord-`.
 - `[error]` Frontmatter `metadata.owner` must equal `smutlord`.
-- `[error]` Frontmatter `description` must start with `SMUTLORD-based` and say what
+- `[error]` Frontmatter `description` must start with `smutlord-based` and say what
   the skill does and when to use it.
 - `[error]` Frontmatter `license` must equal `MIT`.
 - `[error]` `metadata.type` must match one of the local full-template type ids.
@@ -74,7 +74,7 @@ skill-folder/
 - `[error]` `agents/openai.yaml` must contain `display_name`,
   `short_description`, `default_prompt`, `brand_color`, `icon_small`, and
   `icon_large` beneath `interface`.
-- `[error]` `interface.short_description` must start with `SMUTLORD-based`, the
+- `[error]` `interface.short_description` must start with `smutlord-based`, the
   prompt must mention `$<machine-id>`, and the brand color must be `#00c88a`.
 - `[error]` Interface icon paths are relative to the skill directory and must
   resolve. Workspace skills reuse `../../assets/composer-icon.svg` and
@@ -96,7 +96,7 @@ skill-folder/
 
 ## Templates and Optimization
 
-- Start SMUTLORD-local skills from the matching local full template so the SMUTLORD
+- Start smutlord-local skills from the matching local full template so the smutlord
   standard, OpenClaw metadata, and section order are deterministic.
 - Supply a skill-specific OpenClaw emoji. Use the repository skill URL as the
   default homepage unless the skill has a different canonical source.
@@ -116,7 +116,7 @@ skill-folder/
 - Run `bun skills/skill-author/scripts/validate-skill.js --skill-dir <path>`
   from the repository root for every created or standardized local skill.
 - Fix every `[error]`; review `[warn]` and `[manual]` results explicitly.
-- Confirm an SMUTLORD-local skill owns one narrow local surface and does not absorb
+- Confirm a smutlord-local skill owns one narrow local surface and does not absorb
   a shared Tanaab capability merely to override precedence.
 - For coding skills, confirm optional `Deployment` has one material mechanism
   and `GitHub Actions` maps lifecycle sections without duplicating their rules.

@@ -31,7 +31,7 @@ describe('lib/setup/openclaw-config', () => {
     );
   });
 
-  it('should preserve shared grants and model admission while reconciling one SMUTLORD iMessage route', () => {
+  it('should preserve shared grants and model admission while reconciling one smutlord iMessage route', () => {
     const unrelatedBinding = {
       type: 'route',
       agentId: 'other',

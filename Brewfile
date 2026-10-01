@@ -1,4 +1,4 @@
-# SMUTLORD's dependencies, reconciled by Agent System's brew-dependencies setup step.
+# smutlord's dependencies, reconciled by Agent System's brew-dependencies setup step.
 
 tap "steipete/tap", trusted: true
 tap "openclaw/tap", trusted: true

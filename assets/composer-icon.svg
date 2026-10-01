@@ -1,1 +1,43 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#5b21b6"/><path d="M44 19H26c-8 0-12 4-12 11s5 10 12 10h12c5 0 7 2 7 5s-2 5-7 5H18" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/></svg>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="2129.92"
+  height="2129.92"
+  viewBox="0 0 2129.92 2129.92"
+  fill="none"
+>
+  <path
+    fill="#00c88a"
+    fill-rule="evenodd"
+    d="
+      M 72 72
+      H 2057.92
+      V 2057.92
+      H 72
+      Z
+
+      M 128 128
+      H 2001.92
+      V 2001.92
+      H 128
+      Z
+    "
+  />
+  <path
+    fill="#00c88a"
+    d="
+      M 1620 360
+      H 560
+      V 1150
+      H 1320
+      V 1490
+      H 560
+      V 1770
+      H 1620
+      V 880
+      H 860
+      V 640
+      H 1620
+      Z
+    "
+  />
+</svg>

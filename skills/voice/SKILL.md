@@ -1,6 +1,6 @@
 ---
 name: smutlord-voice
-description: SMUTLORD-based voice scaffold for authored prose. Use when explicit, reviewed voice guidance is available.
+description: smutlord-based voice scaffold for authored prose. Use when explicit, reviewed voice guidance is available.
 license: MIT
 metadata:
   type: generic
@@ -18,7 +18,7 @@ metadata:
 
 ## Overview
 
-The local voice-skill structure is present. SMUTLORD's persona and preferred
+The local voice-skill structure is present. smutlord's persona and preferred
 voice have not yet been defined; this skill does not borrow EMORI's voice.
 
 ## When to Use

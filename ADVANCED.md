@@ -1,11 +1,11 @@
 # Advanced operations
 
-Operator details for SMUTLORD's installed workspace. Start with the
+Operator details for smutlord's installed workspace. Start with the
 [README setup status](./README.md#status-and-setup).
 
 ## Manual onboarding
 
-After SMUTLORD-specific credentials have been provisioned and installation is authorized:
+After smutlord-specific credentials have been provisioned and installation is authorized:
 
 1. Sign in to Codex/OpenAI using the operator-approved account flow.
 2. Sign in to Messages on the Gateway Mac. Grant Full Disk Access and Messages
@@ -17,7 +17,7 @@ After SMUTLORD-specific credentials have been provisioned and installation is au
 
 ## Reconciliation
 
-Only after credential provisioning, from SMUTLORD's checkout, rerun `openclaw agent-system install --yes` to reconcile
+Only after credential provisioning, from smutlord's checkout, rerun `openclaw agent-system install --yes` to reconcile
 changes, then run `openclaw agent-system doctor` to inspect readiness and drift.
 Existing Canon checkouts are preserved; installation does not pull their latest
 changes.
@@ -31,7 +31,7 @@ Agent System owns the identity, model and effort profiles, credentials, Git/SSH,
 GitHub admission, and memory-provider binding declared in
 [the manifest](./.agent-system/agent.yaml).
 
-SMUTLORD's final setup step reconciles [OpenClaw policy](./openclaw.patch.json),
+smutlord's final setup step reconciles [OpenClaw policy](./openclaw.patch.json),
 including model admission and runtime bindings, execution, messaging, Workshop,
 and memory settings. It preserves unrelated shared arrays and private channel
 values. Make policy changes in that fragment and rerun installation; do not

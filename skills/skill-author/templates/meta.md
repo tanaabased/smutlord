@@ -37,7 +37,7 @@ metadata:
 
 ## Evaluation Criteria
 
-- Check structure, naming, and consistency against the SMUTLORD standard and any
+- Check structure, naming, and consistency against the smutlord standard and any
   relevant shared Tanaab contract.
 - Prefer small, composable outputs over broad surfaces.
 
@@ -54,7 +54,7 @@ metadata:
 ## Workflow
 
 1. Confirm the request matches this skill's canon-facing surface.
-2. Load only the SMUTLORD standard, relevant shared Tanaab guidance, and local
+2. Load only the smutlord standard, relevant shared Tanaab guidance, and local
    resources required for the task.
 3. Create, standardize, or validate using the narrowest reliable approach.
 4. Re-run validation before finishing and surface any manual review points.
@@ -63,7 +63,7 @@ metadata:
 
 - **Inspect:** Inventory the local artifact family, discovery metadata, bundled
   resources, and validation evidence owned by the skill.
-- **Compare:** Reconcile the local surface with the SMUTLORD standard and relevant
+- **Compare:** Reconcile the local surface with the smutlord standard and relevant
   shared Tanaab contract, distinguishing intentional divergence from
   contradictions, duplicated doctrine, overloaded owners, and obsolete
   identities.
@@ -73,7 +73,7 @@ metadata:
 - **Apply:** After authorization, make the smallest contract-aligned change and
   update every affected local consumer.
 - **Verify:** Run the local validator, review manual checks, and confirm the
-  artifact still owns one SMUTLORD-specific surface.
+  artifact still owns one smutlord-specific surface.
 
 ## Bundled Resources
 
@@ -83,4 +83,4 @@ metadata:
 ## Validation
 
 - Confirm the artifact still owns one narrow canon-facing surface.
-- Validate that structure, naming, and local-vs-hoisted placement match the SMUTLORD contract.
+- Validate that structure, naming, and local-vs-hoisted placement match the smutlord contract.
