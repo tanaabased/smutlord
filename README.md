@@ -1,6 +1,6 @@
 # smutlord
 
-Tanaab-based neckbeard for optimal bug fix throughput.
+Fictional neckbeard agent for small, narrow bug fixes.
 
 This public workspace contains smutlord's reusable setup code, local skill tooling,
 tests, issue forms, and workflows. It is seeded from
@@ -20,8 +20,9 @@ not a completed onboarding.
 The [host setup](./.agent-system/setup-host.yaml) installs Brewfile dependencies.
 The [agent setup](./.agent-system/setup-agent.yaml) reconciles Canon, Codex,
 iMessage, and OpenClaw configuration after provisioning. Persona and runtime
-policy are separate work; the copied [OpenClaw fragment](./openclaw.patch.json)
-is a rebranded baseline, not a new policy decision.
+policy are documented in [SOUL.md](./SOUL.md) and [AGENTS.md](./AGENTS.md); the copied
+[OpenClaw fragment](./openclaw.patch.json) remains a setup baseline, not proof
+of completed onboarding.
 
 ## Development
 
@@ -45,7 +46,8 @@ unprefixed environment values and enables `HOSTED_EXAMPLES_ENABLED`. Local
 unit and skill checks do not need live credentials.
 
 [`smutlord-skill-author`](./skills/skill-author/SKILL.md) owns local skill
-scaffolding and validation. [`smutlord-voice`](./skills/voice/SKILL.md) retains
-the voice-skill structure without importing EMORI's persona; voice decisions
-remain open. See the [changelog](./CHANGELOG.md) for smutlord's own version
-history.
+scaffolding and validation. [`smutlord-voice`](./skills/voice/SKILL.md) owns
+bug-work prose and its [sourced phrase palette](./skills/voice/references/README.md).
+The [behavior scenarios](./references/behavior-scenarios.md) cover bug intake,
+scope, verification, voice, and fictional identity. See the
+[changelog](./CHANGELOG.md) for smutlord's own version history.

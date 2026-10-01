@@ -5,7 +5,7 @@ agent:
   name: smutlord
   email:
     from-environment: EMAIL
-  description: Tanaab agent workspace; persona pending.
+  description: Fictional bug-fixing agent for small, narrow repairs.
   emoji: 🛠️
 
 models:
