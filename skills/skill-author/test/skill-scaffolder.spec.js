@@ -14,7 +14,7 @@ import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { initializeSkill } from './skills/skill-author/lib/skill-scaffolder.js';
 import { validateSkillDir } from './skills/skill-author/lib/skill-validator.js';
-const { operation, input, failWrite } = JSON.parse(process.env.SMUTLORD_SCAFFOLD_TEST);
+const { operation, input, failWrite } = JSON.parse(process.env.SCAFFOLD_TEST);
 const dependencies = failWrite ? { writeSkillFile: async (file, ...args) => {
   if (path.basename(file) === 'openai.yaml') throw new Error('simulated disk failure');
   await writeFile(file, ...args);
@@ -29,7 +29,7 @@ async function invokeNative(operation, input, failWrite = false) {
     encoding: 'utf8',
     env: {
       ...process.env,
-      SMUTLORD_SCAFFOLD_TEST: JSON.stringify({ operation, input, failWrite }),
+      SCAFFOLD_TEST: JSON.stringify({ operation, input, failWrite }),
     },
   });
   if (result.status !== 0) throw new Error(result.stderr || String(result.error));
@@ -50,7 +50,7 @@ describe('skills/skill-author/lib/skill-scaffolder', () => {
       type: 'generic',
       slug: 'example',
       displayName: 'Example',
-      description: 'SMUTLORD-based fixture validation. Use when testing scaffolds.',
+      description: 'smutlord-based fixture validation. Use when testing scaffolds.',
       emoji: '🧪',
       homepage: 'https://example.com/skill',
     };
@@ -77,7 +77,7 @@ describe('skills/skill-author/lib/skill-scaffolder', () => {
 
   it('should round-trip authored punctuation and newlines through valid YAML', async () => {
     const description =
-      'SMUTLORD-based help: keep "quotes", # symbols and \\ paths.\nUse when testing.';
+      'smutlord-based help: keep "quotes", # symbols and \\ paths.\nUse when testing.';
     const displayName = 'Say "hello": #1';
     const prompt = 'Use $smutlord-example: keep "quotes".\nKeep the second line.';
     const { skillDir, result } = await initializeSkill({

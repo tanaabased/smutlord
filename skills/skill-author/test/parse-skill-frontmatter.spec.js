@@ -47,11 +47,11 @@ metadata:
 
   it('should retain fields after comments and decode multiline descriptions', () => {
     const text =
-      '---\r\nname: smutlord-example\r\n# comment\r\nlicense: MIT\r\ndescription: >-\r\n  SMUTLORD-based help:\r\n  keeps # punctuation.\r\n---\r\n# Example\r\n';
+      '---\r\nname: smutlord-example\r\n# comment\r\nlicense: MIT\r\ndescription: >-\r\n  smutlord-based help:\r\n  keeps # punctuation.\r\n---\r\n# Example\r\n';
     assert.deepEqual(parseSkillFrontmatter(text), {
       name: 'smutlord-example',
       license: 'MIT',
-      description: 'SMUTLORD-based help: keeps # punctuation.',
+      description: 'smutlord-based help: keeps # punctuation.',
     });
   });
 

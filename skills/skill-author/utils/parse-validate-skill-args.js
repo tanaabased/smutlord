@@ -1,7 +1,7 @@
 const VALUE_OPTIONS = new Set(['--skill-dir', '--type']);
 
 /**
- * Parses the internal SMUTLORD skill validator arguments.
+ * Parses the internal smutlord skill validator arguments.
  *
  * @param {string[]} argv Raw argument tokens.
  * @returns {object} Parsed validator options.

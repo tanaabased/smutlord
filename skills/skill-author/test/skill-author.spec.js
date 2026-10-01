@@ -63,7 +63,7 @@ function initArgs({ outputDir, type = 'generic', homepage = 'https://example.com
     '--display-name',
     `Contract ${type}`,
     '--description',
-    `SMUTLORD-based ${type} contract fixture. Use when validating the ${type} template.`,
+    `smutlord-based ${type} contract fixture. Use when validating the ${type} template.`,
     '--emoji',
     '🧪',
     '--homepage',
@@ -108,11 +108,11 @@ describe('skills/skill-author', function () {
       if (type === 'meta') {
         assert.match(
           skillContent,
-          /against the SMUTLORD standard and any\s+relevant shared Tanaab contract/,
+          /against the smutlord standard and any\s+relevant shared Tanaab contract/,
         );
         assert.match(
           skillContent,
-          /Load only the SMUTLORD standard, relevant shared Tanaab guidance/,
+          /Load only the smutlord standard, relevant shared Tanaab guidance/,
         );
         assert.doesNotMatch(skillContent, /against shared canon|Load only the shared standard/);
       }
@@ -138,8 +138,8 @@ describe('skills/skill-author', function () {
         path.join(assetsDir, 'composer-icon.svg'),
       ),
       copyFile(
-        path.join(REPO_ROOT, 'assets', 'icon-large.svg'),
-        path.join(assetsDir, 'icon-large.svg'),
+        path.join(REPO_ROOT, 'assets', 'icon-large.png'),
+        path.join(assetsDir, 'icon-large.png'),
       ),
     ]);
 
@@ -149,7 +149,7 @@ describe('skills/skill-author', function () {
     const skillDir = path.join(skillsDir, 'contract-generic');
     const metadata = await readFile(path.join(skillDir, 'agents', 'openai.yaml'), 'utf8');
     assert.equal(YAML.parse(metadata).interface.icon_small, '../../assets/composer-icon.svg');
-    assert.equal(YAML.parse(metadata).interface.icon_large, '../../assets/icon-large.svg');
+    assert.equal(YAML.parse(metadata).interface.icon_large, '../../assets/icon-large.png');
     assert.ok(!(await readdir(skillDir)).includes('assets'));
 
     const validated = runBun(VALIDATE_SCRIPT, ['--skill-dir', skillDir]);
@@ -165,14 +165,14 @@ describe('skills/skill-author', function () {
     await rename(path.join(outputDir, 'smutlord-contract-generic'), movedSkillDir);
     const metadata = await readFile(path.join(movedSkillDir, 'agents', 'openai.yaml'), 'utf8');
     assert.equal(YAML.parse(metadata).interface.icon_small, './assets/icon-small.svg');
-    assert.equal(YAML.parse(metadata).interface.icon_large, './assets/icon-large.svg');
+    assert.equal(YAML.parse(metadata).interface.icon_large, './assets/icon-large.png');
     assert.deepEqual(
       await readFile(path.join(movedSkillDir, 'assets', 'icon-small.svg')),
       await readFile(path.join(REPO_ROOT, 'assets', 'composer-icon.svg')),
     );
     assert.deepEqual(
-      await readFile(path.join(movedSkillDir, 'assets', 'icon-large.svg')),
-      await readFile(path.join(REPO_ROOT, 'assets', 'icon-large.svg')),
+      await readFile(path.join(movedSkillDir, 'assets', 'icon-large.png')),
+      await readFile(path.join(REPO_ROOT, 'assets', 'icon-large.png')),
     );
 
     const validated = runBun(VALIDATE_SCRIPT, ['--skill-dir', movedSkillDir]);

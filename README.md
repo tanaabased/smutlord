@@ -2,7 +2,7 @@
 
 Tanaab-based neckbeard for optimal bug fix throughput.
 
-This public workspace contains SMUTLORD's reusable setup code, local skill tooling,
+This public workspace contains smutlord's reusable setup code, local skill tooling,
 tests, issue forms, and workflows. It is seeded from
 [EMORI commit `789df21b4aba17ddce56bffff64112f910aea85e`](https://github.com/tanaabased/emori/commit/789df21b4aba17ddce56bffff64112f910aea85e)
 under the preserved [MIT license](./LICENSE). EMORI's persona, artwork, private

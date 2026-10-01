@@ -1,6 +1,6 @@
 ---
 name: smutlord-skill-author
-description: SMUTLORD-based authoring, standardization, and validation of SMUTLORD-local skills. Use when a user wants to scaffold, refine, optimize, or validate a skill owned by this workspace.
+description: smutlord-based authoring, standardization, and validation of smutlord-local skills. Use when a user wants to scaffold, refine, optimize, or validate a skill owned by this workspace.
 license: MIT
 metadata:
   type: meta
@@ -21,13 +21,13 @@ metadata:
 
 ## Overview
 
-Author, standardize, optimize, and validate SMUTLORD-local skills using this
+Author, standardize, optimize, and validate smutlord-local skills using this
 workspace's [skill standard](../../references/skill-standard.md), scaffolder,
 and validator. The standard owns local conventions and the Tanaab boundary.
 
 ## When to Use
 
-- Create a new SMUTLORD-local skill.
+- Create a new smutlord-local skill.
 - Choose or refine a local skill's type, metadata, folder, or discovery text.
 - Standardize or validate an existing `smutlord-*` skill.
 - Review whether a local workflow deserves a skill rather than ordinary
@@ -46,9 +46,9 @@ and validator. The standard owns local conventions and the Tanaab boundary.
 
 ## Evaluation Criteria
 
-- Confirm the proposed skill owns a narrow SMUTLORD-specific surface.
+- Confirm the proposed skill owns a narrow smutlord-specific surface.
 - Preserve useful shared conventions where they still fit, and make every
-  SMUTLORD-specific divergence explicit.
+  smutlord-specific divergence explicit.
 - Keep OpenClaw metadata in `SKILL.md` and Codex interface metadata in
   `agents/openai.yaml`.
 - Reuse workspace icons from `assets/`; bundle copies only for standalone
@@ -60,17 +60,17 @@ and validator. The standard owns local conventions and the Tanaab boundary.
 ## Anti-Patterns
 
 - Do not copy a shared Tanaab skill solely to change precedence.
-- Do not present SMUTLORD-local structure as global Tanaab canon.
+- Do not present smutlord-local structure as global Tanaab canon.
 - Do not add broad routing matrices or relationship prose to rescue an
   overloaded skill.
 - Do not hoist support files for hypothetical reuse.
 
 ## Iteration Loop
 
-- Start with the smallest surface that SMUTLORD should own directly.
+- Start with the smallest surface that smutlord should own directly.
 - Scaffold or patch the skill, then validate immediately.
 - Tighten scope before adding resources, code, or another local skill.
-- Recheck the SMUTLORD/Tanaab boundary as either layer evolves, then explicitly
+- Recheck the smutlord/Tanaab boundary as either layer evolves, then explicitly
   choose whether to adopt the shared change or retain local divergence.
 
 ## Workflow
@@ -90,35 +90,35 @@ and validator. The standard owns local conventions and the Tanaab boundary.
 - **Inspect:** Inventory local skill ids, owned surfaces, discovery metadata,
   OpenClaw metadata, templates, resources, validation evidence, and their
   relationship to installed `tanaab-*` skills.
-- **Compare:** Reconcile local behavior with the SMUTLORD standard and relevant
+- **Compare:** Reconcile local behavior with the smutlord standard and relevant
   shared Canon; distinguish intentional divergence from accidental wrappers,
   duplicated doctrine, unclear precedence, misplaced resources, stale ids, and
   overloaded local owners.
 - **Recommend:** Keep justified local behavior; adopt shared changes only when
-  they improve the SMUTLORD contract; propose movement to Canon only for proven
+  they improve the smutlord contract; propose movement to Canon only for proven
   shared capability; and tighten or remove local scope only when evidence
   supports it.
 - **Apply:** After authorization, make the smallest local changes and update
   every affected prompt, link, template, validator rule, and consumer.
-- **Verify:** Run the local validator for every surviving SMUTLORD skill, search for
+- **Verify:** Run the local validator for every surviving smutlord skill, search for
   stale identities, and confirm local and shared ownership boundaries are
   explicit.
 
 ## Bundled Resources
 
 - [../../references/skill-standard.md](../../references/skill-standard.md):
-  independent SMUTLORD-local skill contract
+  independent smutlord-local skill contract
 - [./templates/meta.md](./templates/meta.md): local full-template model for meta
   skills; sibling templates define the other supported types
-- [./scripts/init-skill.js](./scripts/init-skill.js): deterministic SMUTLORD-local
+- [./scripts/init-skill.js](./scripts/init-skill.js): deterministic smutlord-local
   skill scaffolder
-- [./scripts/validate-skill.js](./scripts/validate-skill.js): SMUTLORD-local skill
+- [./scripts/validate-skill.js](./scripts/validate-skill.js): smutlord-local skill
   validation entrypoint
 - [./lib/skill-author.js](./lib/skill-author.js): local skill definitions and
   command presentation
-- [./lib/skill-scaffolder.js](./lib/skill-scaffolder.js): SMUTLORD-local scaffold
+- [./lib/skill-scaffolder.js](./lib/skill-scaffolder.js): smutlord-local scaffold
   orchestration
-- [./lib/skill-validator.js](./lib/skill-validator.js): SMUTLORD-local validation
+- [./lib/skill-validator.js](./lib/skill-validator.js): smutlord-local validation
   orchestration and reporting
 
 ## Validation

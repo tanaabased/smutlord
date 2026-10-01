@@ -13,9 +13,9 @@ const REPO_ROOT = path.resolve(SKILL_DIR, '..', '..');
 const INIT_SCRIPT = path.join(SKILL_DIR, 'scripts', 'init-skill.js');
 const VALIDATOR_MODULE_URL = pathToFileURL(path.join(SKILL_DIR, 'lib', 'skill-validator.js')).href;
 const DIRECT_VALIDATION_SCRIPT = `
-const { validateSkillDir } = await import(process.env.SMUTLORD_VALIDATOR_MODULE_URL);
-const expectedType = process.env.SMUTLORD_VALIDATOR_EXPECTED_TYPE || undefined;
-const result = await validateSkillDir(process.env.SMUTLORD_VALIDATOR_SKILL_DIR, { expectedType });
+const { validateSkillDir } = await import(process.env.VALIDATOR_MODULE_URL);
+const expectedType = process.env.VALIDATOR_EXPECTED_TYPE || undefined;
+const result = await validateSkillDir(process.env.VALIDATOR_SKILL_DIR, { expectedType });
 console.log(JSON.stringify(result));
 `;
 
@@ -36,9 +36,9 @@ function validateDirectly(skillDir, expectedType = '') {
     encoding: 'utf8',
     env: {
       ...process.env,
-      SMUTLORD_VALIDATOR_EXPECTED_TYPE: expectedType,
-      SMUTLORD_VALIDATOR_MODULE_URL: VALIDATOR_MODULE_URL,
-      SMUTLORD_VALIDATOR_SKILL_DIR: skillDir,
+      VALIDATOR_EXPECTED_TYPE: expectedType,
+      VALIDATOR_MODULE_URL: VALIDATOR_MODULE_URL,
+      VALIDATOR_SKILL_DIR: skillDir,
       NO_COLOR: '1',
     },
   });
@@ -72,7 +72,7 @@ describe('skills/skill-author/lib/skill-validator', function () {
         '--display-name',
         'Validator Fixture',
         '--description',
-        'SMUTLORD-based validation of local skill fixtures. Use when exercising validator branches.',
+        'smutlord-based validation of local skill fixtures. Use when exercising validator branches.',
         '--emoji',
         '🧪',
         '--homepage',
@@ -145,8 +145,8 @@ describe('skills/skill-author/lib/skill-validator', function () {
     await writeFile(
       metadataPath,
       content
-        .replace('  brand_color: "#5b21b6"\n', '')
-        .replace('./assets/icon-large.svg', './assets/missing.svg'),
+        .replace('  brand_color: "#00c88a"\n', '')
+        .replace('./assets/icon-large.png', './assets/missing.svg'),
     );
 
     const result = validateDirectly(skillDir);

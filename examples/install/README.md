@@ -1,7 +1,7 @@
 # Install
 
 This scenario installs Agent System from source in an isolated OpenClaw profile,
-then validates and reconciles SMUTLORD's checked-out workspace using his declared
+then validates and reconciles smutlord's checked-out workspace using his declared
 credentials while running host dependency setup and skipping agent setup.
 
 ## Setup
@@ -12,7 +12,7 @@ for name in EMAIL GH_TOKEN SSH_KEY MEMORY_BINDER GOG_CREDENTIALS_JSON GOG_TOKEN_
   test -n "${!name:-}"
 done
 
-# should prepare SMUTLORD's checked-out workspace
+# should prepare smutlord's checked-out workspace
 mkdir -p "$HOME/tanaab"
 git clone --no-local "$GITHUB_WORKSPACE" "$HOME/tanaab/smutlord"
 ```
@@ -20,7 +20,7 @@ git clone --no-local "$GITHUB_WORKSPACE" "$HOME/tanaab/smutlord"
 ## Testing
 
 ```bash
-# should validate and install SMUTLORD with host dependencies but without agent setup
+# should validate and install smutlord with host dependencies but without agent setup
 cd "$GITHUB_WORKSPACE"
 test ! -e "$HOME/tanaab/canon"
 test ! -e "$HOME/tanaab/openclaw-agent-system"
@@ -35,17 +35,17 @@ test ! -e "$HOME/tanaab/openclaw-agent-system"
 ```
 
 ```bash
-# should leave SMUTLORD's repeated installation converged
+# should leave smutlord's repeated installation converged
 cd "$GITHUB_WORKSPACE"
 openclaw agent-system install --skip-setup-agent --json | tee "${TMPDIR}/reinstall.json"
 jq -e '.outcomes | any(.component == "agent" and .status == "unchanged")' "${TMPDIR}/reinstall.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies"]' "${TMPDIR}/reinstall.json"
 jq -e '[.outcomes[] | select(.stepId == "brew-dependencies") | .status] == ["unchanged"]' "${TMPDIR}/reinstall.json"
 
-# should use SMUTLORD's installed GitHub credential
+# should use smutlord's installed GitHub credential
 openclaw agent-system tool gh -- api user --jq .login | grep -Fx smutlord
 
-# should leave SMUTLORD's checkout clean
+# should leave smutlord's checkout clean
 git -C "$GITHUB_WORKSPACE" diff --exit-code
 test -z "$(git -C "$GITHUB_WORKSPACE" status --short --untracked-files=all)"
 ```

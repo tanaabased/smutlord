@@ -10,7 +10,7 @@ function usage(code = 0) {
     renderCliHelp({
       usage: `Usage: ${bold('validate-skill.js')} ${dim('--skill-dir <path> [options]')}`,
       summary:
-        'Validate an SMUTLORD-local skill against the workspace standard and local full templates.',
+        'Validate a smutlord-local skill against the workspace standard and local full templates.',
       options: [
         '  --skill-dir <path>      skill directory to validate',
         '  --type <type>           expected type override',

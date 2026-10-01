@@ -11,7 +11,7 @@ const VALUE_OPTIONS = new Set([
 ]);
 
 /**
- * Parses the internal SMUTLORD skill initializer arguments.
+ * Parses the internal smutlord skill initializer arguments.
  *
  * @param {string[]} argv Raw argument tokens.
  * @param {string} defaultOutputDir Default skill parent directory.

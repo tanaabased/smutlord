@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 
 import { YAML } from 'bun';
 
-import bundledLargeIconImport from '../../../assets/icon-large.svg';
+import bundledLargeIconImport from '../../../assets/icon-large.png';
 import bundledSmallIconImport from '../../../assets/composer-icon.svg';
 import codingTemplateText from '../templates/coding.md' with { type: 'text' };
 import extractTopLevelSkillHeadings, {
@@ -32,7 +32,7 @@ export const SMUTLORD_SKILL_OWNER = 'smutlord';
 export const SMUTLORD_SKILL_MACHINE_PREFIX = 'smutlord';
 export const SMUTLORD_SKILL_MACHINE_PREFIX_WITH_HYPHEN = `${SMUTLORD_SKILL_MACHINE_PREFIX}-`;
 export const SMUTLORD_SKILL_LICENSE = 'MIT';
-export const SMUTLORD_SKILL_BRAND_COLOR = '#5b21b6';
+export const SMUTLORD_SKILL_BRAND_COLOR = '#00c88a';
 export const SMUTLORD_SKILL_DESCRIPTION_PREFIX = SKILL_DESCRIPTION_PREFIX;
 export const SKILLS_ROOT_DIR = path.resolve(MODULE_DIR, '..', '..');
 

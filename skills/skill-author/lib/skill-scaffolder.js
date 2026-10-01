@@ -61,7 +61,7 @@ function makeOpenAiYaml({ displayName, shortDescription, defaultPrompt, iconSmal
 }
 
 /**
- * Creates and validates one SMUTLORD-local skill from the selected template.
+ * Creates and validates one smutlord-local skill from the selected template.
  *
  * Validates a sibling candidate before publication; failed forced replacement
  * restores the existing skill or reports its retained backup path.
@@ -173,7 +173,7 @@ export async function initializeSkill(options, { writeSkillFile = writeFile } = 
   const openAiContent = makeOpenAiYaml({
     defaultPrompt,
     displayName,
-    iconLarge: usesWorkspaceAssets ? '../../assets/icon-large.svg' : './assets/icon-large.svg',
+    iconLarge: usesWorkspaceAssets ? '../../assets/icon-large.png' : './assets/icon-large.png',
     iconSmall: usesWorkspaceAssets ? '../../assets/composer-icon.svg' : './assets/icon-small.svg',
     shortDescription: makeShortDescription(normalizedDescription),
   });
@@ -189,7 +189,7 @@ export async function initializeSkill(options, { writeSkillFile = writeFile } = 
     if (!usesWorkspaceAssets) {
       await mkdir(assetsDir);
       await copyFile(getBundledSmallIconPath(), path.join(assetsDir, 'icon-small.svg'));
-      await copyFile(getBundledLargeIconPath(), path.join(assetsDir, 'icon-large.svg'));
+      await copyFile(getBundledLargeIconPath(), path.join(assetsDir, 'icon-large.png'));
     }
 
     const result = await validateSkillDir(stagedDir, {
