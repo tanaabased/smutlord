@@ -1,0 +1,99 @@
+{
+  "agents": {
+    "entries": {
+      "smutlord": {
+        "models": {
+          "openai/gpt-6-astra": {
+            "agentRuntime": {
+              "id": "codex"
+            }
+          },
+          "openai/gpt-6-luna": {
+            "agentRuntime": {
+              "id": "codex"
+            }
+          },
+          "openai/gpt-6-sol": {
+            "agentRuntime": {
+              "id": "codex"
+            }
+          }
+        },
+        "modelPolicy": {
+          "allow": ["openai/gpt-6-astra", "openai/gpt-6-luna", "openai/gpt-6-sol"]
+        },
+        "tools": {
+          "profile": "coding",
+          "alsoAllow": ["message"],
+          "exec": {
+            "mode": "auto"
+          },
+          "message": {
+            "actions": {
+              "allow": ["send"]
+            },
+            "crossContext": null
+          }
+        },
+        "memory": {
+          "search": {
+            "rememberAcrossConversations": true,
+            "sources": ["memory", "sessions"],
+            "experimental": {
+              "sessionMemory": true
+            },
+            "store": {
+              "vector": {
+                "enabled": true
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "bindings": [
+    {
+      "type": "route",
+      "agentId": "smutlord",
+      "match": {
+        "channel": "imessage",
+        "accountId": "smutlord"
+      }
+    }
+  ],
+  "channels": {
+    "imessage": {
+      "enabled": true,
+      "defaultAccount": "smutlord",
+      "dmPolicy": "pairing",
+      "groupPolicy": "allowlist",
+      "accounts": {
+        "smutlord": {
+          "enabled": true
+        }
+      }
+    }
+  },
+  "hooks": {
+    "internal": {
+      "entries": {
+        "session-memory": {
+          "enabled": false
+        }
+      }
+    }
+  },
+  "skills": {
+    "workshop": {
+      "autonomous": {
+        "mode": "propose"
+      }
+    }
+  },
+  "tools": {
+    "sessions": {
+      "visibility": "agent"
+    }
+  }
+}

@@ -1,0 +1,107 @@
+schema-version: 1
+
+agent:
+  id: smutlord
+  name: SMUTLORD
+  email:
+    from-environment: EMAIL
+  description: Tanaab agent workspace; persona pending.
+  emoji: 🛠️
+
+models:
+  default:
+    model: openai/gpt-6-astra
+    effort: high
+  low:
+    model: openai/gpt-6-luna
+    effort: medium
+  medium:
+    model: openai/gpt-6-sol
+    effort: high
+  high:
+    model: openai/gpt-6-astra
+    effort: high
+
+memory:
+  search:
+    provider: openai
+    model: text-embedding-3-small
+    api-key: MEMORY_BINDER
+
+backup:
+  output: .agent-system/backups
+  git-ignore: true
+  openclaw-state: required
+  include:
+    - '{MEMORY,DREAMS,BOOTSTRAP}.md'
+    - memory/**
+    - .private/**
+
+environment:
+  # No credential source is inherited from EMORI. Provision these for @smutlord.
+  required:
+    - EMAIL
+    - GH_TOKEN
+    - SSH_KEY
+    - MEMORY_BINDER
+    - GOG_CREDENTIALS_JSON
+    - GOG_TOKEN_JSON
+    - GOG_KEYRING_PASSWORD
+
+google:
+  credential-encoding: base64
+  oauth-client: GOG_CREDENTIALS_JSON
+  oauth-token: GOG_TOKEN_JSON
+  keyring-password: GOG_KEYRING_PASSWORD
+
+git:
+  worktrees:
+    repositories:
+      local:
+        smutlord: ~/tanaab/smutlord
+        canon: ~/tanaab/canon
+        openclaw-agent-system: ~/tanaab/openclaw-agent-system
+  ssh:
+    private-keys:
+      from-environment: SSH_KEY
+  signing:
+    key: SSH_KEY
+    allowed-signers-file: .agent-system/allowed_signers
+  policy:
+    delete-remote-ref: deny
+    force-push: deny
+
+github:
+  host: github.com
+  username: smutlord
+  token: GH_TOKEN
+  config:
+    git-protocol: ssh
+    spinner: disabled
+    telemetry: disabled
+  notifications:
+    assignment-types:
+      - issue
+    interval-minutes: 5
+    approved-actors:
+      - login: pirog
+        node-id: MDQ6VXNlcjcxMzQyNA==
+        operator-owner: true
+    allowed-repository-owners:
+      - login: tanaabased
+        node-id: O_kgDODNGy1g
+      - login: pirog
+        node-id: MDQ6VXNlcjcxMzQyNA==
+      - login: lando
+        node-id: MDEyOk9yZ2FuaXphdGlvbjMxNjA1NTg0
+    pull-request:
+      reviewers:
+        - login: pirog
+          node-id: MDQ6VXNlcjcxMzQyNA==
+  policy:
+    releases: allow
+
+setup-host:
+  file: ./setup-host.yaml
+setup-agent:
+  file: ./setup-agent.yaml

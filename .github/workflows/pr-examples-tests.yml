@@ -1,0 +1,72 @@
+name: Example Tests
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  workspace:
+    name: Workspace (credential-free)
+    runs-on: macos-26
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+      - name: Set up OpenClaw
+        uses: tanaabased/actions/setup-openclaw@v1
+        with:
+          agent-system: github:tanaabased/openclaw-agent-system#main
+      - name: Set up Bun
+        uses: tanaabased/actions/setup-bun@v1
+      - name: Install dependencies
+        run: bun install --frozen-lockfile --ignore-scripts
+      - name: Run workspace example
+        shell: bash
+        env:
+          NO_COLOR: '1'
+          TMPDIR: ${{ github.workspace }}/examples/workspace/.tmp
+        run: |
+          mkdir -p "$TMPDIR"
+          bun run leia examples/workspace/README.md --retry 0
+
+  hosted-integrations:
+    name: Hosted integration (${{ matrix.example }})
+    if: vars.HOSTED_EXAMPLES_ENABLED == 'true'
+    runs-on: macos-26
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: '1'
+      EMAIL: ${{ vars.EMAIL }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      SSH_KEY: ${{ secrets.SSH_KEY }}
+      MEMORY_BINDER: ${{ secrets.MEMORY_BINDER }}
+      GOG_CREDENTIALS_JSON: ${{ secrets.GOG_CREDENTIALS_JSON }}
+      GOG_TOKEN_JSON: ${{ secrets.GOG_TOKEN_JSON }}
+      GOG_KEYRING_PASSWORD: ${{ secrets.GOG_KEYRING_PASSWORD }}
+    strategy:
+      fail-fast: false
+      matrix:
+        example: [install, setup, backup]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+      - name: Set up OpenClaw
+        uses: tanaabased/actions/setup-openclaw@v1
+        with:
+          agent-system: github:tanaabased/openclaw-agent-system#main
+      - name: Set up Bun
+        uses: tanaabased/actions/setup-bun@v1
+      - name: Install dependencies
+        run: bun install --frozen-lockfile --ignore-scripts
+      - name: Refresh Homebrew when needed
+        if: matrix.example == 'install' || matrix.example == 'setup'
+        shell: bash
+        run: HOMEBREW_NO_AUTO_UPDATE= brew update-if-needed
+      - name: Run hosted integration example
+        shell: bash
+        env:
+          NO_COLOR: '1'
+          TMPDIR: ${{ github.workspace }}/examples/${{ matrix.example }}/.tmp
+        run: |
+          mkdir -p "$TMPDIR"
+          bun run leia "examples/${{ matrix.example }}/README.md" --retry 0

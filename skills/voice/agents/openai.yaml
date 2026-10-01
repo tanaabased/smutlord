@@ -1,0 +1,7 @@
+interface:
+  display_name: 'Voice'
+  short_description: 'SMUTLORD-based voice scaffold for authored prose'
+  icon_small: '../../assets/composer-icon.svg'
+  icon_large: '../../assets/icon-large.svg'
+  brand_color: '#5b21b6'
+  default_prompt: 'Use $smutlord-voice only with explicit, reviewed voice guidance. Preserve facts and formatting; do not borrow EMORI’s persona.'

@@ -1,0 +1,73 @@
+# Private OpenClaw context
+/MEMORY.md
+/DREAMS.md
+/memory/
+
+# One-time OpenClaw bootstrap artifact
+/BOOTSTRAP.md
+
+# Local-only workspace material
+/.private/
+/.scratch/
+/.worktrees/
+/.agent-system/backups/
+/.agent-system/repositories/
+/.agent-system/worktrees/
+
+# OpenClaw runtime state belongs outside this workspace
+/.openclaw/
+/openclaw-workspace-state.json
+/openclaw.json
+/auth-profiles.json
+/codex-home/
+/credentials/
+/sessions/
+
+# Secrets and credentials
+**/.env
+**/.env.*
+!**/.env.example
+**/.secrets*
+!**/.secrets.example
+**/secrets/
+**/secrets.*
+!**/secrets.example
+**/*.key
+**/*.pem
+**/id_*
+!**/id_*.pub
+
+# Logs and temporary output
+*.log
+logs
+.cache
+.temp
+.tmp
+cache
+temp
+
+# Dependencies, builds, and test output
+node_modules
+build
+coverage/
+.nyc_output
+
+# Common operating-system and editor files
+.*.swp
+._*
+.DS_Store
+.idea/
+*.jxp
+*.sublime-*
+
+# Legacy local-tool artifacts
+.git
+.hg
+.sign
+.svn
+.lock-wscript
+.wafpickle-*
+*.tar
+
+# Agent System local Codex configuration.
+.codex/config.toml

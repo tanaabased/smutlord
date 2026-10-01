@@ -1,0 +1,221 @@
+import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import { mkdir, mkdtemp, readFile, rename, rm, writeFile } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+
+import { YAML } from 'bun';
+
+const TEST_DIR = path.dirname(fileURLToPath(import.meta.url));
+const SKILL_DIR = path.resolve(TEST_DIR, '..');
+const REPO_ROOT = path.resolve(SKILL_DIR, '..', '..');
+const INIT_SCRIPT = path.join(SKILL_DIR, 'scripts', 'init-skill.js');
+const VALIDATOR_MODULE_URL = pathToFileURL(path.join(SKILL_DIR, 'lib', 'skill-validator.js')).href;
+const DIRECT_VALIDATION_SCRIPT = `
+const { validateSkillDir } = await import(process.env.SMUTLORD_VALIDATOR_MODULE_URL);
+const expectedType = process.env.SMUTLORD_VALIDATOR_EXPECTED_TYPE || undefined;
+const result = await validateSkillDir(process.env.SMUTLORD_VALIDATOR_SKILL_DIR, { expectedType });
+console.log(JSON.stringify(result));
+`;
+
+function assertMessage(messages, pattern) {
+  assert.ok(
+    messages.some((message) => pattern.test(message)),
+    `expected ${pattern} in:\n${messages.join('\n')}`,
+  );
+}
+
+function commandOutput(result) {
+  return [result.stdout, result.stderr].filter(Boolean).join('\n');
+}
+
+function validateDirectly(skillDir, expectedType = '') {
+  const validated = spawnSync('bun', ['--eval', DIRECT_VALIDATION_SCRIPT], {
+    cwd: REPO_ROOT,
+    encoding: 'utf8',
+    env: {
+      ...process.env,
+      SMUTLORD_VALIDATOR_EXPECTED_TYPE: expectedType,
+      SMUTLORD_VALIDATOR_MODULE_URL: VALIDATOR_MODULE_URL,
+      SMUTLORD_VALIDATOR_SKILL_DIR: skillDir,
+      NO_COLOR: '1',
+    },
+  });
+
+  assert.equal(validated.status, 0, commandOutput(validated));
+  return JSON.parse(validated.stdout);
+}
+
+describe('skills/skill-author/lib/skill-validator', function () {
+  this.timeout(10_000);
+
+  let tempDir;
+
+  beforeEach(async () => {
+    tempDir = await mkdtemp(path.join(os.tmpdir(), 'smutlord-skill-validator-'));
+  });
+
+  afterEach(async () => {
+    await rm(tempDir, { force: true, recursive: true });
+  });
+
+  async function makeValidSkill() {
+    const initialized = spawnSync(
+      'bun',
+      [
+        INIT_SCRIPT,
+        '--type',
+        'generic',
+        '--slug',
+        'validator-fixture',
+        '--display-name',
+        'Validator Fixture',
+        '--description',
+        'SMUTLORD-based validation of local skill fixtures. Use when exercising validator branches.',
+        '--emoji',
+        '🧪',
+        '--homepage',
+        'https://example.com/smutlord-validator-fixture',
+        '--output-dir',
+        tempDir,
+      ],
+      {
+        cwd: REPO_ROOT,
+        encoding: 'utf8',
+        env: {
+          ...process.env,
+          NO_COLOR: '1',
+        },
+      },
+    );
+
+    assert.equal(initialized.status, 0, commandOutput(initialized));
+    return path.join(tempDir, 'smutlord-validator-fixture');
+  }
+
+  it('should report missing required files', async () => {
+    const skillDir = path.join(tempDir, 'smutlord-empty');
+    await mkdir(skillDir);
+
+    const result = validateDirectly(skillDir);
+
+    assertMessage(result.errors, /Missing SKILL\.md/);
+    assertMessage(result.errors, /Missing agents\/openai\.yaml/);
+  });
+
+  it('should report broken relative links', async () => {
+    const skillDir = await makeValidSkill();
+    const skillPath = path.join(skillDir, 'SKILL.md');
+    const content = await readFile(skillPath, 'utf8');
+    await writeFile(
+      skillPath,
+      content.replace(
+        '## Bundled Resources\n',
+        '## Bundled Resources\n\n- [Missing reference](./references/missing.md)\n',
+      ),
+    );
+
+    const result = validateDirectly(skillDir);
+
+    assertMessage(result.errors, /Broken relative link in SKILL\.md/);
+  });
+
+  it('should report unexpected top-level headings', async () => {
+    const skillDir = await makeValidSkill();
+    const skillPath = path.join(skillDir, 'SKILL.md');
+    const content = await readFile(skillPath, 'utf8');
+    await writeFile(
+      skillPath,
+      content.replace('## Bundled Resources\n', '## Unexpected\n\n## Bundled Resources\n'),
+    );
+
+    const result = validateDirectly(skillDir);
+
+    assertMessage(
+      result.errors,
+      /must use the section order defined by the local generic template/,
+    );
+  });
+
+  it('should report incomplete OpenAI metadata and missing icons', async () => {
+    const skillDir = await makeValidSkill();
+    const metadataPath = path.join(skillDir, 'agents', 'openai.yaml');
+    const content = await readFile(metadataPath, 'utf8');
+    await writeFile(
+      metadataPath,
+      content
+        .replace('  brand_color: "#5b21b6"\n', '')
+        .replace('./assets/icon-large.svg', './assets/missing.svg'),
+    );
+
+    const result = validateDirectly(skillDir);
+
+    assertMessage(result.errors, /missing interface\.brand_color/);
+    assertMessage(result.errors, /interface\.icon_large points to a missing file/);
+  });
+
+  it('should report a folder that does not match its machine id', async () => {
+    const skillDir = await makeValidSkill();
+    const renamedSkillDir = path.join(tempDir, 'smutlord-wrong-folder');
+    await rename(skillDir, renamedSkillDir);
+
+    const result = validateDirectly(renamedSkillDir);
+
+    assertMessage(result.errors, /Skill folder name must match an expected folder id/);
+  });
+
+  it('should warn about empty optional resource directories', async () => {
+    const skillDir = await makeValidSkill();
+    await mkdir(path.join(skillDir, 'references'));
+
+    const result = validateDirectly(skillDir);
+
+    assertMessage(result.warnings, /Empty optional resource directory: references\//);
+  });
+
+  it('should report malformed frontmatter as a validation error', async () => {
+    const skillDir = await makeValidSkill();
+    const file = path.join(skillDir, 'SKILL.md');
+    const content = await readFile(file, 'utf8');
+    await writeFile(file, content.replace(/^description:.*$/m, 'description: invalid: yaml'));
+    assertMessage(validateDirectly(skillDir).errors, /Invalid SKILL.md frontmatter/);
+  });
+
+  it('should reject non-string names and tags without crashing', async () => {
+    const skillDir = await makeValidSkill();
+    const file = path.join(skillDir, 'SKILL.md');
+    const content = await readFile(file, 'utf8');
+    const match = content.match(/^---\n([\s\S]*?)\n---([\s\S]*)$/);
+    const metadata = YAML.parse(match[1]);
+    metadata.name = 42;
+    metadata.metadata.tags = ['smutlord', 'generic', 17];
+    metadata.metadata.openclaw.requires = { bins: [true] };
+    await writeFile(file, `---\n${YAML.stringify(metadata, null, 2)}\n---${match[2]}`);
+    const result = validateDirectly(skillDir);
+    assertMessage(result.errors, /name must be a string/);
+    assertMessage(result.errors, /tags must be a list of strings/);
+    assertMessage(result.errors, /requires.bins must be a list of nonempty strings/);
+  });
+
+  it('should accept boolean policy values and reject quoted booleans and malformed metadata', async () => {
+    const skillDir = await makeValidSkill();
+    const file = path.join(skillDir, 'agents/openai.yaml');
+    const metadata = YAML.parse(await readFile(file, 'utf8'));
+    for (const flag of [true, false]) {
+      metadata.policy = { allow_implicit_invocation: flag };
+      await writeFile(file, YAML.stringify(metadata, null, 2));
+      assert.deepEqual(validateDirectly(skillDir).errors, []);
+    }
+    metadata.policy.allow_implicit_invocation = 'false';
+    metadata.interface.default_prompt = 42;
+    metadata.dependencies = { tools: [{ type: 'mcp', value: false }] };
+    await writeFile(file, YAML.stringify(metadata, null, 2));
+    const result = validateDirectly(skillDir);
+    assertMessage(result.errors, /interface.default_prompt.*nonempty string/);
+    assertMessage(result.errors, /allow_implicit_invocation/);
+    assertMessage(result.errors, /tools\[0\].value must be a nonempty string/);
+    await writeFile(file, 'interface: [');
+    assertMessage(validateDirectly(skillDir).errors, /Invalid agents\/openai.yaml/);
+  });
+});
