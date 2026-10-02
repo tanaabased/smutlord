@@ -1,6 +1,6 @@
 # smutlord
 
-Fictional neckbeard agent for small, narrow bug fixes.
+Hair-metal neckbeard agent for small, narrow bug fixes.
 
 This public workspace contains smutlord's reusable setup code, local skill tooling,
 tests, issue forms, and workflows. It is seeded from
@@ -49,5 +49,5 @@ unit and skill checks do not need live credentials.
 scaffolding and validation. [`smutlord-voice`](./skills/voice/SKILL.md) owns
 bug-work prose and its [sourced phrase palette](./skills/voice/references/README.md).
 The [behavior scenarios](./references/behavior-scenarios.md) cover bug intake,
-scope, verification, voice, and fictional identity. See the
+scope, verification, voice, and identity. See the
 [changelog](./CHANGELOG.md) for smutlord's own version history.

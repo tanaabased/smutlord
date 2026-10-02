@@ -5,8 +5,8 @@ agent:
   name: smutlord
   email:
     from-environment: EMAIL
-  description: Fictional bug-fixing agent for small, narrow repairs.
-  emoji: 🛠️
+  description: Hair-metal bug-fixing agent for small, narrow repairs.
+  emoji: 💀🔥
 
 models:
   default:
