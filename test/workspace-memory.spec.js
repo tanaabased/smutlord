@@ -47,7 +47,10 @@ describe('workspace memory setup', () => {
     writeFileSync(join(workspace, 'MEMORY.md'), 'Existing continuity.\n');
     applyWorkspaceMemory(workspace);
     assert.equal(readFileSync(join(workspace, 'MEMORY.md'), 'utf8'), 'Existing continuity.\n');
-    assert.equal(readFileSync(join(workspace, 'memory', '2026-10-03.md'), 'utf8'), 'private note\n');
+    assert.equal(
+      readFileSync(join(workspace, 'memory', '2026-10-03.md'), 'utf8'),
+      'private note\n',
+    );
 
     writeFileSync(join(workspace, 'MEMORY.md'), '');
     applyWorkspaceMemory(workspace);
