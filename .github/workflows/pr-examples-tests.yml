@@ -17,6 +17,8 @@ jobs:
         uses: tanaabased/actions/setup-openclaw@v1
         with:
           agent-system: github:tanaabased/openclaw-agent-system#main
+      - name: Set up project Node.js
+        uses: tanaabased/actions/setup-node@v1
       - name: Set up Bun
         uses: tanaabased/actions/setup-bun@v1
       - name: Install dependencies
@@ -36,13 +38,6 @@ jobs:
     runs-on: macos-26
     env:
       HOMEBREW_NO_AUTO_UPDATE: '1'
-      EMAIL: ${{ vars.EMAIL }}
-      GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      SSH_KEY: ${{ secrets.SSH_KEY }}
-      MEMORY_BINDER: ${{ secrets.MEMORY_BINDER }}
-      GOG_CREDENTIALS_JSON: ${{ secrets.GOG_CREDENTIALS_JSON }}
-      GOG_TOKEN_JSON: ${{ secrets.GOG_TOKEN_JSON }}
-      GOG_KEYRING_PASSWORD: ${{ secrets.GOG_KEYRING_PASSWORD }}
     strategy:
       fail-fast: false
       matrix:
@@ -54,6 +49,8 @@ jobs:
         uses: tanaabased/actions/setup-openclaw@v1
         with:
           agent-system: github:tanaabased/openclaw-agent-system#main
+      - name: Set up project Node.js
+        uses: tanaabased/actions/setup-node@v1
       - name: Set up Bun
         uses: tanaabased/actions/setup-bun@v1
       - name: Install dependencies
@@ -66,6 +63,7 @@ jobs:
         shell: bash
         env:
           NO_COLOR: '1'
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ matrix.example != 'backup' && secrets.SMUTLORDKEY || '' }}
           TMPDIR: ${{ github.workspace }}/examples/${{ matrix.example }}/.tmp
         run: |
           mkdir -p "$TMPDIR"

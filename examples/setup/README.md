@@ -6,10 +6,9 @@ OpenClaw profile and runs every declared setup step.
 ## Setup
 
 ```bash
-# should require operator-provisioned environment values
-for name in EMAIL GH_TOKEN SSH_KEY MEMORY_BINDER GOG_CREDENTIALS_JSON GOG_TOKEN_JSON GOG_KEYRING_PASSWORD; do
-  test -n "${!name:-}"
-done
+# should store smutlord's 1password service account credential in the isolated profile
+test -n "${OP_SERVICE_ACCOUNT_TOKEN:-}"
+openclaw agent-system credentials set op --from-env
 
 # should prepare smutlord's checked-out workspace
 mkdir -p "$HOME/tanaab"

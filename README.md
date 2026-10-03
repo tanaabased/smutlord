@@ -42,9 +42,12 @@ bun skills/skill-author/scripts/validate-skill.js --skill-dir skills/voice
 The [workspace example](./examples/workspace/README.md) is credential-free but
 requires an isolated OpenClaw profile. The copied install, setup, and backup
 examples are **hosted integration scenarios** requiring separately provisioned
-credentials; their CI job is disabled until the operator provisions its
-unprefixed environment values and enables `HOSTED_EXAMPLES_ENABLED`. Local
-unit and skill checks do not need live credentials.
+credentials. Install and setup receive the `SMUTLORDKEY` Actions secret as
+`OP_SERVICE_ACCOUNT_TOKEN`; Agent System resolves credentials through the
+manifest's 1Password sources. The operator must configure those sources and
+service-account access before enabling `HOSTED_EXAMPLES_ENABLED`. Example CI
+selects the project Node.js version from `.node-version` after OpenClaw setup.
+Local unit and skill checks do not need live credentials.
 
 [`smutlord-skill-author`](./skills/skill-author/SKILL.md) owns local skill
 scaffolding and validation. [`smutlord-voice`](./skills/voice/SKILL.md) owns
