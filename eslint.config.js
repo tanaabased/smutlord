@@ -6,7 +6,14 @@ import globals from 'globals';
 import prettierConfig from 'eslint-config-prettier';
 
 const restrictedBuiltinImports = builtinModules
-  .filter((name) => !name.startsWith('_') && !name.startsWith('node:'))
+  // Bun includes its own modules here; only Node builtins require the node: prefix.
+  .filter(
+    (name) =>
+      !name.startsWith('_') &&
+      !name.startsWith('node:') &&
+      name !== 'bun' &&
+      !name.startsWith('bun:'),
+  )
   .map((name) => ({
     name,
     message: `Use node:${name} instead of bare builtin imports.`,

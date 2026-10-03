@@ -1,15 +1,16 @@
 # Setup
 
-This scenario installs smutlord from his checked-out workspace in an isolated
-OpenClaw profile and runs every declared setup step.
+This scenario verifies smutlord's full setup and repeat convergence. Keeping both
+runs together proves idempotence against the state the first run created.
+It also seeds legacy model admissions and verifies migration to the GPT-6 policy.
+Cross-agent plugin reuse is covered separately by [shared](../shared/README.md).
 
 ## Setup
 
 ```bash
-# should require operator-provisioned environment values
-for name in EMAIL GH_TOKEN SSH_KEY MEMORY_BINDER GOG_CREDENTIALS_JSON GOG_TOKEN_JSON GOG_KEYRING_PASSWORD; do
-  test -n "${!name:-}"
-done
+# should store smutlord's 1password service account credential in the isolated profile
+test -n "${OP_SERVICE_ACCOUNT_TOKEN:-}"
+openclaw agent-system credentials set op --from-env
 
 # should prepare smutlord's checked-out workspace
 mkdir -p "$HOME/tanaab"
@@ -19,31 +20,36 @@ git clone --no-local "$GITHUB_WORKSPACE" "$HOME/tanaab/smutlord"
 ## Testing
 
 ```bash
-# should start without setup effects and converge every declared concern
+# should start without smutlord setup effects and record host dependency readiness
 cd "$GITHUB_WORKSPACE"
 test ! -e "$HOME/tanaab/canon"
 test ! -e "$HOME/tanaab/openclaw-agent-system"
+openclaw plugins list --json | jq -e 'all(.plugins[]; .id != "codex")'
 ! openclaw plugins inspect tanaab --json >/dev/null 2>&1
-! openclaw plugins inspect codex --json >/dev/null 2>&1
 ! openclaw plugins inspect imessage --json >/dev/null 2>&1
+if node scripts/setup-brew-dependencies-task.js check; then
+  printf unchanged > "${TMPDIR}/brew-expected-status"
+else
+  test "$?" -eq 1
+  printf updated > "${TMPDIR}/brew-expected-status"
+fi
 openclaw config set skills.load.extraDirs "[\"$HOME/tanaab/canon/skills\"]" --strict-json
 
-# should run host setup before agent setup through Agent System
+# should install Codex before host setup and then reconcile agent setup
 openclaw agent-system validate
 openclaw agent-system install --json | tee "${TMPDIR}/setup-install.json"
-jq -e '.outcomes[0].component == "setup" and .outcomes[0].stepId == "brew-dependencies"' "${TMPDIR}/setup-install.json"
-jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "canon-checkout", "canon-plugin", "codex-plugin", "imessage-plugin", "openclaw-config"]' "${TMPDIR}/setup-install.json"
-jq -e '[.outcomes[] | select(.component == "setup") | .status] | all(. == "updated")' "${TMPDIR}/setup-install.json"
+jq -e '.outcomes[0].component == "codex-plugin" and .outcomes[0].code == "codex-plugin-installed" and .outcomes[0].status == "created" and .outcomes[1].stepId == "brew-dependencies"' "${TMPDIR}/setup-install.json"
+jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "canon-checkout", "canon-plugin", "openclaw-config"]' "${TMPDIR}/setup-install.json"
+jq -e --arg brew "$(cat "${TMPDIR}/brew-expected-status")" '[.outcomes[] | select(.component == "setup") | .status] == [$brew, "updated", "updated", "updated"]' "${TMPDIR}/setup-install.json"
 
 # should satisfy smutlord's Brewfile dependencies
 HOMEBREW_NO_AUTO_UPDATE=1 brew bundle check --verbose --file "$GITHUB_WORKSPACE/Brewfile"
-gog --version
 
 # should clone Canon over SSH and admit it with smutlord's managed Git identity
 test -d "$HOME/tanaab/canon/.git"
 cd "$HOME/tanaab/canon"
 openclaw agent-system tool git --agent smutlord -- remote get-url origin | grep -Fx 'git@github.com:tanaabased/canon.git'
-openclaw agent-system tool git --agent smutlord -- var GIT_AUTHOR_IDENT | grep -F "smutlord <$EMAIL>"
+openclaw agent-system tool git --agent smutlord -- var GIT_AUTHOR_IDENT | grep -F 'smutlord <smutlord@tanaab.dev>'
 cd "$GITHUB_WORKSPACE"
 test ! -e "$HOME/tanaab/openclaw-agent-system"
 
@@ -65,20 +71,22 @@ openclaw skills info tanaab-project-optimizer --agent smutlord --json | jq -e '
 '
 ! openclaw config get skills.load.extraDirs --json >/dev/null 2>&1
 
-# should install the Codex plugin
-openclaw plugins inspect codex --json | jq -e '.plugin.id == "codex"'
+# should leave the shared Codex plugin healthy after agent setup
+openclaw plugins inspect codex --json | tee "${TMPDIR}/codex-after-setup.json" | jq -e '.plugin.id == "codex" and .plugin.enabled == true and .plugin.status != "error"'
+jq -S .install "${TMPDIR}/codex-after-setup.json" > "${TMPDIR}/codex-receipt-before.json"
+openclaw config get plugins.entries.codex --json | jq -S . > "${TMPDIR}/codex-config-before.json"
 
-# should install the official iMessage channel plugin without configuring the channel
-openclaw plugins inspect imessage --json | jq -e '
-  .plugin.id == "imessage" and
-  .plugin.enabled == true and
-  .plugin.status != "error" and
-  .plugin.packageName == "@openclaw/imessage" and
-  (.plugin.channelIds | index("imessage")) != null and
-  .install.resolvedName == "@openclaw/imessage"
+# should retain smutlord's Codex runtime bindings and model admission
+openclaw config get agents.entries.smutlord --json | jq -e --slurpfile desired "$GITHUB_WORKSPACE/openclaw.patch.json" '
+  . as $agent |
+  $desired[0].agents.entries.smutlord as $owned |
+  all($owned.models | to_entries[];
+    $agent.models[.key].agentRuntime.id == .value.agentRuntime.id) and
+  all($owned.modelPolicy.allow[]; . as $model |
+    ($agent.modelPolicy.allow | index($model)) != null)
 '
 
-# should atomically configure smutlord's execution and messaging policy
+# should atomically configure smutlord's execution policy
 openclaw config get agents.entries.smutlord.tools --json | jq -e '
   .profile == "coding" and
   .exec.mode == "auto" and
@@ -87,33 +95,8 @@ openclaw config get agents.entries.smutlord.tools --json | jq -e '
   (.exec.pathPrepend | length) > 0
 '
 
-# should preserve Agent System grants while allowing only message sends
-openclaw config get agents.entries.smutlord.tools --json | jq -e '
-  (.alsoAllow | index("message")) != null and
-  .message.actions.allow == ["send"] and
-  (.message | has("crossContext") | not)
-'
-
-# should configure smutlord's iMessage route without changing session scope
-openclaw config get channels.imessage --json | jq -e '
-  .enabled == true and
-  .defaultAccount == "smutlord" and
-  .dmPolicy == "pairing" and
-  .groupPolicy == "allowlist" and
-  .accounts.smutlord == {"enabled": true} and
-  (has("defaultTo") | not) and
-  (has("allowFrom") | not) and
-  (.accounts.smutlord | has("cliPath") | not) and
-  (.accounts.smutlord | has("dbPath") | not)
-'
-openclaw config get bindings --json | jq -e '
-  [.[] | select(.type == "route" and .match.channel == "imessage" and .match.accountId == "smutlord")] == [{
-    "type": "route",
-    "agentId": "smutlord",
-    "match": {"channel": "imessage", "accountId": "smutlord"}
-  }]
-'
-! openclaw config get session.dmScope --json >/dev/null 2>&1
+# should leave iMessage uninstalled after setup
+openclaw plugins list --json | jq -e 'all(.plugins[]; .id != "imessage")'
 
 # should configure Workshop proposal policy
 openclaw config get skills.workshop.autonomous.mode --json | jq -e '. == "propose"'
@@ -159,10 +142,40 @@ openclaw hooks list --json | jq -e '
 # should leave a converged setup unchanged on repeat installation
 cd "$GITHUB_WORKSPACE"
 openclaw agent-system install --json | tee "${TMPDIR}/setup-reinstall.json"
-jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "canon-checkout", "canon-plugin", "codex-plugin", "imessage-plugin", "openclaw-config"]' "${TMPDIR}/setup-reinstall.json"
+jq -e '.outcomes[0].component == "codex-plugin" and .outcomes[0].code == "codex-plugin-unchanged" and .outcomes[0].status == "unchanged"' "${TMPDIR}/setup-reinstall.json"
+jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "canon-checkout", "canon-plugin", "openclaw-config"]' "${TMPDIR}/setup-reinstall.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .status] | all(. == "unchanged")' "${TMPDIR}/setup-reinstall.json"
 
+# should preserve the shared plugin receipt and configuration after repeat setup
+openclaw plugins inspect codex --json | jq -S .install > "${TMPDIR}/codex-receipt-repeat.json"
+cmp "${TMPDIR}/codex-receipt-before.json" "${TMPDIR}/codex-receipt-repeat.json"
+openclaw config get plugins.entries.codex --json | jq -S . > "${TMPDIR}/codex-config-repeat.json"
+cmp "${TMPDIR}/codex-config-before.json" "${TMPDIR}/codex-config-repeat.json"
+
 # should preserve smutlord's clean checkout
+test -z "$(git -C "$GITHUB_WORKSPACE" status --short --untracked-files=all)"
+test -z "$(git -C "$HOME/tanaab/smutlord" status --short --untracked-files=all)"
+```
+
+```bash
+# should retire the six-model legacy allowlist on reconciliation
+cd "$GITHUB_WORKSPACE"
+openclaw config set agents.entries.smutlord.modelPolicy.allow '["openai/gpt-5.5","openai/gpt-6-astra","openai/gpt-5.6-sol","openai/gpt-6-luna","openai/gpt-5.6-terra","openai/gpt-6-sol"]' --strict-json
+openclaw agent-system install --json | tee "${TMPDIR}/setup-model-migration.json"
+jq -e '[.outcomes[] | select(.component == "setup" and .stepId == "openclaw-config")] | length == 1 and .[0].status == "updated"' "${TMPDIR}/setup-model-migration.json"
+openclaw config get agents.entries.smutlord.modelPolicy.allow --json | jq -e --slurpfile desired "$GITHUB_WORKSPACE/openclaw.patch.json" '. == $desired[0].agents.entries.smutlord.modelPolicy.allow'
+
+# should leave the migrated model policy unchanged on repeat installation
+cd "$GITHUB_WORKSPACE"
+openclaw agent-system install --json | tee "${TMPDIR}/setup-model-repeat.json"
+jq -e '[.outcomes[] | select(.component == "setup") | .status] | length == 4 and all(. == "unchanged")' "${TMPDIR}/setup-model-repeat.json"
+openclaw config get agents.entries.smutlord.modelPolicy.allow --json | jq -e --slurpfile desired "$GITHUB_WORKSPACE/openclaw.patch.json" '. == $desired[0].agents.entries.smutlord.modelPolicy.allow'
+
+# should preserve the shared Codex plugin and clean checkout after model migration
+openclaw plugins inspect codex --json | jq -S .install > "${TMPDIR}/codex-receipt-models.json"
+cmp "${TMPDIR}/codex-receipt-before.json" "${TMPDIR}/codex-receipt-models.json"
+openclaw config get plugins.entries.codex --json | jq -S . > "${TMPDIR}/codex-config-models.json"
+cmp "${TMPDIR}/codex-config-before.json" "${TMPDIR}/codex-config-models.json"
 test -z "$(git -C "$GITHUB_WORKSPACE" status --short --untracked-files=all)"
 test -z "$(git -C "$HOME/tanaab/smutlord" status --short --untracked-files=all)"
 ```

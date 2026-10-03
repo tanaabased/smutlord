@@ -26,6 +26,7 @@ openclaw agents list --json | grep -F '"id": "smutlord"'
 
 # should report smutlord identity from the workspace
 grep -F '"name": "smutlord"' "${TMPDIR}/identity.json"
+grep -F '"avatar": "assets/icon-large.png"' "${TMPDIR}/identity.json"
 
 # should validate the resulting OpenClaw configuration
 openclaw config validate --json | tr -d '[:space:]' | grep -F '"valid":true'
@@ -36,6 +37,11 @@ bun "$GITHUB_WORKSPACE/skills/skill-author/scripts/validate-skill.js" --skill-di
 # should preserve the reviewed identity file byte-for-byte
 cmp -s "${TMPDIR}/IDENTITY.before.md" "$GITHUB_WORKSPACE/IDENTITY.md"
 grep -Fx -- '- Name: smutlord' "$GITHUB_WORKSPACE/IDENTITY.md"
+grep -Fx -- '- Machine ID: smutlord' "$GITHUB_WORKSPACE/IDENTITY.md"
+grep -Fx -- '- Avatar: assets/icon-large.png' "$GITHUB_WORKSPACE/IDENTITY.md"
+test -s "$GITHUB_WORKSPACE/assets/icon-large.png"
+test -s "$GITHUB_WORKSPACE/assets/icon-large-circle.png"
+grep -F '#00c88a' "$GITHUB_WORKSPACE/assets/composer-icon.svg"
 
 # should leave the repository worktree clean
 git -C "$GITHUB_WORKSPACE" diff --exit-code

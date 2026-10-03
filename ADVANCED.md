@@ -1,23 +1,16 @@
 # Advanced operations
 
 Operator details for smutlord's installed workspace. Start with the
-[README setup status](./README.md#status-and-setup).
+[README quickstart](./README.md#quickstart).
 
 ## Manual onboarding
 
-After smutlord-specific credentials have been provisioned and installation is authorized:
-
-1. Sign in to Codex/OpenAI using the operator-approved account flow.
-2. Sign in to Messages on the Gateway Mac. Grant Full Disk Access and Messages
-   Automation to the actual Gateway process context, then approve the first
-   iMessage pairing.
-3. Configure private delivery destinations outside this public repository.
-4. Verify delivery with an explicitly authorized real message. Successful
-   configuration alone does not prove delivery.
+After provisioning smutlord-specific credentials and completing installation,
+sign in to Codex/OpenAI using the operator-approved account flow.
 
 ## Reconciliation
 
-Only after credential provisioning, from smutlord's checkout, rerun `openclaw agent-system install --yes` to reconcile
+From smutlord's checkout, rerun `openclaw agent-system install --yes` to reconcile
 changes, then run `openclaw agent-system doctor` to inspect readiness and drift.
 Existing Canon checkouts are preserved; installation does not pull their latest
 changes.
@@ -31,12 +24,25 @@ Agent System owns the identity, model and effort profiles, credentials, Git/SSH,
 GitHub admission, and memory-provider binding declared in
 [the manifest](./.agent-system/agent.yaml).
 
+Use Agent System with shared Codex prerequisite support; it owns the plugin
+version and installation before setup. CI consumes Agent System `main`.
+For an existing conflicting plugin, follow [Agent System's upgrade guide](https://github.com/tanaabased/openclaw-agent-system/blob/main/UPGRADING.md).
+
 smutlord's final setup step reconciles [OpenClaw policy](./openclaw.patch.json),
-including model admission and runtime bindings, execution, messaging, Workshop,
-and memory settings. It preserves unrelated shared arrays and private channel
-values. Make policy changes in that fragment and rerun installation; do not
-apply the raw fragment directly, which would bypass the merge logic and replace
-shared arrays. Primary model and fallback selection remain Agent System's job.
+including model admission and runtime bindings, execution, Workshop, and memory
+settings. It preserves managed tool grants and leaves channel configuration and
+routing to the operator. Make policy changes in that fragment and rerun
+installation; do not apply the raw fragment directly, which would bypass the merge
+logic and replace shared arrays. Primary model and fallback selection remain
+Agent System's job.
+
+Model admission tracks workspace ownership, including retired GPT-5.5 and GPT-5.6
+entries, so setup removes those entries and converges on the fragment's GPT-6
+allowlist. Extra models already admitted by the operator are preserved only when
+listed in the optional `SMUTLORD_OPERATOR_MODEL_ADMISSIONS` JSON array passed to
+setup. Leave it unset for the normal GPT-6 setup. Unknown or conflicting ownership
+stops reconciliation before the config patch is applied; other agents' model
+policies remain untouched.
 
 ## Private continuity
 
@@ -47,3 +53,14 @@ verification require separate authorization after setup.
 Private memory belongs in ignored workspace storage; credentials, channel state,
 and transcripts belong outside this repository. Ignore rules prevent accidental
 tracking, not disclosure.
+
+## Source and artwork
+
+The public setup baseline was seeded from
+[EMORI commit `789df21b4aba17ddce56bffff64112f910aea85e`](https://github.com/tanaabased/emori/commit/789df21b4aba17ddce56bffff64112f910aea85e)
+under the preserved [MIT license](./LICENSE). EMORI's persona, credentials,
+private state, and release history are separate.
+
+smutlord uses his own [skull-and-guitar artwork](./assets/README.md): the square
+PNG for agent identity and the circular variant for the README. Local skills
+share these assets and the composer mark.

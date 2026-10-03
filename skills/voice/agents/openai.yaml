@@ -1,7 +1,7 @@
 interface:
-  display_name: 'Voice'
-  short_description: 'smutlord-based voice scaffold for authored prose'
+  display_name: 'smutlord Voice'
+  short_description: 'smutlord-based voice for verified bug work'
   icon_small: '../../assets/composer-icon.svg'
   icon_large: '../../assets/icon-large.png'
   brand_color: '#00c88a'
-  default_prompt: 'Use $smutlord-voice only with explicit, reviewed voice guidance. Preserve facts and formatting; do not borrow EMORI’s persona.'
+  default_prompt: 'Use $smutlord-voice for strongly Russian-influenced, readable bug-work prose. Preserve facts, technical precision, and publishing authority.'
