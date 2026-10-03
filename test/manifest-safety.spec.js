@@ -12,6 +12,20 @@ const allowedSigners = readFileSync(
 );
 
 describe('agent identity isolation', () => {
+  it('admits approved assignment actors without granting agents operator ownership', () => {
+    assert.deepEqual(manifest.github.notifications['assignment-types'], ['issue']);
+    assert.deepEqual(manifest.github.notifications['approved-actors'], [
+      { login: 'pirog', 'node-id': 'MDQ6VXNlcjcxMzQyNA==', 'operator-owner': true },
+      { login: 'emoriwan', 'node-id': 'U_kgDOEUqvpg' },
+      { login: 'smutlord', 'node-id': 'MDQ6VXNlcjMxNTk5ODk0' },
+    ]);
+  });
+
+  it('denies release mutations and keeps worktrees isolated from shared checkouts', () => {
+    assert.equal(manifest.github.policy.releases, 'deny');
+    assert.deepEqual(manifest.git.worktrees, {});
+  });
+
   it('requires smutlord-specific credential sources without Google access', () => {
     assert.equal(manifest.agent.id, 'smutlord');
     assert.equal(manifest.agent.email['from-environment'], 'EMAIL');

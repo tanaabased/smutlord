@@ -50,12 +50,7 @@ environment:
     - SMUT_RECALL_KEY
 
 git:
-  worktrees:
-    repositories:
-      local:
-        smutlord: ~/tanaab/smutlord
-        canon: ~/tanaab/canon
-        openclaw-agent-system: ~/tanaab/openclaw-agent-system
+  worktrees: {}
   ssh:
     private-keys:
       from-environment: SMUTLORD_SSH_KEY
@@ -88,6 +83,10 @@ github:
       - login: pirog
         node-id: MDQ6VXNlcjcxMzQyNA==
         operator-owner: true
+      - login: emoriwan
+        node-id: U_kgDOEUqvpg
+      - login: smutlord
+        node-id: MDQ6VXNlcjMxNTk5ODk0
     allowed-repository-owners:
       - login: tanaabased
         node-id: O_kgDODNGy1g
@@ -100,7 +99,7 @@ github:
         - login: pirog
           node-id: MDQ6VXNlcjcxMzQyNA==
   policy:
-    releases: allow
+    releases: deny
 
 setup-host:
   file: ./setup-host.yaml
