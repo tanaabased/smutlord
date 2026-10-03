@@ -2,6 +2,7 @@
 
 This scenario verifies smutlord's full setup and repeat convergence. Keeping both
 runs together proves idempotence against the state the first run created.
+It also seeds legacy model admissions and verifies migration to the GPT-6 policy.
 Cross-agent plugin reuse is covered separately by [shared](../shared/README.md).
 
 ## Setup
@@ -187,6 +188,29 @@ openclaw config get plugins.entries.codex --json | jq -S . > "${TMPDIR}/codex-co
 cmp "${TMPDIR}/codex-config-before.json" "${TMPDIR}/codex-config-repeat.json"
 
 # should preserve smutlord's clean checkout
+test -z "$(git -C "$GITHUB_WORKSPACE" status --short --untracked-files=all)"
+test -z "$(git -C "$HOME/tanaab/smutlord" status --short --untracked-files=all)"
+```
+
+```bash
+# should retire the six-model legacy allowlist on reconciliation
+cd "$GITHUB_WORKSPACE"
+openclaw config set agents.entries.smutlord.modelPolicy.allow '["openai/gpt-5.5","openai/gpt-6-astra","openai/gpt-5.6-sol","openai/gpt-6-luna","openai/gpt-5.6-terra","openai/gpt-6-sol"]' --strict-json
+openclaw agent-system install --json | tee "${TMPDIR}/setup-model-migration.json"
+jq -e '[.outcomes[] | select(.component == "setup" and .stepId == "openclaw-config")] | length == 1 and .[0].status == "updated"' "${TMPDIR}/setup-model-migration.json"
+openclaw config get agents.entries.smutlord.modelPolicy.allow --json | jq -e --slurpfile desired "$GITHUB_WORKSPACE/openclaw.patch.json" '. == $desired[0].agents.entries.smutlord.modelPolicy.allow'
+
+# should leave the migrated model policy unchanged on repeat installation
+cd "$GITHUB_WORKSPACE"
+openclaw agent-system install --json | tee "${TMPDIR}/setup-model-repeat.json"
+jq -e '[.outcomes[] | select(.component == "setup") | .status] | length == 5 and all(. == "unchanged")' "${TMPDIR}/setup-model-repeat.json"
+openclaw config get agents.entries.smutlord.modelPolicy.allow --json | jq -e --slurpfile desired "$GITHUB_WORKSPACE/openclaw.patch.json" '. == $desired[0].agents.entries.smutlord.modelPolicy.allow'
+
+# should preserve the shared Codex plugin and clean checkout after model migration
+openclaw plugins inspect codex --json | jq -S .install > "${TMPDIR}/codex-receipt-models.json"
+cmp "${TMPDIR}/codex-receipt-before.json" "${TMPDIR}/codex-receipt-models.json"
+openclaw config get plugins.entries.codex --json | jq -S . > "${TMPDIR}/codex-config-models.json"
+cmp "${TMPDIR}/codex-config-before.json" "${TMPDIR}/codex-config-models.json"
 test -z "$(git -C "$GITHUB_WORKSPACE" status --short --untracked-files=all)"
 test -z "$(git -C "$HOME/tanaab/smutlord" status --short --untracked-files=all)"
 ```

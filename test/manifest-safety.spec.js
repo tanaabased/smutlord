@@ -29,7 +29,7 @@ describe('agent identity isolation', () => {
     assert.equal(manifest.environment.op, '3t5psl4lnq2vqfvub3u6pq4tdm');
     assert.deepEqual(manifest.environment.set, {
       SMUTLORD_SSH_KEY: {
-        'from-op': 'op://6o5luqmb4taps663zyhjd3xyz4/id_smutkey/private key?ssh-format=openssh',
+        'from-op': 'op://gwhijlujd334yr67wonpmsrr2y/id_smutkey/private key?ssh-format=openssh',
       },
     });
     assert.equal(manifest.google, undefined);

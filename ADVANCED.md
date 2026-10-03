@@ -42,6 +42,14 @@ values. Make policy changes in that fragment and rerun installation; do not
 apply the raw fragment directly, which would bypass the merge logic and replace
 shared arrays. Primary model and fallback selection remain Agent System's job.
 
+Model admission tracks workspace ownership, including retired GPT-5.5 and GPT-5.6
+entries, so setup removes those entries and converges on the fragment's GPT-6
+allowlist. Extra models already admitted by the operator are preserved only when
+listed in the optional `SMUTLORD_OPERATOR_MODEL_ADMISSIONS` JSON array passed to
+setup. Leave it unset for the normal GPT-6 setup. Unknown or conflicting ownership
+stops reconciliation before the config patch is applied; other agents' model
+policies remain untouched.
+
 ## Private continuity
 
 Setup does not restore private memory, import conversations, or force an index
