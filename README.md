@@ -18,8 +18,9 @@ gap. [Advanced setup notes](./ADVANCED.md) describe the inherited mechanics,
 not a completed onboarding.
 
 The [host setup](./.agent-system/setup-host.yaml) installs Brewfile dependencies.
-The [agent setup](./.agent-system/setup-agent.yaml) reconciles Canon, Codex,
-iMessage, and OpenClaw configuration after provisioning. Persona and runtime
+Agent System provisions the shared Codex plugin before setup; the
+[agent setup](./.agent-system/setup-agent.yaml) reconciles Canon, iMessage,
+and OpenClaw configuration after provisioning. Persona and runtime
 policy are documented in [SOUL.md](./SOUL.md) and [AGENTS.md](./AGENTS.md); the copied
 [OpenClaw fragment](./openclaw.patch.json) remains a setup baseline, not proof
 of completed onboarding.

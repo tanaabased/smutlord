@@ -31,6 +31,10 @@ Agent System owns the identity, model and effort profiles, credentials, Git/SSH,
 GitHub admission, and memory-provider binding declared in
 [the manifest](./.agent-system/agent.yaml).
 
+Use Agent System with shared Codex prerequisite support; it owns the plugin
+version and installation before setup. CI consumes Agent System `main`.
+For an existing conflicting plugin, follow [Agent System's upgrade guide](https://github.com/tanaabased/openclaw-agent-system/blob/main/UPGRADING.md).
+
 smutlord's final setup step reconciles [OpenClaw policy](./openclaw.patch.json),
 including model admission and runtime bindings, execution, messaging, Workshop,
 and memory settings. It preserves unrelated shared arrays and private channel
