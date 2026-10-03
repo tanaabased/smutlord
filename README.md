@@ -62,6 +62,11 @@ openclaw agent-system credentials set op
 openclaw agent-system validate
 openclaw agent-system install --yes
 
+# authorize smutlord to use the selected provider profile.
+# NOTE: adapt Tanaab's OpenAI example to your provider/account and model configuration.
+openclaw models auth login --device-code --agent smutlord --profile-id openai:smutlord
+openclaw models auth order set --agent smutlord openai:smutlord
+
 # check installed state and confirm the managed GitHub identity is smutlord.
 openclaw agent-system doctor
 openclaw agent-system tool gh -- api user --jq .login
