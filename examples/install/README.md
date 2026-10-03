@@ -27,7 +27,6 @@ openclaw agent-system validate
 openclaw agent-system install --skip-setup-agent --json | tee "${TMPDIR}/install.json"
 jq -e '.outcomes | any(.component == "agent" and .status == "created")' "${TMPDIR}/install.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies"]' "${TMPDIR}/install.json"
-gog --version
 openclaw agents list --json | grep -F '"id": "smutlord"'
 test ! -e "$HOME/tanaab/canon"
 test ! -e "$HOME/tanaab/openclaw-agent-system"

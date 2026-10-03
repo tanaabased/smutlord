@@ -11,10 +11,10 @@ state, credentials, and release history are not part of this baseline.
 ## Status and setup
 
 The [Agent System manifest](./.agent-system/agent.yaml) identifies `smutlord`
-and `@smutlord`, but credentials are **unprovisioned**. No 1Password source,
-SSH public key, or allowed-signer entry is inherited. Installation must wait for
-the separate operator credential task; never use EMORI's credentials to fill the
-gap. [Advanced setup notes](./ADVANCED.md) describe the inherited mechanics,
+and `@smutlord`, with smutlord-specific 1Password sources and an SSH public key.
+Credential access, signing trust, and installed readiness still need operator
+verification; never use EMORI's credentials to fill a gap.
+[Advanced setup notes](./ADVANCED.md) describe the inherited mechanics,
 not a completed onboarding.
 
 The [host setup](./.agent-system/setup-host.yaml) installs Brewfile dependencies.
@@ -45,8 +45,8 @@ examples are **hosted integration scenarios** requiring separately provisioned
 credentials. Install and setup receive the `SMUTLORDKEY` Actions secret as
 `OP_SERVICE_ACCOUNT_TOKEN`; Agent System resolves credentials through the
 manifest's 1Password sources. The operator must configure those sources and
-service-account access before enabling `HOSTED_EXAMPLES_ENABLED`. Example CI
-selects the project Node.js version from `.node-version` after OpenClaw setup.
+service-account access before enabling `HOSTED_EXAMPLES_ENABLED`. OpenClaw setup
+selects a compatible Node.js runtime for the examples.
 Local unit and skill checks do not need live credentials.
 
 [`smutlord-skill-author`](./skills/skill-author/SKILL.md) owns local skill

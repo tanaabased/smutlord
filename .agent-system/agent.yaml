@@ -26,7 +26,7 @@ memory:
   search:
     provider: openai
     model: text-embedding-3-small
-    api-key: MEMORY_BINDER
+    api-key: SMUT_RECALL_KEY
 
 backup:
   output: .agent-system/backups
@@ -38,21 +38,15 @@ backup:
     - .private/**
 
 environment:
-  # No credential source is inherited from EMORI. Provision these for @smutlord.
+  op: 3t5psl4lnq2vqfvub3u6pq4tdm
+  set:
+    SMUTLORD_SSH_KEY:
+      from-op: 'op://6o5luqmb4taps663zyhjd3xyz4/id_smutkey/private key?ssh-format=openssh'
   required:
     - EMAIL
     - GH_TOKEN
-    - SSH_KEY
-    - MEMORY_BINDER
-    - GOG_CREDENTIALS_JSON
-    - GOG_TOKEN_JSON
-    - GOG_KEYRING_PASSWORD
-
-google:
-  credential-encoding: base64
-  oauth-client: GOG_CREDENTIALS_JSON
-  oauth-token: GOG_TOKEN_JSON
-  keyring-password: GOG_KEYRING_PASSWORD
+    - SMUTLORD_SSH_KEY
+    - SMUT_RECALL_KEY
 
 git:
   worktrees:
@@ -63,9 +57,9 @@ git:
         openclaw-agent-system: ~/tanaab/openclaw-agent-system
   ssh:
     private-keys:
-      from-environment: SSH_KEY
+      from-environment: SMUTLORD_SSH_KEY
   signing:
-    key: SSH_KEY
+    key: SMUTLORD_SSH_KEY
     allowed-signers-file: .agent-system/allowed_signers
   policy:
     delete-remote-ref: deny
@@ -75,6 +69,12 @@ github:
   host: github.com
   username: smutlord
   token: GH_TOKEN
+  ssh-keys:
+    key: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDfCqPM+EQzOSBzbktgt3zwRjttQPAosS27kZbdN4mHT'
+    title: smutlord-authentication
+  ssh-signing-keys:
+    key: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDfCqPM+EQzOSBzbktgt3zwRjttQPAosS27kZbdN4mHT'
+    title: smutlord-signing
   config:
     git-protocol: ssh
     spinner: disabled
