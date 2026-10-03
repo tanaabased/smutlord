@@ -26,7 +26,7 @@ of completed onboarding.
 
 ## Development
 
-Use Node.js 26.9.0 and Bun 1.4.2 (Node.js 24.15.0+ in the 24.x line is also
+Use Node.js 26.9.0 and Bun 1.4.2 (Node.js 24.16.0+ in the 24.x line is also
 supported). Install dependencies without scripts, then run credential-free
 checks:
 
