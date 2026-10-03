@@ -26,6 +26,7 @@ openclaw agents list --json | grep -F '"id": "smutlord"'
 
 # should report smutlord identity from the workspace
 grep -F '"name": "smutlord"' "${TMPDIR}/identity.json"
+grep -F '"avatar": "assets/icon-large.png"' "${TMPDIR}/identity.json"
 
 # should validate the resulting OpenClaw configuration
 openclaw config validate --json | tr -d '[:space:]' | grep -F '"valid":true'

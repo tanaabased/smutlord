@@ -23,8 +23,10 @@ git clone --no-local "$GITHUB_WORKSPACE" "$HOME/tanaab/smutlord"
 cd "$GITHUB_WORKSPACE"
 test ! -e "$HOME/tanaab/canon"
 test ! -e "$HOME/tanaab/openclaw-agent-system"
+openclaw plugins list --json | jq -e 'all(.plugins[]; .id != "codex")'
 openclaw agent-system validate
 openclaw agent-system install --skip-setup-agent --json | tee "${TMPDIR}/install.json"
+jq -e '.outcomes[0].component == "codex-plugin" and .outcomes[0].code == "codex-plugin-installed" and .outcomes[0].status == "created" and .outcomes[1].stepId == "brew-dependencies"' "${TMPDIR}/install.json"
 jq -e '.outcomes | any(.component == "agent" and .status == "created")' "${TMPDIR}/install.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies"]' "${TMPDIR}/install.json"
 openclaw agents list --json | grep -F '"id": "smutlord"'
@@ -36,6 +38,7 @@ test ! -e "$HOME/tanaab/openclaw-agent-system"
 # should leave smutlord's repeated installation converged
 cd "$GITHUB_WORKSPACE"
 openclaw agent-system install --skip-setup-agent --json | tee "${TMPDIR}/reinstall.json"
+jq -e '.outcomes[0].component == "codex-plugin" and .outcomes[0].code == "codex-plugin-unchanged" and .outcomes[0].status == "unchanged"' "${TMPDIR}/reinstall.json"
 jq -e '.outcomes | any(.component == "agent" and .status == "unchanged")' "${TMPDIR}/reinstall.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies"]' "${TMPDIR}/reinstall.json"
 jq -e '[.outcomes[] | select(.stepId == "brew-dependencies") | .status] == ["unchanged"]' "${TMPDIR}/reinstall.json"

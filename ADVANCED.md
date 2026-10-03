@@ -1,11 +1,11 @@
 # Advanced operations
 
 Operator details for smutlord's installed workspace. Start with the
-[README setup status](./README.md#status-and-setup).
+[README quickstart](./README.md#quickstart).
 
 ## Manual onboarding
 
-After smutlord-specific credentials have been provisioned and installation is authorized:
+After provisioning smutlord-specific credentials and completing installation:
 
 1. Sign in to Codex/OpenAI using the operator-approved account flow.
 2. Sign in to Messages on the Gateway Mac. Grant Full Disk Access and Messages
@@ -17,7 +17,7 @@ After smutlord-specific credentials have been provisioned and installation is au
 
 ## Reconciliation
 
-Only after credential provisioning, from smutlord's checkout, rerun `openclaw agent-system install --yes` to reconcile
+From smutlord's checkout, rerun `openclaw agent-system install --yes` to reconcile
 changes, then run `openclaw agent-system doctor` to inspect readiness and drift.
 Existing Canon checkouts are preserved; installation does not pull their latest
 changes.
@@ -51,3 +51,14 @@ verification require separate authorization after setup.
 Private memory belongs in ignored workspace storage; credentials, channel state,
 and transcripts belong outside this repository. Ignore rules prevent accidental
 tracking, not disclosure.
+
+## Source and artwork
+
+The public setup baseline was seeded from
+[EMORI commit `789df21b4aba17ddce56bffff64112f910aea85e`](https://github.com/tanaabased/emori/commit/789df21b4aba17ddce56bffff64112f910aea85e)
+under the preserved [MIT license](./LICENSE). EMORI's persona, credentials,
+private state, and release history are separate.
+
+smutlord uses his own [skull-and-guitar artwork](./assets/README.md): the square
+PNG for agent identity and the circular variant for the README. Local skills
+share these assets and the composer mark.

@@ -6,6 +6,7 @@ agent:
   email:
     from-environment: EMAIL
   description: Hair-metal bug-fixing agent for small, narrow repairs.
+  avatar: assets/icon-large.png
   emoji: 💀🔥
 
 models:
