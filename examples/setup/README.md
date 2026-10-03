@@ -39,8 +39,8 @@ openclaw config set skills.load.extraDirs "[\"$HOME/tanaab/canon/skills\"]" --st
 openclaw agent-system validate
 openclaw agent-system install --json | tee "${TMPDIR}/setup-install.json"
 jq -e '.outcomes[0].component == "codex-plugin" and .outcomes[0].code == "codex-plugin-installed" and .outcomes[0].status == "created" and .outcomes[1].stepId == "brew-dependencies"' "${TMPDIR}/setup-install.json"
-jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "canon-checkout", "canon-plugin", "imessage-plugin", "openclaw-config"]' "${TMPDIR}/setup-install.json"
-jq -e --arg brew "$(cat "${TMPDIR}/brew-expected-status")" '[.outcomes[] | select(.component == "setup") | .status] == [$brew, "updated", "updated", "updated", "updated"]' "${TMPDIR}/setup-install.json"
+jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "canon-checkout", "canon-plugin", "openclaw-config"]' "${TMPDIR}/setup-install.json"
+jq -e --arg brew "$(cat "${TMPDIR}/brew-expected-status")" '[.outcomes[] | select(.component == "setup") | .status] == [$brew, "updated", "updated", "updated"]' "${TMPDIR}/setup-install.json"
 
 # should satisfy smutlord's Brewfile dependencies
 HOMEBREW_NO_AUTO_UPDATE=1 brew bundle check --verbose --file "$GITHUB_WORKSPACE/Brewfile"
@@ -86,17 +86,7 @@ openclaw config get agents.entries.smutlord --json | jq -e --slurpfile desired "
     ($agent.modelPolicy.allow | index($model)) != null)
 '
 
-# should install the official iMessage channel plugin without configuring the channel
-openclaw plugins inspect imessage --json | jq -e '
-  .plugin.id == "imessage" and
-  .plugin.enabled == true and
-  .plugin.status != "error" and
-  .plugin.packageName == "@openclaw/imessage" and
-  (.plugin.channelIds | index("imessage")) != null and
-  .install.resolvedName == "@openclaw/imessage"
-'
-
-# should atomically configure smutlord's execution and messaging policy
+# should atomically configure smutlord's execution policy
 openclaw config get agents.entries.smutlord.tools --json | jq -e '
   .profile == "coding" and
   .exec.mode == "auto" and
@@ -105,33 +95,8 @@ openclaw config get agents.entries.smutlord.tools --json | jq -e '
   (.exec.pathPrepend | length) > 0
 '
 
-# should preserve Agent System grants while allowing only message sends
-openclaw config get agents.entries.smutlord.tools --json | jq -e '
-  (.alsoAllow | index("message")) != null and
-  .message.actions.allow == ["send"] and
-  (.message | has("crossContext") | not)
-'
-
-# should configure smutlord's iMessage route without changing session scope
-openclaw config get channels.imessage --json | jq -e '
-  .enabled == true and
-  .defaultAccount == "smutlord" and
-  .dmPolicy == "pairing" and
-  .groupPolicy == "allowlist" and
-  .accounts.smutlord == {"enabled": true} and
-  (has("defaultTo") | not) and
-  (has("allowFrom") | not) and
-  (.accounts.smutlord | has("cliPath") | not) and
-  (.accounts.smutlord | has("dbPath") | not)
-'
-openclaw config get bindings --json | jq -e '
-  [.[] | select(.type == "route" and .match.channel == "imessage" and .match.accountId == "smutlord")] == [{
-    "type": "route",
-    "agentId": "smutlord",
-    "match": {"channel": "imessage", "accountId": "smutlord"}
-  }]
-'
-! openclaw config get session.dmScope --json >/dev/null 2>&1
+# should leave iMessage uninstalled after setup
+openclaw plugins list --json | jq -e 'all(.plugins[]; .id != "imessage")'
 
 # should configure Workshop proposal policy
 openclaw config get skills.workshop.autonomous.mode --json | jq -e '. == "propose"'
@@ -178,7 +143,7 @@ openclaw hooks list --json | jq -e '
 cd "$GITHUB_WORKSPACE"
 openclaw agent-system install --json | tee "${TMPDIR}/setup-reinstall.json"
 jq -e '.outcomes[0].component == "codex-plugin" and .outcomes[0].code == "codex-plugin-unchanged" and .outcomes[0].status == "unchanged"' "${TMPDIR}/setup-reinstall.json"
-jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "canon-checkout", "canon-plugin", "imessage-plugin", "openclaw-config"]' "${TMPDIR}/setup-reinstall.json"
+jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "canon-checkout", "canon-plugin", "openclaw-config"]' "${TMPDIR}/setup-reinstall.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .status] | all(. == "unchanged")' "${TMPDIR}/setup-reinstall.json"
 
 # should preserve the shared plugin receipt and configuration after repeat setup
@@ -203,7 +168,7 @@ openclaw config get agents.entries.smutlord.modelPolicy.allow --json | jq -e --s
 # should leave the migrated model policy unchanged on repeat installation
 cd "$GITHUB_WORKSPACE"
 openclaw agent-system install --json | tee "${TMPDIR}/setup-model-repeat.json"
-jq -e '[.outcomes[] | select(.component == "setup") | .status] | length == 5 and all(. == "unchanged")' "${TMPDIR}/setup-model-repeat.json"
+jq -e '[.outcomes[] | select(.component == "setup") | .status] | length == 4 and all(. == "unchanged")' "${TMPDIR}/setup-model-repeat.json"
 openclaw config get agents.entries.smutlord.modelPolicy.allow --json | jq -e --slurpfile desired "$GITHUB_WORKSPACE/openclaw.patch.json" '. == $desired[0].agents.entries.smutlord.modelPolicy.allow'
 
 # should preserve the shared Codex plugin and clean checkout after model migration

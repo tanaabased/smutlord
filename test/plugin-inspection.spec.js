@@ -3,14 +3,13 @@ import { spawnSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 
-const task = fileURLToPath(new URL('../scripts/setup-imessage-plugin-task.js', import.meta.url));
+const pluginModule = new URL('../lib/setup/plugin.js', import.meta.url).href;
 const missing = {
   ok: false,
   error: {
     type: 'cli_error',
-    message: 'Plugin not found: imessage. Run `openclaw plugins list` to see installed plugins.',
+    message: 'Plugin not found: tanaab. Run `openclaw plugins list` to see installed plugins.',
   },
 };
 
@@ -34,12 +33,24 @@ fi
 
   afterEach(() => rmSync(directory, { force: true, recursive: true }));
 
-  function execute(mode, status, response) {
+  function execute(status, response) {
     const responsePath = join(directory, 'response.json');
     const callsPath = join(directory, 'calls');
     writeFileSync(responsePath, typeof response === 'string' ? response : JSON.stringify(response));
     writeFileSync(callsPath, '');
-    const result = spawnSync(process.execPath, [task, mode], {
+    const task = join(directory, 'inspect-plugin.mjs');
+    writeFileSync(
+      task,
+      `import { inspectPlugin } from ${JSON.stringify(pluginModule)};
+try {
+  process.stdout.write(JSON.stringify(inspectPlugin('tanaab')));
+} catch (error) {
+  process.stderr.write(error.message);
+  process.exitCode = 2;
+}
+`,
+    );
+    const result = spawnSync(process.execPath, [task], {
       encoding: 'utf8',
       env: {
         ...process.env,
@@ -54,32 +65,26 @@ fi
   }
 
   it('should report an inspected healthy plugin as converged', () => {
-    const result = execute('check', 0, {
+    const result = execute(0, {
       plugin: {
-        id: 'imessage',
+        id: 'tanaab',
         enabled: true,
         status: 'loaded',
-        packageName: '@openclaw/imessage',
-        channelIds: ['imessage'],
       },
-      install: { resolvedName: '@openclaw/imessage' },
     });
     assert.equal(result.status, 0, result.stderr);
-    assert.deepEqual(result.calls, ['plugins inspect imessage --json']);
+    assert.deepEqual(result.calls, ['plugins inspect tanaab --json']);
+    assert.equal(JSON.parse(result.stdout).plugin.enabled, true);
   });
 
-  it('should install only after an explicit missing-plugin response', () => {
-    assert.equal(execute('check', 1, missing).status, 1);
-    const result = execute('apply', 1, missing);
+  it('should return missing only after an explicit missing-plugin response', () => {
+    const result = execute(1, missing);
     assert.equal(result.status, 0, result.stderr);
-    assert.deepEqual(result.calls, [
-      'plugins inspect imessage --json',
-      'plugins install @openclaw/imessage --force --accept-capabilities --acknowledge-install-policy-warning',
-      'plugins enable imessage --accept-capabilities',
-    ]);
+    assert.equal(JSON.parse(result.stdout), null);
+    assert.deepEqual(result.calls, ['plugins inspect tanaab --json']);
   });
 
-  it('should block checks and applies when inspection fails or returns an invalid result', () => {
+  it('should reject failed or invalid inspection instead of treating the plugin as missing', () => {
     const failures = [
       [1, { ok: false, error: { type: 'cli_error', message: 'Invalid configuration.' } }],
       [2, missing],
@@ -93,12 +98,10 @@ fi
       [0, { plugin: { id: 'other' } }],
     ];
     for (const [status, response] of failures) {
-      for (const mode of ['check', 'apply']) {
-        const result = execute(mode, status, response);
-        assert.equal(result.status, 2, `${mode}: ${JSON.stringify(response)}\n${result.stderr}`);
-        assert.deepEqual(result.calls, ['plugins inspect imessage --json']);
-        assert.match(result.stderr, /could not inspect plugin imessage|returned invalid JSON/u);
-      }
+      const result = execute(status, response);
+      assert.equal(result.status, 2, `${JSON.stringify(response)}\n${result.stderr}`);
+      assert.deepEqual(result.calls, ['plugins inspect tanaab --json']);
+      assert.match(result.stderr, /could not inspect plugin tanaab|returned invalid JSON/u);
     }
   });
 });

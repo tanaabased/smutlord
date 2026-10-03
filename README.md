@@ -18,9 +18,6 @@ This is his public [OpenClaw](https://openclaw.ai) workspace.
 [Agent System](https://github.com/tanaabased/openclaw-agent-system) handles his
 identity, tool credentials, and GitHub work intake.
 
-His own credential sources and public signing key are configured. Credential
-access and installed readiness still need operational verification.
-
 ## Overview
 
 - Agent System has [model and effort profiles](./.agent-system/agent.yaml) for
@@ -81,12 +78,10 @@ reconciling managed tools, then runs the agent setup in
 | `brew-dependencies` | Installs Brewfile dependencies and the platform-specific SQLite vector package. |
 | `canon-checkout`    | Clones Canon when absent and preserves existing checkouts.                      |
 | `canon-plugin`      | Links Canon's `tanaab` plugin and exposes its shared skills.                    |
-| `imessage-plugin`   | Installs and enables the official iMessage plugin.                              |
-| `openclaw-config`   | Reconciles execution, model admission, messaging, Workshop, and memory policy.  |
+| `openclaw-config`   | Reconciles execution, model admission, Workshop, and memory policy.             |
 
 Finish [manual onboarding](./ADVANCED.md#manual-onboarding) for Codex/OpenAI
-sign-in, Messages permissions, and pairing. Installation does not complete those
-account-consent steps. For later changes, see
+sign-in. Installation does not complete account consent. For later changes, see
 [reconciliation](./ADVANCED.md#reconciliation).
 
 ## Configuration

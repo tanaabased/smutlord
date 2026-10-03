@@ -1,8 +1,5 @@
 # smutlord's dependencies, reconciled by Agent System's brew-dependencies setup step.
 
-tap "steipete/tap", trusted: true
-
-brew "steipete/tap/imsg"
 brew "gh"
 brew "git"
 brew "openssh"

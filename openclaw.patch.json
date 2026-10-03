@@ -24,15 +24,8 @@
         },
         "tools": {
           "profile": "coding",
-          "alsoAllow": ["message"],
           "exec": {
             "mode": "auto"
-          },
-          "message": {
-            "actions": {
-              "allow": ["send"]
-            },
-            "crossContext": null
           }
         },
         "memory": {
@@ -48,29 +41,6 @@
               }
             }
           }
-        }
-      }
-    }
-  },
-  "bindings": [
-    {
-      "type": "route",
-      "agentId": "smutlord",
-      "match": {
-        "channel": "imessage",
-        "accountId": "smutlord"
-      }
-    }
-  ],
-  "channels": {
-    "imessage": {
-      "enabled": true,
-      "defaultAccount": "smutlord",
-      "dmPolicy": "pairing",
-      "groupPolicy": "allowlist",
-      "accounts": {
-        "smutlord": {
-          "enabled": true
         }
       }
     }

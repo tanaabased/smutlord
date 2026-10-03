@@ -1,6 +1,10 @@
 # Changelog
 
-## 0.1.0 - Unreleased
+## {{ UNRELEASED_VERSION }} - [{{ UNRELEASED_DATE }}]({{ UNRELEASED_LINK }})
 
-- Seeded the public setup, skills, tests, issue forms, tooling, and workflows from [EMORI commit 789df21b4aba17ddce56bffff64112f910aea85e](https://github.com/tanaabased/emori/commit/789df21b4aba17ddce56bffff64112f910aea85e).
-- Rebranded operational identifiers for smutlord and left credentials and signing trust unprovisioned.
+- Added smutlord's narrow bug-fixing identity and voice. [#9](https://github.com/tanaabased/smutlord/pull/9)
+- Configured isolated 1Password, GitHub, SSH signing, and memory credential sources. [#9](https://github.com/tanaabased/smutlord/pull/9)
+- Delegated the shared Codex plugin prerequisite to Agent System. [#9](https://github.com/tanaabased/smutlord/pull/9)
+- Fixed GPT-6 reconciliation to retire legacy model admissions and preserve explicit operator additions. [#9](https://github.com/tanaabased/smutlord/pull/9)
+- Removed automatic `imessage` setup and the `imsg` dependency. [#9](https://github.com/tanaabased/smutlord/pull/9)
+- Seeded public workspace tooling from [EMORI commit `789df21b4aba17ddce56bffff64112f910aea85e`](https://github.com/tanaabased/emori/commit/789df21b4aba17ddce56bffff64112f910aea85e).

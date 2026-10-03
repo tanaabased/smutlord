@@ -5,15 +5,8 @@ Operator details for smutlord's installed workspace. Start with the
 
 ## Manual onboarding
 
-After provisioning smutlord-specific credentials and completing installation:
-
-1. Sign in to Codex/OpenAI using the operator-approved account flow.
-2. Sign in to Messages on the Gateway Mac. Grant Full Disk Access and Messages
-   Automation to the actual Gateway process context, then approve the first
-   iMessage pairing.
-3. Configure private delivery destinations outside this public repository.
-4. Verify delivery with an explicitly authorized real message. Successful
-   configuration alone does not prove delivery.
+After provisioning smutlord-specific credentials and completing installation,
+sign in to Codex/OpenAI using the operator-approved account flow.
 
 ## Reconciliation
 
@@ -36,11 +29,12 @@ version and installation before setup. CI consumes Agent System `main`.
 For an existing conflicting plugin, follow [Agent System's upgrade guide](https://github.com/tanaabased/openclaw-agent-system/blob/main/UPGRADING.md).
 
 smutlord's final setup step reconciles [OpenClaw policy](./openclaw.patch.json),
-including model admission and runtime bindings, execution, messaging, Workshop,
-and memory settings. It preserves unrelated shared arrays and private channel
-values. Make policy changes in that fragment and rerun installation; do not
-apply the raw fragment directly, which would bypass the merge logic and replace
-shared arrays. Primary model and fallback selection remain Agent System's job.
+including model admission and runtime bindings, execution, Workshop, and memory
+settings. It preserves managed tool grants and leaves channel configuration and
+routing to the operator. Make policy changes in that fragment and rerun
+installation; do not apply the raw fragment directly, which would bypass the merge
+logic and replace shared arrays. Primary model and fallback selection remain
+Agent System's job.
 
 Model admission tracks workspace ownership, including retired GPT-5.5 and GPT-5.6
 entries, so setup removes those entries and converges on the fragment's GPT-6
