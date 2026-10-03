@@ -45,13 +45,22 @@ jq -e --arg brew "$(cat "${TMPDIR}/brew-expected-status")" '[.outcomes[] | selec
 # should satisfy smutlord's Brewfile dependencies
 HOMEBREW_NO_AUTO_UPDATE=1 brew bundle check --verbose --file "$GITHUB_WORKSPACE/Brewfile"
 
-# should clone Canon over SSH and admit it with smutlord's managed Git identity
+# should clone canon over SSH for shared skills
 test -d "$HOME/tanaab/canon/.git"
-cd "$HOME/tanaab/canon"
-openclaw agent-system tool git --agent smutlord -- remote get-url origin | grep -Fx 'git@github.com:tanaabased/canon.git'
-openclaw agent-system tool git --agent smutlord -- var GIT_AUTHOR_IDENT | grep -F 'smutlord <smutlord@tanaab.dev>'
-cd "$GITHUB_WORKSPACE"
+git -C "$HOME/tanaab/canon" remote get-url origin | grep -Fx 'git@github.com:tanaabased/canon.git'
 test ! -e "$HOME/tanaab/openclaw-agent-system"
+
+# should use smutlord's managed Git identity in his own workspace
+cd "$GITHUB_WORKSPACE"
+openclaw agent-system tool git --agent smutlord -- var GIT_AUTHOR_IDENT | grep -F 'smutlord <smutlord@tanaab.dev>'
+
+# should deny managed Git access to the shared canon checkout
+cd "$HOME/tanaab/canon"
+if openclaw agent-system tool git --agent smutlord -- remote get-url origin > "${TMPDIR}/canon-git-denied.log" 2>&1; then
+  printf '%s\n' 'Managed Git unexpectedly admitted the shared Canon checkout.' >&2
+  exit 1
+fi
+grep -Fx 'tool: The git tool working directory is invalid. code=invalid_arguments' "${TMPDIR}/canon-git-denied.log"
 
 # should activate Canon as the plugin-owned source of shared skills
 openclaw plugins inspect tanaab --json | jq -e '
