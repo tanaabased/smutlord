@@ -37,6 +37,7 @@ openclaw config set skills.load.extraDirs "[\"$HOME/tanaab/canon/skills\"]" --st
 
 # should install Codex before host setup and then reconcile agent setup
 openclaw agent-system validate
+openclaw config set tools.sessions.visibility '"all"' --strict-json
 openclaw agent-system install --json | tee "${TMPDIR}/setup-install.json"
 jq -e '.outcomes[0].component == "codex-plugin" and .outcomes[0].code == "codex-plugin-installed" and .outcomes[0].status == "created" and .outcomes[1].stepId == "brew-dependencies"' "${TMPDIR}/setup-install.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "workspace-memory", "canon-checkout", "canon-plugin", "openclaw-config"]' "${TMPDIR}/setup-install.json"
@@ -97,8 +98,9 @@ openclaw config get plugins.entries.codex --json | jq -S . > "${TMPDIR}/codex-co
 openclaw config get agents.entries.smutlord --json | jq -e --slurpfile desired "$GITHUB_WORKSPACE/openclaw.patch.json" '
   . as $agent |
   $desired[0].agents.entries.smutlord as $owned |
-  all($owned.models | to_entries[];
-    $agent.models[.key].agentRuntime.id == .value.agentRuntime.id) and
+  $agent.models["openai/*"].agentRuntime.id == "codex" and
+  all($owned.modelPolicy.allow[]; . as $model |
+    ($agent.models[$model].agentRuntime.id // $agent.models["openai/*"].agentRuntime.id) == "codex") and
   all($owned.modelPolicy.allow[]; . as $model |
     ($agent.modelPolicy.allow | index($model)) != null)
 '
@@ -140,7 +142,7 @@ openclaw memory status --agent smutlord --json | jq -e \
 openclaw config get agents.entries.smutlord.memory.search.rememberAcrossConversations --json | jq -e '. == true'
 openclaw config get agents.entries.smutlord.memory.search.sources --json | jq -e '. == ["memory", "sessions"]'
 openclaw config get agents.entries.smutlord.memory.search.experimental.sessionMemory --json | jq -e '. == true'
-openclaw config get tools.sessions.visibility --json | jq -e '. == "agent"'
+openclaw config get tools.sessions.visibility --json | jq -e '. == "all"'
 openclaw config get hooks.internal.entries.session-memory.enabled --json | jq -e '. == false'
 openclaw memory status --agent smutlord --json | jq -e '
   map(select(.agentId == "smutlord")) |
@@ -161,7 +163,7 @@ cd "$GITHUB_WORKSPACE"
 openclaw agent-system install --json | tee "${TMPDIR}/setup-reinstall.json"
 jq -e '.outcomes[0].component == "codex-plugin" and .outcomes[0].code == "codex-plugin-unchanged" and .outcomes[0].status == "unchanged"' "${TMPDIR}/setup-reinstall.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "workspace-memory", "canon-checkout", "canon-plugin", "openclaw-config"]' "${TMPDIR}/setup-reinstall.json"
-jq -e '[.outcomes[] | select(.component == "setup") | .status] | all(. == "unchanged")' "${TMPDIR}/setup-reinstall.json"
+jq -e '[.outcomes[] | select(.component == "setup" or .component == "models") | .status] | length == 6 and all(. == "unchanged")' "${TMPDIR}/setup-reinstall.json"
 cmp "${TMPDIR}/memory-before-repeat.md" "$GITHUB_WORKSPACE/MEMORY.md"
 
 # should preserve the shared plugin receipt and configuration after repeat setup
@@ -186,7 +188,7 @@ openclaw config get agents.entries.smutlord.modelPolicy.allow --json | jq -e --s
 # should leave the migrated model policy unchanged on repeat installation
 cd "$GITHUB_WORKSPACE"
 openclaw agent-system install --json | tee "${TMPDIR}/setup-model-repeat.json"
-jq -e '[.outcomes[] | select(.component == "setup") | .status] | length == 5 and all(. == "unchanged")' "${TMPDIR}/setup-model-repeat.json"
+jq -e '[.outcomes[] | select(.component == "setup" or .component == "models") | .status] | length == 6 and all(. == "unchanged")' "${TMPDIR}/setup-model-repeat.json"
 openclaw config get agents.entries.smutlord.modelPolicy.allow --json | jq -e --slurpfile desired "$GITHUB_WORKSPACE/openclaw.patch.json" '. == $desired[0].agents.entries.smutlord.modelPolicy.allow'
 
 # should preserve the shared Codex plugin and clean checkout after model migration
