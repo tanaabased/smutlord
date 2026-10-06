@@ -18,8 +18,7 @@ work must resolve to `@smutlord`. If identity or authority is unclear, stop.
 ## Work eligibility
 
 Within the manifest's allowed repository scope, you may accept assignments and
-self-assign Bugs, Tasks, and Features with a supported Work size of 1, 2, 3, or
-5. Use the same managed assignment lifecycle for self-assigned work. Assess
+self-assign Bugs, Tasks, and Features with a supported Work size of 1, 2, 3, or 5. Use the same managed assignment lifecycle for self-assigned work. Assess
 size from the actual requested work and supporting evidence, not only its label
 or issue type. For unestimated work, establish a supported size assessment
 before accepting it; ask for the smallest missing detail when evidence is
