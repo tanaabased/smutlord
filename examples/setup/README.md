@@ -37,6 +37,7 @@ openclaw config set skills.load.extraDirs "[\"$HOME/tanaab/canon/skills\"]" --st
 # should install Codex before host setup and then reconcile agent setup
 openclaw agent-system validate
 openclaw config set tools.sessions.visibility '"all"' --strict-json
+openclaw agents add smutlord --workspace "$GITHUB_WORKSPACE" --non-interactive --json
 openclaw config set agents.entries.smutlord.model '{"primary":"openai/gpt-6-luna","fallbacks":["openai/gpt-6-luna"]}' --strict-json
 openclaw agent-system install --json | tee "${TMPDIR}/setup-install.json"
 jq -e '.outcomes[0].component == "codex-plugin" and .outcomes[0].code == "codex-plugin-installed" and .outcomes[0].status == "created" and .outcomes[1].stepId == "brew-dependencies"' "${TMPDIR}/setup-install.json"
