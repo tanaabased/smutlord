@@ -55,10 +55,5 @@
         "mode": "propose"
       }
     }
-  },
-  "tools": {
-    "sessions": {
-      "visibility": "agent"
-    }
   }
 }

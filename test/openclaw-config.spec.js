@@ -204,7 +204,7 @@ describe('lib/setup/openclaw-config', () => {
   });
 
   it('should carry every owned static policy through one patch', () => {
-    const patch = buildPatch();
+    const patch = buildPatch({ tools: { sessions: { visibility: 'all' } } });
     assert.equal(patch.agents.entries.smutlord.models['openai/gpt-6-astra'], null);
     assert.equal(
       patch.agents.entries.smutlord.models['openai/gpt-6-luna'].agentRuntime.id,
@@ -230,7 +230,7 @@ describe('lib/setup/openclaw-config', () => {
     assert.deepEqual(patch.agents.entries.smutlord.memory.search.sources, ['memory', 'sessions']);
     assert.equal(patch.hooks.internal.entries['session-memory'].enabled, false);
     assert.equal(patch.skills.workshop.autonomous.mode, 'propose');
-    assert.equal(patch.tools.sessions.visibility, 'agent');
+    assert.equal(patch.tools, undefined);
   });
 
   it('should recognize a converged patch including deletions and exact arrays', () => {
