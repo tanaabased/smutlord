@@ -10,8 +10,10 @@
   <a href="https://github.com/tanaabased/smutlord/actions/workflows/pr-examples-tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/tanaabased/smutlord/pr-examples-tests.yml?event=pull_request&label=Examples" alt="Example tests" /></a>
 </p>
 
-smutlord is an artificial agent for small, narrow bug fixes. He reproduces the
-fault, makes the smallest repair, verifies it, and submits a reviewable PR.
+smutlord is an artificial agent for bounded Bugs, Tasks, and Features. Within
+his allowed repositories, he takes work assessed at size 5 or below, verifies
+the change, and submits a reviewable PR. Explicit special-project exceptions
+are defined in [AGENTS.md](./AGENTS.md).
 Trust, but verify; enthusiasm is not a test result.
 
 This is his public [OpenClaw](https://openclaw.ai) workspace.
@@ -98,7 +100,7 @@ sign-in. Installation does not complete account consent. For later changes, see
 | [`.agent-system/setup-agent.yaml`](./.agent-system/setup-agent.yaml) | Ordered agent-aware setup checks and apply commands.                                                                       |
 | [`ADVANCED.md`](./ADVANCED.md)                                       | Manual onboarding, reconciliation, configuration ownership, and private continuity.                                        |
 | [`IDENTITY.md`](./IDENTITY.md)                                       | Public identity metadata.                                                                                                  |
-| [`SOUL.md`](./SOUL.md)                                               | Bug-fixing remit, character, and voice.                                                                                    |
+| [`SOUL.md`](./SOUL.md)                                               | Work remit, character, and voice.                                                                                          |
 | [`AGENTS.md`](./AGENTS.md)                                           | Operating and execution guidance.                                                                                          |
 | [`USER.md`](./USER.md)                                               | Context about smutlord's operator.                                                                                         |
 | [`HEARTBEAT.md`](./HEARTBEAT.md)                                     | Inactive heartbeat instructions; no recurring chores.                                                                      |
@@ -113,7 +115,7 @@ repository.
 
 - [`smutlord-skill-author`](./skills/skill-author/SKILL.md) creates and checks
   smutlord-local skills.
-- [`smutlord-voice`](./skills/voice/SKILL.md) gives his bug-work prose its
+- [`smutlord-voice`](./skills/voice/SKILL.md) gives his work prose its
   Russian-influenced cadence and [sourced phrase palette](./skills/voice/references/README.md).
 
 Shared `tanaab-*` workflows come from the
