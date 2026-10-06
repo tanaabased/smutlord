@@ -112,7 +112,6 @@ openclaw config get agents.entries.smutlord --json | jq -e '
 openclaw config get agents --json | bun --eval '
   import { readFileSync } from "node:fs";
   import { resolveAllowedModelRef } from "openclaw/plugin-sdk/agent-runtime";
-
   const cfg = { agents: JSON.parse(readFileSync(0, "utf8")) };
   for (const raw of ["openai/gpt-6.1-sol", "openai/gpt-6-luna"]) {
     const result = resolveAllowedModelRef({ cfg, agentId: "smutlord", catalog: [], defaultProvider: "openai", raw });
