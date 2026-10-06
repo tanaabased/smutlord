@@ -5,7 +5,7 @@ agent:
   name: smutlord
   email:
     from-environment: EMAIL
-  description: Hair-metal bug-fixing agent for small, narrow repairs.
+  description: Hair-metal agent for bounded Bugs, Tasks, and Features.
   avatar: assets/icon-large.png
   emoji: 💀🔥
 
