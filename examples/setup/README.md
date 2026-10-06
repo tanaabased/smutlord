@@ -65,7 +65,10 @@ if openclaw agent-system tool git --agent smutlord -- remote get-url origin > "$
   printf '%s\n' 'Managed Git unexpectedly admitted the shared Canon checkout.' >&2
   exit 1
 fi
-grep -Fx 'tool: The git tool working directory is invalid. code=invalid_arguments' "${TMPDIR}/canon-git-denied.log"
+if ! grep -Fq 'tool: The git tool working directory is invalid. code=invalid_arguments' "${TMPDIR}/canon-git-denied.log"; then
+  cat "${TMPDIR}/canon-git-denied.log" >&2
+  exit 1
+fi
 
 # should activate Canon as the plugin-owned source of shared skills
 openclaw plugins inspect tanaab --json | jq -e '
