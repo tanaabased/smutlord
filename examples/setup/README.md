@@ -2,7 +2,6 @@
 
 This scenario verifies smutlord's full setup and repeat convergence. Keeping both
 runs together proves idempotence against the state the first run created.
-It also seeds legacy model admissions and verifies migration to the GPT-6 policy.
 Cross-agent plugin reuse is covered separately by [shared](../shared/README.md).
 
 ## Setup
@@ -38,6 +37,8 @@ openclaw config set skills.load.extraDirs "[\"$HOME/tanaab/canon/skills\"]" --st
 # should install Codex before host setup and then reconcile agent setup
 openclaw agent-system validate
 openclaw config set tools.sessions.visibility '"all"' --strict-json
+openclaw agents add smutlord --workspace "$GITHUB_WORKSPACE" --non-interactive --json
+openclaw config set agents.entries.smutlord.model '{"primary":"openai/gpt-6-luna","fallbacks":["openai/gpt-6-luna"]}' --strict-json
 openclaw agent-system install --json | tee "${TMPDIR}/setup-install.json"
 jq -e '.outcomes[0].component == "codex-plugin" and .outcomes[0].code == "codex-plugin-installed" and .outcomes[0].status == "created" and .outcomes[1].stepId == "brew-dependencies"' "${TMPDIR}/setup-install.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "workspace-memory", "canon-checkout", "canon-plugin", "openclaw-config"]' "${TMPDIR}/setup-install.json"
@@ -94,15 +95,29 @@ openclaw plugins inspect codex --json | tee "${TMPDIR}/codex-after-setup.json" |
 jq -S .install "${TMPDIR}/codex-after-setup.json" > "${TMPDIR}/codex-receipt-before.json"
 openclaw config get plugins.entries.codex --json | jq -S . > "${TMPDIR}/codex-config-before.json"
 
-# should retain smutlord's Codex runtime bindings and model admission
-openclaw config get agents.entries.smutlord --json | jq -e --slurpfile desired "$GITHUB_WORKSPACE/openclaw.patch.json" '
-  . as $agent |
-  $desired[0].agents.entries.smutlord as $owned |
-  $agent.models["openai/*"].agentRuntime.id == "codex" and
-  all($owned.modelPolicy.allow[]; . as $model |
-    ($agent.models[$model].agentRuntime.id // $agent.models["openai/*"].agentRuntime.id) == "codex") and
-  all($owned.modelPolicy.allow[]; . as $model |
-    ($agent.modelPolicy.allow | index($model)) != null)
+# should select the manifest-declared default model and effort
+openclaw config get agents.entries.smutlord.model.primary --json | jq -e '. == "openai/gpt-6.1-sol"'
+openclaw config get agents.entries.smutlord.thinkingDefault --json | jq -e '. == "high"'
+
+# should preserve existing fallbacks
+openclaw config get agents.entries.smutlord.model.fallbacks --json | jq -e '. == ["openai/gpt-6-luna"]'
+
+# should bind both manifest-declared models to Codex
+openclaw config get agents.entries.smutlord --json | jq -e '
+  .models["openai/gpt-6.1-sol"].agentRuntime.id == "codex" and
+  .models["openai/gpt-6-luna"].agentRuntime.id == "codex"
+'
+
+# should allow selection of both manifest-declared models
+openclaw config get agents --json | bun --eval '
+  import { readFileSync } from "node:fs";
+  import { resolveAllowedModelRef } from "openclaw/plugin-sdk/agent-runtime";
+  const cfg = { agents: JSON.parse(readFileSync(0, "utf8")) };
+  for (const raw of ["openai/gpt-6.1-sol", "openai/gpt-6-luna"]) {
+    const result = resolveAllowedModelRef({ cfg, agentId: "smutlord", catalog: [], defaultProvider: "openai", raw });
+    if ("error" in result) throw new Error(result.error);
+    console.log(`Allowed: ${result.key}`);
+  }
 '
 
 # should atomically configure smutlord's execution policy
@@ -173,29 +188,6 @@ openclaw config get plugins.entries.codex --json | jq -S . > "${TMPDIR}/codex-co
 cmp "${TMPDIR}/codex-config-before.json" "${TMPDIR}/codex-config-repeat.json"
 
 # should preserve smutlord's clean checkout
-test -z "$(git -C "$GITHUB_WORKSPACE" status --short --untracked-files=all)"
-test -z "$(git -C "$HOME/tanaab/smutlord" status --short --untracked-files=all)"
-```
-
-```bash
-# should retire the six-model legacy allowlist on reconciliation
-cd "$GITHUB_WORKSPACE"
-openclaw config set agents.entries.smutlord.modelPolicy.allow '["openai/gpt-5.5","openai/gpt-6-astra","openai/gpt-5.6-sol","openai/gpt-6-luna","openai/gpt-5.6-terra","openai/gpt-6-sol"]' --strict-json
-openclaw agent-system install --json | tee "${TMPDIR}/setup-model-migration.json"
-jq -e '[.outcomes[] | select(.component == "setup" and .stepId == "openclaw-config")] | length == 1 and .[0].status == "updated"' "${TMPDIR}/setup-model-migration.json"
-openclaw config get agents.entries.smutlord.modelPolicy.allow --json | jq -e --slurpfile desired "$GITHUB_WORKSPACE/openclaw.patch.json" '. == $desired[0].agents.entries.smutlord.modelPolicy.allow'
-
-# should leave the migrated model policy unchanged on repeat installation
-cd "$GITHUB_WORKSPACE"
-openclaw agent-system install --json | tee "${TMPDIR}/setup-model-repeat.json"
-jq -e '[.outcomes[] | select(.component == "setup" or .component == "models") | .status] | length == 6 and all(. == "unchanged")' "${TMPDIR}/setup-model-repeat.json"
-openclaw config get agents.entries.smutlord.modelPolicy.allow --json | jq -e --slurpfile desired "$GITHUB_WORKSPACE/openclaw.patch.json" '. == $desired[0].agents.entries.smutlord.modelPolicy.allow'
-
-# should preserve the shared Codex plugin and clean checkout after model migration
-openclaw plugins inspect codex --json | jq -S .install > "${TMPDIR}/codex-receipt-models.json"
-cmp "${TMPDIR}/codex-receipt-before.json" "${TMPDIR}/codex-receipt-models.json"
-openclaw config get plugins.entries.codex --json | jq -S . > "${TMPDIR}/codex-config-models.json"
-cmp "${TMPDIR}/codex-config-before.json" "${TMPDIR}/codex-config-models.json"
 test -z "$(git -C "$GITHUB_WORKSPACE" status --short --untracked-files=all)"
 test -z "$(git -C "$HOME/tanaab/smutlord" status --short --untracked-files=all)"
 ```

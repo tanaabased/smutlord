@@ -85,7 +85,7 @@ reconciling managed tools, then runs the agent setup in
 | `brew-dependencies` | Installs Brewfile dependencies and the platform-specific SQLite vector package. |
 | `canon-checkout`    | Clones Canon when absent and preserves existing checkouts.                      |
 | `canon-plugin`      | Links Canon's `tanaab` plugin and exposes its shared skills.                    |
-| `openclaw-config`   | Reconciles execution, model admission, Workshop, and memory policy.             |
+| `openclaw-config`   | Reconciles execution, Workshop, and memory policy.                              |
 
 Finish [manual onboarding](./ADVANCED.md#manual-onboarding) for Codex/OpenAI
 sign-in. Installation does not complete account consent. For later changes, see

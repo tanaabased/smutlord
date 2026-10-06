@@ -25,24 +25,17 @@ GitHub admission, and memory-provider binding declared in
 [the manifest](./.agent-system/agent.yaml).
 
 Use Agent System with shared Codex prerequisite support; it owns the plugin
-version and installation before setup. CI consumes Agent System `main`.
+version and installation before setup. Hosted setup CI pins an installable
+revision containing the declared-runtime fix.
 For an existing conflicting plugin, follow [Agent System's upgrade guide](https://github.com/tanaabased/openclaw-agent-system/blob/main/UPGRADING.md).
 
-smutlord's final setup step reconciles [OpenClaw policy](./openclaw.patch.json),
-including model admission and runtime bindings, execution, Workshop, and memory
-settings. It preserves managed tool grants and leaves channel configuration and
-routing to the operator. Make policy changes in that fragment and rerun
-installation; do not apply the raw fragment directly, which would bypass the merge
-logic and replace shared arrays. Primary model and fallback selection remain
-Agent System's job.
-
-Model admission tracks workspace ownership, including retired GPT-5.5 and GPT-5.6
-entries, so setup removes those entries and converges on the fragment's GPT-6
-allowlist. Extra models already admitted by the operator are preserved only when
-listed in the optional `SMUTLORD_OPERATOR_MODEL_ADMISSIONS` JSON array passed to
-setup. Leave it unset for the normal GPT-6 setup. Unknown or conflicting ownership
-stops reconciliation before the config patch is applied; other agents' model
-policies remain untouched.
+smutlord's final setup step reconciles [non-model OpenClaw policy](./openclaw.patch.json),
+including execution, Workshop, and memory settings. It preserves managed tool
+grants and leaves channel configuration and routing to the operator. Make those
+policy changes in the fragment and rerun installation; do not apply the raw
+fragment directly, which would bypass the merge logic and replace shared arrays.
+Keep chat-model runtime, profiles, effort, and admissions in the Agent System
+manifest; Agent System installs them and manages primary and fallback selection.
 
 ## Private continuity
 
