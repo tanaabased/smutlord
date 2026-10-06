@@ -95,15 +95,30 @@ openclaw plugins inspect codex --json | tee "${TMPDIR}/codex-after-setup.json" |
 jq -S .install "${TMPDIR}/codex-after-setup.json" > "${TMPDIR}/codex-receipt-before.json"
 openclaw config get plugins.entries.codex --json | jq -S . > "${TMPDIR}/codex-config-before.json"
 
-# should bind manifest-declared models and admissions while preserving fallbacks
+# should select the manifest-declared default model and effort
+openclaw config get agents.entries.smutlord.model.primary --json | jq -e '. == "openai/gpt-6.1-sol"'
+openclaw config get agents.entries.smutlord.thinkingDefault --json | jq -e '. == "high"'
+
+# should preserve existing fallbacks
+openclaw config get agents.entries.smutlord.model.fallbacks --json | jq -e '. == ["openai/gpt-6-luna"]'
+
+# should bind both manifest-declared models to Codex
 openclaw config get agents.entries.smutlord --json | jq -e '
-  .model.primary == "openai/gpt-6.1-sol" and
-  .model.fallbacks == ["openai/gpt-6-luna"] and
-  .thinkingDefault == "high" and
   .models["openai/gpt-6.1-sol"].agentRuntime.id == "codex" and
-  .models["openai/gpt-6-luna"].agentRuntime.id == "codex" and
-  (.modelPolicy.allow | index("openai/gpt-6.1-sol")) != null and
-  (.modelPolicy.allow | index("openai/gpt-6-luna")) != null
+  .models["openai/gpt-6-luna"].agentRuntime.id == "codex"
+'
+
+# should allow selection of both manifest-declared models
+openclaw config get agents --json | bun --eval '
+  import { readFileSync } from "node:fs";
+  import { resolveAllowedModelRef } from "openclaw/plugin-sdk/agent-runtime";
+
+  const cfg = { agents: JSON.parse(readFileSync(0, "utf8")) };
+  for (const raw of ["openai/gpt-6.1-sol", "openai/gpt-6-luna"]) {
+    const result = resolveAllowedModelRef({ cfg, agentId: "smutlord", catalog: [], defaultProvider: "openai", raw });
+    if ("error" in result) throw new Error(result.error);
+    console.log(`Allowed: ${result.key}`);
+  }
 '
 
 # should atomically configure smutlord's execution policy
