@@ -24,21 +24,5 @@
         }
       }
     }
-  },
-  "hooks": {
-    "internal": {
-      "entries": {
-        "session-memory": {
-          "enabled": false
-        }
-      }
-    }
-  },
-  "skills": {
-    "workshop": {
-      "autonomous": {
-        "mode": "propose"
-      }
-    }
   }
 }

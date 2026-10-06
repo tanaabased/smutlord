@@ -30,12 +30,16 @@ revision containing the declared-runtime fix.
 For an existing conflicting plugin, follow [Agent System's upgrade guide](https://github.com/tanaabased/openclaw-agent-system/blob/main/UPGRADING.md).
 
 smutlord's final setup step reconciles [non-model OpenClaw policy](./openclaw.patch.json),
-including execution, Workshop, and memory settings. It preserves managed tool
+including his execution and memory settings. It preserves managed tool
 grants and leaves channel configuration and routing to the operator. Make those
 policy changes in the fragment and rerun installation; do not apply the raw
 fragment directly, which would bypass the merge logic and replace shared arrays.
 Keep chat-model runtime, profiles, effort, and admissions in the Agent System
 manifest; Agent System installs them and manages primary and fallback selection.
+
+EMORI's setup owns the shared session-memory hook and Workshop autonomy settings
+on the Agentbox. smutlord's setup preserves the host's values and does not require
+particular values to pass its checks. On a separate host, the operator owns them.
 
 ## Private continuity
 

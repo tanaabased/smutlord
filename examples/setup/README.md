@@ -34,6 +34,10 @@ else
 fi
 openclaw config set skills.load.extraDirs "[\"$HOME/tanaab/canon/skills\"]" --strict-json
 
+# should seed host preferences that differ from EMORI's defaults
+openclaw config set hooks.internal.entries.session-memory.enabled true --strict-json
+openclaw config set skills.workshop.autonomous.mode '"off"' --strict-json
+
 # should install Codex before host setup and then reconcile agent setup
 openclaw agent-system validate
 openclaw config set tools.sessions.visibility '"all"' --strict-json
@@ -132,8 +136,9 @@ openclaw config get agents.entries.smutlord.tools --json | jq -e '
 # should leave iMessage uninstalled after setup
 openclaw plugins list --json | jq -e 'all(.plugins[]; .id != "imessage")'
 
-# should configure Workshop proposal policy
-openclaw config get skills.workshop.autonomous.mode --json | jq -e '. == "propose"'
+# should preserve the host's hook and Workshop preferences
+openclaw config get hooks.internal.entries.session-memory.enabled --json | jq -e '. == true'
+openclaw config get skills.workshop.autonomous.mode --json | jq -e '. == "off"'
 
 # should configure smutlord's memory policy with the installed vector extension
 case "$(uname -m)" in
@@ -153,22 +158,15 @@ openclaw memory status --agent smutlord --json | jq -e \
    .[0].status.vector.enabled == true and
    .[0].status.vector.extensionPath == $extension'
 
-# should enable private same-agent recall without the legacy memory hook
+# should enable private same-agent recall
 openclaw config get agents.entries.smutlord.memory.search.rememberAcrossConversations --json | jq -e '. == true'
 openclaw config get agents.entries.smutlord.memory.search.sources --json | jq -e '. == ["memory", "sessions"]'
 openclaw config get agents.entries.smutlord.memory.search.experimental.sessionMemory --json | jq -e '. == true'
 openclaw config get tools.sessions.visibility --json | jq -e '. == "all"'
-openclaw config get hooks.internal.entries.session-memory.enabled --json | jq -e '. == false'
 openclaw memory status --agent smutlord --json | jq -e '
   map(select(.agentId == "smutlord")) |
   length == 1 and
   .[0].status.sources == ["memory", "sessions"]
-'
-openclaw hooks list --json | jq -e '
-  [.hooks[] | select(.name == "session-memory")] |
-  length == 1 and
-  .[0].disabled == true and
-  .[0].enabledByConfig == false
 '
 ```
 
@@ -180,6 +178,10 @@ jq -e '.outcomes[0].component == "codex-plugin" and .outcomes[0].code == "codex-
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "workspace-memory", "canon-checkout", "canon-plugin", "openclaw-config"]' "${TMPDIR}/setup-reinstall.json"
 jq -e '[.outcomes[] | select(.component == "setup" or .component == "models") | .status] | length == 6 and all(. == "unchanged")' "${TMPDIR}/setup-reinstall.json"
 cmp "${TMPDIR}/memory-before-repeat.md" "$GITHUB_WORKSPACE/MEMORY.md"
+
+# should preserve the host's hook and Workshop preferences after repeat setup
+openclaw config get hooks.internal.entries.session-memory.enabled --json | jq -e '. == true'
+openclaw config get skills.workshop.autonomous.mode --json | jq -e '. == "off"'
 
 # should preserve the shared plugin receipt and configuration after repeat setup
 openclaw plugins inspect codex --json | jq -S .install > "${TMPDIR}/codex-receipt-repeat.json"
