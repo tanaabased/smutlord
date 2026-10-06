@@ -2,16 +2,6 @@
   "agents": {
     "entries": {
       "smutlord": {
-        "models": {
-          "openai/*": {
-            "agentRuntime": {
-              "id": "codex"
-            }
-          }
-        },
-        "modelPolicy": {
-          "allow": ["openai/gpt-6.1-sol", "openai/gpt-6-luna"]
-        },
         "tools": {
           "profile": "coding",
           "exec": {
