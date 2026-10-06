@@ -3,6 +3,7 @@ schema-version: 1
 agent:
   id: smutlord
   name: smutlord
+  runtime: codex
   email:
     from-environment: EMAIL
   description: Hair-metal bug-fixing agent for small, narrow repairs.
