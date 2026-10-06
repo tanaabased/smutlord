@@ -21,7 +21,7 @@ This skips every setup check and apply, so it does not establish full readiness.
 ## Configuration ownership
 
 Agent System owns the identity, model and effort profiles, credentials, Git/SSH,
-GitHub admission, and memory-provider binding declared in
+GitHub admission, Google account and credentials, and memory-provider binding declared in
 [the manifest](./.agent-system/agent.yaml).
 
 Use Agent System with shared Codex prerequisite support; it owns the plugin

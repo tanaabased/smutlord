@@ -37,6 +37,10 @@ cp "$GITHUB_WORKSPACE/MEMORY.md" "${TMPDIR}/memory-before-repeat.md"
 openclaw agents list --json | grep -F '"id": "smutlord"'
 test ! -e "$HOME/tanaab/canon"
 test ! -e "$HOME/tanaab/openclaw-agent-system"
+
+# should install GoG before reconciling smutlord's declared Google account
+gog --version
+jq -e '.outcomes | any(.code == "google-credentials-created") and ([.[] | .stepId // .component] | index("brew-dependencies") < index("google"))' "${TMPDIR}/install.json"
 ```
 
 ```bash
@@ -48,6 +52,11 @@ jq -e '.outcomes | any(.component == "agent" and .status == "unchanged")' "${TMP
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "workspace-memory"]' "${TMPDIR}/reinstall.json"
 jq -e '[.outcomes[] | select(.stepId == "brew-dependencies" or .stepId == "workspace-memory") | .status] == ["unchanged", "unchanged"]' "${TMPDIR}/reinstall.json"
 cmp "${TMPDIR}/memory-before-repeat.md" "$GITHUB_WORKSPACE/MEMORY.md"
+
+# should retain Google credentials and verify the configured account on repeat installation
+cd "$GITHUB_WORKSPACE"
+jq -e '.outcomes | any(.code == "google-credentials-unchanged")' "${TMPDIR}/reinstall.json"
+openclaw agent-system doctor --json | jq -e '.findings | any(.code == "google-live-identity-ready")'
 
 # should use smutlord's installed GitHub credential
 openclaw agent-system tool gh -- api user --jq .login | grep -Fx smutlord

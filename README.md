@@ -43,6 +43,14 @@ identity, tool credentials, and GitHub work intake.
 Homebrew and Node/npm must be available to the runtime user. smutlord's install
 handles his additional [`Brewfile`](./Brewfile) dependencies automatically.
 
+In smutlord's 1Password environment, set `GOG_ACCOUNT` to his Google account email,
+which differs from his main `EMAIL`. Supply base64-encoded OAuth client and token
+JSON in `GOG_CREDENTIALS_JSON` and `GOG_TOKEN_JSON`, plus `GOG_KEYRING_PASSWORD`.
+The token must authorize the `GOG_ACCOUNT` account; installation requires that
+variable and does not fall back to `EMAIL`. See Agent System's
+[Google onboarding](https://github.com/tanaabased/openclaw-agent-system/blob/main/tools/google/README.md#per-agent-onboarding)
+if those credentials still need consent or export.
+
 ## Quickstart
 
 Run as the OpenClaw runtime user on the Agentbox Mac, with smutlord's 1Password
@@ -69,7 +77,7 @@ openclaw agent-system install --yes
 openclaw models auth login --device-code --agent smutlord --profile-id openai:smutlord
 openclaw models auth order set --agent smutlord openai:smutlord
 
-# check installed state and confirm the managed GitHub identity is smutlord.
+# check installed state, including Google account verification, and confirm GitHub identity.
 openclaw agent-system doctor
 openclaw agent-system tool gh -- api user --jq .login
 ```
@@ -93,17 +101,17 @@ sign-in. Installation does not complete account consent. For later changes, see
 
 ## Configuration
 
-| File                                                                 | Purpose                                                                                                                    |
-| -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| [`.agent-system/agent.yaml`](./.agent-system/agent.yaml)             | Identity, model and effort profiles, environment sources, managed Git, GitHub, assignment admission, and setup references. |
-| [`.agent-system/setup-host.yaml`](./.agent-system/setup-host.yaml)   | Host dependency check and apply command, run before managed-tool reconciliation.                                           |
-| [`.agent-system/setup-agent.yaml`](./.agent-system/setup-agent.yaml) | Ordered agent-aware setup checks and apply commands.                                                                       |
-| [`ADVANCED.md`](./ADVANCED.md)                                       | Manual onboarding, reconciliation, configuration ownership, and private continuity.                                        |
-| [`IDENTITY.md`](./IDENTITY.md)                                       | Public identity metadata.                                                                                                  |
-| [`SOUL.md`](./SOUL.md)                                               | Work remit, character, and voice.                                                                                          |
-| [`AGENTS.md`](./AGENTS.md)                                           | Operating and execution guidance.                                                                                          |
-| [`USER.md`](./USER.md)                                               | Context about smutlord's operator.                                                                                         |
-| [`HEARTBEAT.md`](./HEARTBEAT.md)                                     | Inactive heartbeat instructions; no recurring chores.                                                                      |
+| File                                                                 | Purpose                                                                                                                            |
+| -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| [`.agent-system/agent.yaml`](./.agent-system/agent.yaml)             | Identity, model and effort profiles, environment sources, managed Git, GitHub, Google, assignment admission, and setup references. |
+| [`.agent-system/setup-host.yaml`](./.agent-system/setup-host.yaml)   | Host dependency check and apply command, run before managed-tool reconciliation.                                                   |
+| [`.agent-system/setup-agent.yaml`](./.agent-system/setup-agent.yaml) | Ordered agent-aware setup checks and apply commands.                                                                               |
+| [`ADVANCED.md`](./ADVANCED.md)                                       | Manual onboarding, reconciliation, configuration ownership, and private continuity.                                                |
+| [`IDENTITY.md`](./IDENTITY.md)                                       | Public identity metadata.                                                                                                          |
+| [`SOUL.md`](./SOUL.md)                                               | Work remit, character, and voice.                                                                                                  |
+| [`AGENTS.md`](./AGENTS.md)                                           | Operating and execution guidance.                                                                                                  |
+| [`USER.md`](./USER.md)                                               | Context about smutlord's operator.                                                                                                 |
+| [`HEARTBEAT.md`](./HEARTBEAT.md)                                     | Inactive heartbeat instructions; no recurring chores.                                                                              |
 
 See Agent System's
 [manifest reference](https://github.com/tanaabased/openclaw-agent-system/blob/main/MANIFEST.md)

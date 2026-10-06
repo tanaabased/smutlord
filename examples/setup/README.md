@@ -130,6 +130,7 @@ openclaw config get agents.entries.smutlord.tools --json | jq -e '
   .exec.mode == "auto" and
   (.alsoAllow | index("agent_system_git")) != null and
   (.alsoAllow | index("agent_system_github")) != null and
+  (.alsoAllow | index("agent_system_google")) != null and
   (.exec.pathPrepend | length) > 0
 '
 
