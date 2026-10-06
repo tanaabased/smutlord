@@ -37,6 +37,7 @@ openclaw config set skills.load.extraDirs "[\"$HOME/tanaab/canon/skills\"]" --st
 
 # should install Codex before host setup and then reconcile agent setup
 openclaw agent-system validate
+openclaw config set tools.sessions.visibility '"all"' --strict-json
 openclaw agent-system install --json | tee "${TMPDIR}/setup-install.json"
 jq -e '.outcomes[0].component == "codex-plugin" and .outcomes[0].code == "codex-plugin-installed" and .outcomes[0].status == "created" and .outcomes[1].stepId == "brew-dependencies"' "${TMPDIR}/setup-install.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "workspace-memory", "canon-checkout", "canon-plugin", "openclaw-config"]' "${TMPDIR}/setup-install.json"
@@ -140,7 +141,7 @@ openclaw memory status --agent smutlord --json | jq -e \
 openclaw config get agents.entries.smutlord.memory.search.rememberAcrossConversations --json | jq -e '. == true'
 openclaw config get agents.entries.smutlord.memory.search.sources --json | jq -e '. == ["memory", "sessions"]'
 openclaw config get agents.entries.smutlord.memory.search.experimental.sessionMemory --json | jq -e '. == true'
-openclaw config get tools.sessions.visibility --json | jq -e '. == "agent"'
+openclaw config get tools.sessions.visibility --json | jq -e '. == "all"'
 openclaw config get hooks.internal.entries.session-memory.enabled --json | jq -e '. == false'
 openclaw memory status --agent smutlord --json | jq -e '
   map(select(.agentId == "smutlord")) |
