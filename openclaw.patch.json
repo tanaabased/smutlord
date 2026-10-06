@@ -3,12 +3,7 @@
     "entries": {
       "smutlord": {
         "models": {
-          "openai/gpt-6-luna": {
-            "agentRuntime": {
-              "id": "codex"
-            }
-          },
-          "openai/gpt-6.1-sol": {
+          "openai/*": {
             "agentRuntime": {
               "id": "codex"
             }

@@ -107,6 +107,7 @@ describe('lib/setup/openclaw-config', () => {
     const reconciled = structuredClone(patch);
     for (const [model, value] of Object.entries(reconciled.agents.entries.smutlord.models)) {
       if (value === null) delete reconciled.agents.entries.smutlord.models[model];
+      else if (value.agentRuntime === null) delete value.agentRuntime;
     }
     assert.equal(configPatchSatisfied(reconciled, buildPatch(reconciled)), true);
     assert.deepEqual(current, original);
@@ -148,8 +149,12 @@ describe('lib/setup/openclaw-config', () => {
       'operator/custom-model',
       'openai/gpt-6.1-sol',
     ]);
-    assert.equal(patch.agents.entries.smutlord.models['openai/gpt-6-astra'], null);
-    assert.equal(patch.agents.entries.smutlord.models['openai/gpt-6-sol'], null);
+    assert.deepEqual(patch.agents.entries.smutlord.models['openai/gpt-6-astra'], {
+      agentRuntime: null,
+    });
+    assert.deepEqual(patch.agents.entries.smutlord.models['openai/gpt-6-sol'], {
+      agentRuntime: null,
+    });
     assert.deepEqual(
       patch.agents.entries.smutlord.models['operator/custom-model'],
       current.agents.entries.smutlord.models['operator/custom-model'],
@@ -159,6 +164,7 @@ describe('lib/setup/openclaw-config', () => {
     const reconciled = structuredClone(patch);
     for (const [model, value] of Object.entries(reconciled.agents.entries.smutlord.models)) {
       if (value === null) delete reconciled.agents.entries.smutlord.models[model];
+      else if (value.agentRuntime === null) delete value.agentRuntime;
     }
     reconciled.agents.entries.other = structuredClone(current.agents.entries.other);
     assert.equal(
@@ -203,18 +209,11 @@ describe('lib/setup/openclaw-config', () => {
     assert.deepEqual(withoutCanonSkillDir(['~/tanaab/canon/skills'], canonPath, home), []);
   });
 
-  it('should carry every owned static policy through one patch', () => {
+  it('should bind OpenAI models through one wildcard and preserve model selection policy', () => {
     const patch = buildPatch();
-    assert.equal(patch.agents.entries.smutlord.models['openai/gpt-6-astra'], null);
-    assert.equal(
-      patch.agents.entries.smutlord.models['openai/gpt-6-luna'].agentRuntime.id,
-      'codex',
-    );
-    assert.equal(patch.agents.entries.smutlord.models['openai/gpt-6-sol'], null);
-    assert.equal(
-      patch.agents.entries.smutlord.models['openai/gpt-6.1-sol'].agentRuntime.id,
-      'codex',
-    );
+    assert.deepEqual(patch.agents.entries.smutlord.models, {
+      'openai/*': { agentRuntime: { id: 'codex' } },
+    });
     assert.deepEqual(patch.agents.entries.smutlord.modelPolicy.allow, [
       'openai/gpt-6.1-sol',
       'openai/gpt-6-luna',
@@ -231,6 +230,75 @@ describe('lib/setup/openclaw-config', () => {
     assert.equal(patch.hooks.internal.entries['session-memory'].enabled, false);
     assert.equal(patch.skills.workshop.autonomous.mode, 'propose');
     assert.equal(patch.tools.sessions.visibility, 'agent');
+  });
+
+  it('should remove exact Codex runtimes without dropping other model settings', () => {
+    const current = {
+      agents: {
+        entries: {
+          smutlord: {
+            models: {
+              'openai/gpt-6-luna': {
+                alias: 'Luna',
+                agentRuntime: { id: 'codex' },
+                params: { temperature: 0.2 },
+              },
+              'openai/gpt-6.1-sol': {
+                agentRuntime: { id: 'codex' },
+                params: { reasoningEffort: 'medium' },
+              },
+            },
+          },
+        },
+      },
+    };
+    const patch = buildPatch(current);
+    assert.deepEqual(patch.agents.entries.smutlord.models['openai/gpt-6-luna'], {
+      agentRuntime: null,
+    });
+    assert.deepEqual(patch.agents.entries.smutlord.models['openai/gpt-6.1-sol'], {
+      agentRuntime: null,
+    });
+    assert.equal(configPatchSatisfied(current, patch), false);
+    const reconciled = structuredClone(current);
+    for (const model of ['openai/gpt-6-luna', 'openai/gpt-6.1-sol']) {
+      delete reconciled.agents.entries.smutlord.models[model].agentRuntime;
+    }
+    reconciled.agents.entries.smutlord.models['openai/*'] = {
+      agentRuntime: { id: 'codex' },
+    };
+    assert.equal(
+      configPatchSatisfied(
+        reconciled.agents.entries.smutlord.models,
+        patch.agents.entries.smutlord.models,
+      ),
+      true,
+    );
+    assert.deepEqual(reconciled.agents.entries.smutlord.models['openai/gpt-6-luna'], {
+      alias: 'Luna',
+      params: { temperature: 0.2 },
+    });
+    assert.deepEqual(reconciled.agents.entries.smutlord.models['openai/gpt-6.1-sol'], {
+      params: { reasoningEffort: 'medium' },
+    });
+  });
+
+  it('should report an exact non-Codex runtime that overrides the wildcard', () => {
+    assert.throws(
+      () =>
+        buildPatch({
+          agents: {
+            entries: {
+              smutlord: {
+                models: {
+                  'openai/gpt-6-luna': { agentRuntime: { id: 'other-runtime' } },
+                },
+              },
+            },
+          },
+        }),
+      /Conflicting exact model runtime for openai\/gpt-6-luna: other-runtime/u,
+    );
   });
 
   it('should recognize a converged patch including deletions and exact arrays', () => {
