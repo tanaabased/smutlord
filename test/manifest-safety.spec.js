@@ -12,6 +12,15 @@ const allowedSigners = readFileSync(
 );
 
 describe('agent identity isolation', () => {
+  it('uses Sol 6.1 for default, medium, and high while retaining Luna for low', () => {
+    assert.deepEqual(manifest.models, {
+      default: { model: 'openai/gpt-6.1-sol', effort: 'high' },
+      low: { model: 'openai/gpt-6-luna', effort: 'medium' },
+      medium: { model: 'openai/gpt-6.1-sol', effort: 'high' },
+      high: { model: 'openai/gpt-6.1-sol', effort: 'high' },
+    });
+  });
+
   it('admits approved assignment actors without granting agents operator ownership', () => {
     assert.deepEqual(manifest.github.notifications['assignment-types'], ['issue']);
     assert.deepEqual(manifest.github.notifications['approved-actors'], [

@@ -73,13 +73,12 @@ describe('lib/setup/openclaw-config', () => {
     ]);
     assert.deepEqual(patch.agents.entries.smutlord.modelPolicy.allow, [
       'operator/custom-model',
-      'openai/gpt-6-astra',
+      'openai/gpt-6.1-sol',
       'openai/gpt-6-luna',
-      'openai/gpt-6-sol',
     ]);
   });
 
-  it('should migrate the six-model allowlist to GPT-6 and converge without mutating input', () => {
+  it('should migrate the six-model allowlist to Sol 6.1 and converge without mutating input', () => {
     const current = {
       agents: {
         entries: {
@@ -101,24 +100,31 @@ describe('lib/setup/openclaw-config', () => {
     const original = structuredClone(current);
     const patch = buildPatch(current);
     assert.deepEqual(patch.agents.entries.smutlord.modelPolicy.allow, [
-      'openai/gpt-6-astra',
+      'openai/gpt-6.1-sol',
       'openai/gpt-6-luna',
-      'openai/gpt-6-sol',
     ]);
     assert.equal(configPatchSatisfied(current, patch), false);
     const reconciled = structuredClone(patch);
+    for (const [model, value] of Object.entries(reconciled.agents.entries.smutlord.models)) {
+      if (value === null) delete reconciled.agents.entries.smutlord.models[model];
+    }
     assert.equal(configPatchSatisfied(reconciled, buildPatch(reconciled)), true);
     assert.deepEqual(current, original);
   });
 
   it('should retire owned models removed from the fragment and preserve operator models and other agents', () => {
     const fragment = loadOpenClawConfigFragment();
-    fragment.agents.entries.smutlord.modelPolicy.allow = ['openai/gpt-6-astra'];
+    fragment.agents.entries.smutlord.modelPolicy.allow = ['openai/gpt-6.1-sol'];
     const current = {
       agents: {
         entries: {
           smutlord: {
             tools: { alsoAllow: ['agent_system_git'] },
+            models: {
+              'openai/gpt-6-astra': { agentRuntime: { id: 'codex' } },
+              'openai/gpt-6-sol': { agentRuntime: { id: 'codex' } },
+              'operator/custom-model': { agentRuntime: { id: 'operator-runtime' } },
+            },
             modelPolicy: {
               allow: ['openai/gpt-6-astra', 'openai/gpt-6-sol', 'operator/custom-model'],
             },
@@ -140,11 +146,20 @@ describe('lib/setup/openclaw-config', () => {
     const patch = buildOpenClawConfigPatch(fragment, current, options);
     assert.deepEqual(patch.agents.entries.smutlord.modelPolicy.allow, [
       'operator/custom-model',
-      'openai/gpt-6-astra',
+      'openai/gpt-6.1-sol',
     ]);
+    assert.equal(patch.agents.entries.smutlord.models['openai/gpt-6-astra'], null);
+    assert.equal(patch.agents.entries.smutlord.models['openai/gpt-6-sol'], null);
+    assert.deepEqual(
+      patch.agents.entries.smutlord.models['operator/custom-model'],
+      current.agents.entries.smutlord.models['operator/custom-model'],
+    );
     assert.deepEqual(patch.agents.entries.smutlord.tools.alsoAllow, ['agent_system_git']);
     assert.equal(patch.agents.entries.other, undefined);
     const reconciled = structuredClone(patch);
+    for (const [model, value] of Object.entries(reconciled.agents.entries.smutlord.models)) {
+      if (value === null) delete reconciled.agents.entries.smutlord.models[model];
+    }
     reconciled.agents.entries.other = structuredClone(current.agents.entries.other);
     assert.equal(
       configPatchSatisfied(reconciled, buildOpenClawConfigPatch(fragment, reconciled, options)),
@@ -166,6 +181,13 @@ describe('lib/setup/openclaw-config', () => {
     for (const model of ['openai/gpt-5.6-sol', 'openai/gpt-6-sol']) {
       assert.throws(() => buildPatch(current, [model]), /Model admission ownership conflicts/u);
     }
+    assert.throws(
+      () =>
+        buildPatch({
+          agents: { entries: { smutlord: { models: { 'operator/unknown': {} } } } },
+        }),
+      /Unresolved model runtime ownership: operator\/unknown/u,
+    );
     assert.throws(() => buildPatch(current, 'all'), /Operator model admissions must be an array/u);
     assert.deepEqual(current, original);
   });
@@ -183,19 +205,19 @@ describe('lib/setup/openclaw-config', () => {
 
   it('should carry every owned static policy through one patch', () => {
     const patch = buildPatch();
-    assert.equal(
-      patch.agents.entries.smutlord.models['openai/gpt-6-astra'].agentRuntime.id,
-      'codex',
-    );
+    assert.equal(patch.agents.entries.smutlord.models['openai/gpt-6-astra'], null);
     assert.equal(
       patch.agents.entries.smutlord.models['openai/gpt-6-luna'].agentRuntime.id,
       'codex',
     );
-    assert.equal(patch.agents.entries.smutlord.models['openai/gpt-6-sol'].agentRuntime.id, 'codex');
+    assert.equal(patch.agents.entries.smutlord.models['openai/gpt-6-sol'], null);
+    assert.equal(
+      patch.agents.entries.smutlord.models['openai/gpt-6.1-sol'].agentRuntime.id,
+      'codex',
+    );
     assert.deepEqual(patch.agents.entries.smutlord.modelPolicy.allow, [
-      'openai/gpt-6-astra',
+      'openai/gpt-6.1-sol',
       'openai/gpt-6-luna',
-      'openai/gpt-6-sol',
     ]);
     assert.equal(patch.agents.entries.smutlord.tools.profile, 'coding');
     assert.equal(patch.agents.entries.smutlord.tools.exec.mode, 'auto');
@@ -214,6 +236,9 @@ describe('lib/setup/openclaw-config', () => {
   it('should recognize a converged patch including deletions and exact arrays', () => {
     const patch = buildPatch();
     const current = structuredClone(patch);
+    for (const [model, value] of Object.entries(current.agents.entries.smutlord.models)) {
+      if (value === null) delete current.agents.entries.smutlord.models[model];
+    }
     patch.skills.load = { extraDirs: null };
     current.skills.load = {};
     assert.equal(configPatchSatisfied(current, patch), true);
