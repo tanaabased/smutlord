@@ -39,16 +39,6 @@ backup:
     - memory/**
     - .private/**
 
-automations:
-  - id: backup-drive-nightly
-    enabled: true
-    runtimes: [openclaw]
-    schedule:
-      cron: '0 3 * * *'
-      timezone: America/New_York
-    run: [bun, scripts/backup-drive-task.js]
-    timeout-seconds: 3600
-
 environment:
   op: 3t5psl4lnq2vqfvub3u6pq4tdm
   set:

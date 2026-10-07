@@ -12,19 +12,6 @@ const allowedSigners = readFileSync(
 );
 
 describe('agent identity isolation', () => {
-  it('declares one enabled nightly backup with explicit timezone and the verified command', () => {
-    assert.deepEqual(manifest.automations, [
-      {
-        id: 'backup-drive-nightly',
-        enabled: true,
-        runtimes: ['openclaw'],
-        schedule: { cron: '0 3 * * *', timezone: 'America/New_York' },
-        run: ['bun', 'scripts/backup-drive-task.js'],
-        'timeout-seconds': 3600,
-      },
-    ]);
-  });
-
   it('uses Sol 6.1 for default, medium, and high while retaining Luna for low', () => {
     assert.deepEqual(manifest.models, {
       default: { model: 'openai/gpt-6.1-sol', effort: 'high' },
