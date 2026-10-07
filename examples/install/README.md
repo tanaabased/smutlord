@@ -56,7 +56,14 @@ cmp "${TMPDIR}/memory-before-repeat.md" "$GITHUB_WORKSPACE/MEMORY.md"
 # should retain Google credentials and verify the configured account on repeat installation
 cd "$GITHUB_WORKSPACE"
 jq -e '.outcomes | any(.code == "google-credentials-unchanged")' "${TMPDIR}/reinstall.json"
-openclaw agent-system doctor --json | jq -e '.findings | any(.code == "google-live-identity-ready")'
+if openclaw agent-system doctor --json > "${TMPDIR}/install-doctor.json"; then
+  doctor_exit=0
+else
+  doctor_exit=$?
+fi
+jq '{status, findings: [.findings[] | {component, stepId, code, status}]}' "${TMPDIR}/install-doctor.json"
+jq -e '.findings | any(.code == "google-live-identity-ready" and .status == "healthy")' "${TMPDIR}/install-doctor.json"
+test "$doctor_exit" -eq 0
 
 # should use smutlord's installed GitHub credential
 openclaw agent-system tool gh -- api user --jq .login | grep -Fx smutlord
