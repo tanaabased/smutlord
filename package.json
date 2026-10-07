@@ -32,6 +32,6 @@
     "lint:eslint": "bun run --bun eslint .",
     "lint:examples": "bun scripts/validate-examples-task.js",
     "test": "bun run test:unit",
-    "test:unit": "bun --bun mocha \"skills/*/test/**/*.spec.js\" \"test/**/*.spec.js\""
+    "test:unit": "bun --bun mocha \"skills/*/test/**/*.spec.js\" \"lib/*/test/*.spec.js\" \"test/**/*.spec.js\""
   }
 }
