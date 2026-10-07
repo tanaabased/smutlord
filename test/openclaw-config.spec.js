@@ -5,7 +5,6 @@ import {
   configPatchSatisfied,
   loadOpenClawConfigFragment,
   memoryStatusHealthy,
-  sessionMemoryHookHealthy,
   sqliteVectorExtensionPath,
   withoutCanonSkillDir,
 } from '../lib/setup/openclaw-config.js';
@@ -112,9 +111,30 @@ describe('lib/setup/openclaw-config', () => {
       vectorExtensionPath,
     );
     assert.deepEqual(patch.agents.entries.smutlord.memory.search.sources, ['memory', 'sessions']);
-    assert.equal(patch.hooks.internal.entries['session-memory'].enabled, false);
-    assert.equal(patch.skills.workshop.autonomous.mode, 'propose');
+    assert.equal(patch.hooks, undefined);
+    assert.equal(patch.skills, undefined);
     assert.equal(patch.tools, undefined);
+  });
+
+  it('should converge without changing shared hook and Workshop preferences', () => {
+    for (const enabled of [false, true]) {
+      for (const mode of ['off', 'propose', 'auto']) {
+        const current = buildPatch();
+        current.hooks = { internal: { entries: { 'session-memory': { enabled } } } };
+        current.skills = {
+          workshop: { autonomous: { mode } },
+          load: { extraDirs: ['~/tanaab/canon/skills', '/opt/shared-skills'] },
+        };
+        const original = structuredClone(current);
+        const patch = buildPatch(current);
+        assert.equal(patch.hooks, undefined);
+        assert.equal(patch.skills.workshop, undefined);
+        assert.deepEqual(patch.skills.load.extraDirs, ['/opt/shared-skills']);
+        assert.deepEqual(current, original);
+        current.skills.load.extraDirs = ['/opt/shared-skills'];
+        assert.equal(configPatchSatisfied(current, buildPatch(current)), true);
+      }
+    }
   });
 
   it('should preserve existing tool and selection settings', () => {
@@ -148,15 +168,15 @@ describe('lib/setup/openclaw-config', () => {
   it('should recognize a converged patch including deletions and exact arrays', () => {
     const patch = buildPatch();
     const current = structuredClone(patch);
-    patch.skills.load = { extraDirs: null };
-    current.skills.load = {};
+    patch.skills = { load: { extraDirs: null } };
+    current.skills = { load: {} };
     assert.equal(configPatchSatisfied(current, patch), true);
 
     current.agents.entries.smutlord.memory.search.sources = ['sessions', 'memory'];
     assert.equal(configPatchSatisfied(current, patch), false);
   });
 
-  it('should require the configured memory runtime and disabled legacy hook', () => {
+  it('should require the configured memory runtime', () => {
     assert.equal(
       memoryStatusHealthy(
         [
@@ -173,18 +193,6 @@ describe('lib/setup/openclaw-config', () => {
       true,
     );
     assert.equal(memoryStatusHealthy([], vectorExtensionPath), false);
-    assert.equal(
-      sessionMemoryHookHealthy({
-        hooks: [{ name: 'session-memory', disabled: true, enabledByConfig: false }],
-      }),
-      true,
-    );
-    assert.equal(
-      sessionMemoryHookHealthy({
-        hooks: [{ name: 'session-memory', disabled: false, enabledByConfig: true }],
-      }),
-      false,
-    );
   });
 
   it('should reject malformed shared arrays before replacing them', () => {

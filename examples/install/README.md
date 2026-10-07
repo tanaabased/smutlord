@@ -3,6 +3,9 @@
 This scenario installs Agent System from source in an isolated OpenClaw profile,
 then validates and reconciles smutlord's checked-out workspace using his declared
 credentials while running host dependency setup and skipping agent setup.
+Doctor also inspects the skipped setup steps and model availability, so its
+overall readiness is not this scenario's Google contract. Capture its report
+and require healthy Google findings independently of that aggregate status.
 
 ## Setup
 
@@ -37,6 +40,10 @@ cp "$GITHUB_WORKSPACE/MEMORY.md" "${TMPDIR}/memory-before-repeat.md"
 openclaw agents list --json | grep -F '"id": "smutlord"'
 test ! -e "$HOME/tanaab/canon"
 test ! -e "$HOME/tanaab/openclaw-agent-system"
+
+# should install GoG before reconciling smutlord's declared Google account
+gog --version
+jq -e '.outcomes | any(.code == "google-credentials-created") and ([.[] | .stepId // .component] | index("brew-dependencies") < index("google"))' "${TMPDIR}/install.json"
 ```
 
 ```bash
@@ -48,6 +55,24 @@ jq -e '.outcomes | any(.component == "agent" and .status == "unchanged")' "${TMP
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "workspace-memory"]' "${TMPDIR}/reinstall.json"
 jq -e '[.outcomes[] | select(.stepId == "brew-dependencies" or .stepId == "workspace-memory") | .status] == ["unchanged", "unchanged"]' "${TMPDIR}/reinstall.json"
 cmp "${TMPDIR}/memory-before-repeat.md" "$GITHUB_WORKSPACE/MEMORY.md"
+
+# should retain Google credentials on repeat installation
+cd "$GITHUB_WORKSPACE"
+jq -e '.outcomes | any(.code == "google-credentials-unchanged")' "${TMPDIR}/reinstall.json"
+
+# should verify the configured Google account independently of overall readiness
+cd "$GITHUB_WORKSPACE"
+if openclaw agent-system doctor --json > "${TMPDIR}/install-doctor.json"; then
+  doctor_exit=0
+else
+  doctor_exit=$?
+fi
+jq '{status, findings: [.findings[] | {component, stepId, code, status}]}' "${TMPDIR}/install-doctor.json"
+jq -e --argjson exit "$doctor_exit" '
+  (.status == "healthy" and $exit == 0) or
+  ((.status == "drift" or .status == "blocked") and $exit == 1)
+' "${TMPDIR}/install-doctor.json"
+jq -e '.findings | map(select(.component == "google")) | any(.code == "google-live-identity-ready" and .status == "healthy") and all(.status == "healthy")' "${TMPDIR}/install-doctor.json"
 
 # should use smutlord's installed GitHub credential
 openclaw agent-system tool gh -- api user --jq .login | grep -Fx smutlord

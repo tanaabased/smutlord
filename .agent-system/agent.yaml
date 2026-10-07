@@ -49,6 +49,18 @@ environment:
     - GH_TOKEN
     - SMUTLORD_SSH_KEY
     - SMUT_RECALL_KEY
+    - GOG_ACCOUNT
+    - GOG_CREDENTIALS_JSON
+    - GOG_TOKEN_JSON
+    - GOG_KEYRING_PASSWORD
+
+google:
+  account:
+    from-environment: GOG_ACCOUNT
+  credential-encoding: base64
+  oauth-client: GOG_CREDENTIALS_JSON
+  oauth-token: GOG_TOKEN_JSON
+  keyring-password: GOG_KEYRING_PASSWORD
 
 git:
   worktrees: {}

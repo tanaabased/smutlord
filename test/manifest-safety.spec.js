@@ -35,7 +35,7 @@ describe('agent identity isolation', () => {
     assert.deepEqual(manifest.git.worktrees, {});
   });
 
-  it('requires smutlord-specific credential sources without Google access', () => {
+  it('requires smutlord-specific credential sources', () => {
     assert.equal(manifest.agent.id, 'smutlord');
     assert.equal(manifest.agent.email['from-environment'], 'EMAIL');
     assert.equal(manifest.github.username, 'smutlord');
@@ -48,6 +48,10 @@ describe('agent identity isolation', () => {
       'GH_TOKEN',
       'SMUTLORD_SSH_KEY',
       'SMUT_RECALL_KEY',
+      'GOG_ACCOUNT',
+      'GOG_CREDENTIALS_JSON',
+      'GOG_TOKEN_JSON',
+      'GOG_KEYRING_PASSWORD',
     ]);
     assert.equal(manifest.environment.op, '3t5psl4lnq2vqfvub3u6pq4tdm');
     assert.deepEqual(manifest.environment.set, {
@@ -55,12 +59,22 @@ describe('agent identity isolation', () => {
         'from-op': 'op://gwhijlujd334yr67wonpmsrr2y/id_smutkey/private key?ssh-format=openssh',
       },
     });
-    assert.equal(manifest.google, undefined);
     assert.equal(manifest.github['ssh-keys'].key, manifest.github['ssh-signing-keys'].key);
     assert.match(manifest.github['ssh-keys'].key, /^ssh-ed25519 /u);
     assert.equal(
       allowedSigners.trim(),
       `smutlord@tanaab.dev ${manifest.github['ssh-signing-keys'].key}`,
     );
+  });
+
+  it('should bind Google explicitly to GOG_ACCOUNT instead of the agent email', () => {
+    assert.deepEqual(manifest.google, {
+      account: { 'from-environment': 'GOG_ACCOUNT' },
+      'credential-encoding': 'base64',
+      'oauth-client': 'GOG_CREDENTIALS_JSON',
+      'oauth-token': 'GOG_TOKEN_JSON',
+      'keyring-password': 'GOG_KEYRING_PASSWORD',
+    });
+    assert.equal(manifest.agent.email['from-environment'], 'EMAIL');
   });
 });
