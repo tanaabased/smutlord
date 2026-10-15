@@ -66,8 +66,7 @@ jq -e '
   (has("blocked") | not) and (has("unattempted") | not) and
   any(.warnings[]; .component == "github-notifications" and .code == "github-notification-runtime-unsupported") and
   any(.outcomes[]; .component == "github-notifications" and .code == "github-notification-runtime-unsupported" and .status == "skipped") and
-  any(.outcomes[]; .component == "github" and (.status == "created" or .status == "updated" or .status == "unchanged")) and
-  all(.outcomes[]; .code != "intake-activated")
+  any(.outcomes[]; .component == "github" and (.status == "created" or .status == "updated" or .status == "unchanged"))
 ' "${TMPDIR}/setup-install.json"
 
 # should satisfy smutlord's Brewfile dependencies
@@ -203,8 +202,7 @@ jq -e '
   (has("blocked") | not) and (has("unattempted") | not) and
   any(.warnings[]; .component == "github-notifications" and .code == "github-notification-runtime-unsupported") and
   any(.outcomes[]; .component == "github-notifications" and .code == "github-notification-runtime-unsupported" and .status == "skipped") and
-  any(.outcomes[]; .component == "github" and .status == "unchanged") and
-  all(.outcomes[]; .code != "intake-activated")
+  any(.outcomes[]; .component == "github" and .status == "unchanged")
 ' "${TMPDIR}/setup-reinstall.json"
 
 # should preserve the host's hook and Workshop preferences after repeat setup

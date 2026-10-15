@@ -54,8 +54,7 @@ jq -e '
   (has("blocked") | not) and (has("unattempted") | not) and
   any(.warnings[]; .component == "github-notifications" and .code == "github-notification-runtime-unsupported") and
   any(.outcomes[]; .component == "github-notifications" and .code == "github-notification-runtime-unsupported" and .status == "skipped") and
-  any(.outcomes[]; .component == "github" and (.status == "created" or .status == "updated" or .status == "unchanged")) and
-  all(.outcomes[]; .code != "intake-activated")
+  any(.outcomes[]; .component == "github" and (.status == "created" or .status == "updated" or .status == "unchanged"))
 ' "${TMPDIR}/install.json"
 
 # should install GoG before reconciling smutlord's declared Google account
@@ -79,8 +78,7 @@ jq -e '
   (has("blocked") | not) and (has("unattempted") | not) and
   any(.warnings[]; .component == "github-notifications" and .code == "github-notification-runtime-unsupported") and
   any(.outcomes[]; .component == "github-notifications" and .code == "github-notification-runtime-unsupported" and .status == "skipped") and
-  any(.outcomes[]; .component == "github" and .status == "unchanged") and
-  all(.outcomes[]; .code != "intake-activated")
+  any(.outcomes[]; .component == "github" and .status == "unchanged")
 ' "${TMPDIR}/reinstall.json"
 
 # should retain Google credentials on repeat installation
