@@ -18,6 +18,9 @@ openclaw agent-system credentials set op --from-env
 # should prepare smutlord's checked-out workspace
 mkdir -p "$HOME/tanaab"
 git clone --no-local "$GITHUB_WORKSPACE" "$HOME/tanaab/smutlord"
+
+# should start the isolated gateway for consented enrollment verification
+openclaw-gateway start
 ```
 
 ## Testing
@@ -217,4 +220,11 @@ cmp "${TMPDIR}/codex-config-before.json" "${TMPDIR}/codex-config-repeat.json"
 # should preserve smutlord's clean checkout
 test -z "$(git -C "$GITHUB_WORKSPACE" status --short --untracked-files=all)"
 test -z "$(git -C "$HOME/tanaab/smutlord" status --short --untracked-files=all)"
+```
+
+## Cleanup
+
+```bash
+# should stop the isolated gateway
+openclaw-gateway stop
 ```
