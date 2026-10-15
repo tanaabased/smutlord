@@ -99,17 +99,10 @@ github:
     spinner: disabled
     telemetry: disabled
   notifications:
-    assignment-types:
-      - issue
+    schema-version: 2
+    runtimes:
+      - openclaw
     interval-minutes: 5
-    approved-actors:
-      - login: pirog
-        node-id: MDQ6VXNlcjcxMzQyNA==
-        operator-owner: true
-      - login: emoriwan
-        node-id: U_kgDOEUqvpg
-      - login: smutlord
-        node-id: MDQ6VXNlcjMxNTk5ODk0
     allowed-repository-owners:
       - login: tanaabased
         node-id: O_kgDODNGy1g
@@ -117,10 +110,28 @@ github:
         node-id: MDQ6VXNlcjcxMzQyNA==
       - login: lando
         node-id: MDEyOk9yZ2FuaXphdGlvbjMxNjA1NTg0
-    pull-request:
-      reviewers:
+    issue-assignment:
+      mode: plan
+      allowed:
         - login: pirog
           node-id: MDQ6VXNlcjcxMzQyNA==
+          operator-owner: true
+        - login: emoriwan
+          node-id: U_kgDOEUqvpg
+        - login: smutlord
+          node-id: MDQ6VXNlcjMxNTk5ODk0
+      feedback:
+        inherit: true
+      pull-request:
+        recipients:
+          - source: assignment-actor
+            roles:
+              - assignee
+          - login: pirog
+            node-id: MDQ6VXNlcjcxMzQyNA==
+            roles:
+              - assignee
+              - reviewer
   policy:
     releases: deny
 

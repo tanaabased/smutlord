@@ -34,13 +34,55 @@ describe('agent identity isolation', () => {
     });
   });
 
-  it('admits approved assignment actors without granting agents operator ownership', () => {
-    assert.deepEqual(manifest.github.notifications['assignment-types'], ['issue']);
-    assert.deepEqual(manifest.github.notifications['approved-actors'], [
+  it('should declare only v2 OpenClaw plan intake without changing the agent runtime', () => {
+    const notifications = manifest.github.notifications;
+    assert.equal(manifest['schema-version'], 1);
+    assert.equal(manifest.agent.runtime, 'codex');
+    assert.equal(notifications['schema-version'], 2);
+    assert.deepEqual(notifications.runtimes, ['openclaw']);
+    assert.equal(notifications['interval-minutes'], 5);
+    assert.equal(notifications['issue-assignment'].mode, 'plan');
+    assert.deepEqual(
+      new Set(Object.keys(notifications)),
+      new Set([
+        'schema-version',
+        'runtimes',
+        'interval-minutes',
+        'allowed-repository-owners',
+        'issue-assignment',
+      ]),
+    );
+  });
+
+  it('should retain pinned repository owners', () => {
+    assert.deepEqual(manifest.github.notifications['allowed-repository-owners'], [
+      { login: 'tanaabased', 'node-id': 'O_kgDODNGy1g' },
+      { login: 'pirog', 'node-id': 'MDQ6VXNlcjcxMzQyNA==' },
+      { login: 'lando', 'node-id': 'MDEyOk9yZ2FuaXphdGlvbjMxNjA1NTg0' },
+    ]);
+  });
+
+  it('should admit delegation and self-assignment without granting agents operator ownership', () => {
+    assert.deepEqual(manifest.github.notifications['issue-assignment'].allowed, [
       { login: 'pirog', 'node-id': 'MDQ6VXNlcjcxMzQyNA==', 'operator-owner': true },
       { login: 'emoriwan', 'node-id': 'U_kgDOEUqvpg' },
       { login: 'smutlord', 'node-id': 'MDQ6VXNlcjMxNTk5ODk0' },
     ]);
+  });
+
+  it('should inherit issue feedback and retain dynamic and pinned PR recipient roles', () => {
+    const assignment = manifest.github.notifications['issue-assignment'];
+    assert.deepEqual(assignment.feedback, { inherit: true });
+    assert.deepEqual(assignment['pull-request'], {
+      recipients: [
+        { source: 'assignment-actor', roles: ['assignee'] },
+        { login: 'pirog', 'node-id': 'MDQ6VXNlcjcxMzQyNA==', roles: ['assignee', 'reviewer'] },
+      ],
+    });
+    assert.deepEqual(
+      new Set(Object.keys(assignment)),
+      new Set(['mode', 'allowed', 'feedback', 'pull-request']),
+    );
   });
 
   it('denies release mutations and keeps worktrees isolated from shared checkouts', () => {

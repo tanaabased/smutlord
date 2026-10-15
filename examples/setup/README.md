@@ -4,6 +4,10 @@ This scenario verifies smutlord's full setup and repeat convergence. Keeping bot
 runs together proves idempotence against the state the first run created.
 Cross-agent plugin reuse is covered separately by [shared](../shared/README.md).
 
+`--yes` consents to enrollment only in this isolated CI profile. Inherited
+feedback stays configured but unsupported; skipped notifications do not establish
+operational readiness or supported Plan-mode execution.
+
 ## Setup
 
 ```bash
@@ -14,6 +18,9 @@ openclaw agent-system credentials set op --from-env
 # should prepare smutlord's checked-out workspace
 mkdir -p "$HOME/tanaab"
 git clone --no-local "$GITHUB_WORKSPACE" "$HOME/tanaab/smutlord"
+
+# should start the isolated gateway for consented enrollment verification
+openclaw-gateway start
 ```
 
 ## Testing
@@ -43,7 +50,7 @@ openclaw agent-system validate
 openclaw config set tools.sessions.visibility '"all"' --strict-json
 openclaw agents add smutlord --workspace "$GITHUB_WORKSPACE" --non-interactive --json
 openclaw config set agents.entries.smutlord.model '{"primary":"openai/gpt-6-luna","fallbacks":["openai/gpt-6-luna"]}' --strict-json
-openclaw agent-system install --json | tee "${TMPDIR}/setup-install.json"
+openclaw agent-system install --yes --json | tee "${TMPDIR}/setup-install.json"
 jq -e '.outcomes[0].component == "codex-plugin" and .outcomes[0].code == "codex-plugin-installed" and .outcomes[0].status == "created" and .outcomes[1].stepId == "brew-dependencies"' "${TMPDIR}/setup-install.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "workspace-memory", "canon-checkout", "canon-plugin", "openclaw-config"]' "${TMPDIR}/setup-install.json"
 jq -e --arg brew "$(cat "${TMPDIR}/brew-expected-status")" '[.outcomes[] | select(.component == "setup") | .status] == [$brew, "updated", "updated", "updated", "updated"]' "${TMPDIR}/setup-install.json"
@@ -52,6 +59,15 @@ test -f "$GITHUB_WORKSPACE/MEMORY.md"
 grep -Fx '# Memory' "$GITHUB_WORKSPACE/MEMORY.md"
 printf '\nPreserved setup example note.\n' >> "$GITHUB_WORKSPACE/MEMORY.md"
 cp "$GITHUB_WORKSPACE/MEMORY.md" "${TMPDIR}/memory-before-repeat.md"
+
+# should warn and skip unsupported feedback while completing unrelated installation
+jq -e '
+  .agentId == "smutlord" and
+  (has("blocked") | not) and (has("unattempted") | not) and
+  any(.warnings[]; .component == "github-notifications" and .code == "github-notification-runtime-unsupported") and
+  any(.outcomes[]; .component == "github-notifications" and .code == "github-notification-runtime-unsupported" and .status == "skipped") and
+  any(.outcomes[]; .component == "github" and (.status == "created" or .status == "updated" or .status == "unchanged"))
+' "${TMPDIR}/setup-install.json"
 
 # should satisfy smutlord's Brewfile dependencies
 HOMEBREW_NO_AUTO_UPDATE=1 brew bundle check --verbose --file "$GITHUB_WORKSPACE/Brewfile"
@@ -174,11 +190,20 @@ openclaw memory status --agent smutlord --json | jq -e '
 ```bash
 # should leave a converged setup unchanged on repeat installation
 cd "$GITHUB_WORKSPACE"
-openclaw agent-system install --json | tee "${TMPDIR}/setup-reinstall.json"
+openclaw agent-system install --yes --json | tee "${TMPDIR}/setup-reinstall.json"
 jq -e '.outcomes[0].component == "codex-plugin" and .outcomes[0].code == "codex-plugin-unchanged" and .outcomes[0].status == "unchanged"' "${TMPDIR}/setup-reinstall.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "workspace-memory", "canon-checkout", "canon-plugin", "openclaw-config"]' "${TMPDIR}/setup-reinstall.json"
 jq -e '[.outcomes[] | select(.component == "setup" or .component == "models") | .status] | length == 6 and all(. == "unchanged")' "${TMPDIR}/setup-reinstall.json"
 cmp "${TMPDIR}/memory-before-repeat.md" "$GITHUB_WORKSPACE/MEMORY.md"
+
+# should retain the unsupported feedback warning and skipped notifications on repeat
+jq -e '
+  .agentId == "smutlord" and
+  (has("blocked") | not) and (has("unattempted") | not) and
+  any(.warnings[]; .component == "github-notifications" and .code == "github-notification-runtime-unsupported") and
+  any(.outcomes[]; .component == "github-notifications" and .code == "github-notification-runtime-unsupported" and .status == "skipped") and
+  any(.outcomes[]; .component == "github" and .status == "unchanged")
+' "${TMPDIR}/setup-reinstall.json"
 
 # should preserve the host's hook and Workshop preferences after repeat setup
 openclaw config get hooks.internal.entries.session-memory.enabled --json | jq -e '. == true'
@@ -193,4 +218,11 @@ cmp "${TMPDIR}/codex-config-before.json" "${TMPDIR}/codex-config-repeat.json"
 # should preserve smutlord's clean checkout
 test -z "$(git -C "$GITHUB_WORKSPACE" status --short --untracked-files=all)"
 test -z "$(git -C "$HOME/tanaab/smutlord" status --short --untracked-files=all)"
+```
+
+## Cleanup
+
+```bash
+# should stop the isolated gateway
+openclaw-gateway stop
 ```
