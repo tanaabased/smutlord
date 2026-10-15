@@ -7,6 +7,10 @@ Doctor also inspects the skipped setup steps and model availability, so its
 overall readiness is not this scenario's Google contract. Capture its report
 and require healthy Google findings independently of that aggregate status.
 
+`--yes` consents to enrollment only in this isolated CI profile. Inherited
+feedback stays configured but unsupported; skipped notifications do not establish
+operational readiness or supported Plan-mode execution.
+
 ## Setup
 
 ```bash
@@ -28,7 +32,7 @@ test ! -e "$HOME/tanaab/canon"
 test ! -e "$HOME/tanaab/openclaw-agent-system"
 openclaw plugins list --json | jq -e 'all(.plugins[]; .id != "codex")'
 openclaw agent-system validate
-openclaw agent-system install --skip-setup-agent --json | tee "${TMPDIR}/install.json"
+openclaw agent-system install --yes --skip-setup-agent --json | tee "${TMPDIR}/install.json"
 jq -e '.outcomes[0].component == "codex-plugin" and .outcomes[0].code == "codex-plugin-installed" and .outcomes[0].status == "created" and .outcomes[1].stepId == "brew-dependencies"' "${TMPDIR}/install.json"
 jq -e '.outcomes | any(.component == "agent" and .status == "created")' "${TMPDIR}/install.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "workspace-memory"]' "${TMPDIR}/install.json"
@@ -41,6 +45,16 @@ openclaw agents list --json | grep -F '"id": "smutlord"'
 test ! -e "$HOME/tanaab/canon"
 test ! -e "$HOME/tanaab/openclaw-agent-system"
 
+# should warn and skip unsupported feedback while completing unrelated installation
+jq -e '
+  .agentId == "smutlord" and
+  (has("blocked") | not) and (has("unattempted") | not) and
+  any(.warnings[]; .component == "github-notifications" and .code == "github-notification-runtime-unsupported") and
+  any(.outcomes[]; .component == "github-notifications" and .code == "github-notification-runtime-unsupported" and .status == "skipped") and
+  any(.outcomes[]; .component == "github" and (.status == "created" or .status == "updated" or .status == "unchanged")) and
+  all(.outcomes[]; .code != "intake-activated")
+' "${TMPDIR}/install.json"
+
 # should install GoG before reconciling smutlord's declared Google account
 gog --version
 jq -e '.outcomes | any(.code == "google-credentials-created") and ([.[] | .stepId // .component] | index("brew-dependencies") < index("google"))' "${TMPDIR}/install.json"
@@ -49,12 +63,22 @@ jq -e '.outcomes | any(.code == "google-credentials-created") and ([.[] | .stepI
 ```bash
 # should leave smutlord's repeated installation converged
 cd "$GITHUB_WORKSPACE"
-openclaw agent-system install --skip-setup-agent --json | tee "${TMPDIR}/reinstall.json"
+openclaw agent-system install --yes --skip-setup-agent --json | tee "${TMPDIR}/reinstall.json"
 jq -e '.outcomes[0].component == "codex-plugin" and .outcomes[0].code == "codex-plugin-unchanged" and .outcomes[0].status == "unchanged"' "${TMPDIR}/reinstall.json"
 jq -e '.outcomes | any(.component == "agent" and .status == "unchanged")' "${TMPDIR}/reinstall.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "workspace-memory"]' "${TMPDIR}/reinstall.json"
 jq -e '[.outcomes[] | select(.stepId == "brew-dependencies" or .stepId == "workspace-memory") | .status] == ["unchanged", "unchanged"]' "${TMPDIR}/reinstall.json"
 cmp "${TMPDIR}/memory-before-repeat.md" "$GITHUB_WORKSPACE/MEMORY.md"
+
+# should retain the unsupported feedback warning and skipped notifications on repeat
+jq -e '
+  .agentId == "smutlord" and
+  (has("blocked") | not) and (has("unattempted") | not) and
+  any(.warnings[]; .component == "github-notifications" and .code == "github-notification-runtime-unsupported") and
+  any(.outcomes[]; .component == "github-notifications" and .code == "github-notification-runtime-unsupported" and .status == "skipped") and
+  any(.outcomes[]; .component == "github" and .status == "unchanged") and
+  all(.outcomes[]; .code != "intake-activated")
+' "${TMPDIR}/reinstall.json"
 
 # should retain Google credentials on repeat installation
 cd "$GITHUB_WORKSPACE"
