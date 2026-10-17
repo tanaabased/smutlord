@@ -8,8 +8,8 @@ overall readiness is not this scenario's Google contract. Capture its report
 and require healthy Google findings independently of that aggregate status.
 
 `--yes` consents to enrollment only in this isolated CI profile. Inherited
-feedback stays configured but unsupported; skipped notifications do not establish
-operational readiness or supported Plan-mode execution.
+feedback remains enabled. These scenarios verify intake baseline activation and
+retention, not ongoing polling or feedback execution.
 
 ## Setup
 
@@ -48,12 +48,12 @@ openclaw agents list --json | grep -F '"id": "smutlord"'
 test ! -e "$HOME/tanaab/canon"
 test ! -e "$HOME/tanaab/openclaw-agent-system"
 
-# should warn and skip unsupported feedback while completing unrelated installation
+# should activate supported issue intake while completing installation
 jq -e '
   .agentId == "smutlord" and
   (has("blocked") | not) and (has("unattempted") | not) and
-  any(.warnings[]; .component == "github-notifications" and .code == "github-notification-runtime-unsupported") and
-  any(.outcomes[]; .component == "github-notifications" and .code == "github-notification-runtime-unsupported" and .status == "skipped") and
+  all(.warnings[]; .code != "github-notification-runtime-unsupported") and
+  any(.outcomes[]; .component == "github-intake" and .code == "intake-activated" and .status == "updated") and
   any(.outcomes[]; .component == "github" and (.status == "created" or .status == "updated" or .status == "unchanged"))
 ' "${TMPDIR}/install.json"
 
@@ -72,12 +72,12 @@ jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-depende
 jq -e '[.outcomes[] | select(.stepId == "brew-dependencies" or .stepId == "workspace-memory") | .status] == ["unchanged", "unchanged"]' "${TMPDIR}/reinstall.json"
 cmp "${TMPDIR}/memory-before-repeat.md" "$GITHUB_WORKSPACE/MEMORY.md"
 
-# should retain the unsupported feedback warning and skipped notifications on repeat
+# should retain supported issue intake on repeat installation
 jq -e '
   .agentId == "smutlord" and
   (has("blocked") | not) and (has("unattempted") | not) and
-  any(.warnings[]; .component == "github-notifications" and .code == "github-notification-runtime-unsupported") and
-  any(.outcomes[]; .component == "github-notifications" and .code == "github-notification-runtime-unsupported" and .status == "skipped") and
+  all(.warnings[]; .code != "github-notification-runtime-unsupported") and
+  any(.outcomes[]; .component == "github-intake" and .code == "intake-retained" and .status == "unchanged") and
   any(.outcomes[]; .component == "github" and .status == "unchanged")
 ' "${TMPDIR}/reinstall.json"
 
