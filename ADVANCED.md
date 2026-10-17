@@ -69,8 +69,8 @@ bun scripts/backup-drive-task.js --operator --pilot
 
 The task checks the selected agent, default backup destination and required
 OpenClaw database capture, creates a backup, runs `backup verify` on the exact
-archive and retained set **before uploading**, checks remote IDs, parent, size
-and checksums, then downloads and verifies the new archive. Pilot success prints
+archive before uploading, checks remote IDs, parent, size and checksums, then
+downloads and verifies the new archive before reconciling older copies. Pilot success prints
 `"status":"piloted"`; it applies no local or remote pruning.
 
 Omit `--pilot` to exercise the full retention command manually. After recovery
@@ -84,14 +84,32 @@ does not prove unattended execution. After installation, reconcile twice with
 Agent System and check that the second sync changes nothing. Issue completion
 still requires an actual scheduled occurrence and saved schedule readback.
 
-Failures exit nonzero and preserve recoverable archives. Private receipts and
-sanitized status live in ignored `.private/backup-drive/`; never publish that
-journal or archive contents. A pending run resumes the same archive; an uncertain
-upload must be reconciled rather than blindly retried.
+Each ordinary invocation captures current state afresh, including after a failed
+creation or lost return. Private receipts and sanitized status live in ignored
+`.private/backup-drive/`; never publish that journal or archive contents. Older
+uncertain uploads are reconciled by exact identity and integrity, never replayed
+because a listing is empty. Missing, unverified or unuploaded older archives defer
+cleanup, not the fresh backup. Successful fresh verification can report
+`retention: "deferred"` with a sanitized reason; local and Drive storage can exceed
+five copies until resolved. Failure of the fresh backup still exits nonzero.
 
-Before removing a stale `run.lock`, check its PID and ensure no backup task is
-running. Keep the journal. If creation was interrupted before saving its returned
-path, identify and verify the archive, then resume it explicitly:
+The workflow uses a nonblocking kernel `flock` through `@lickle/lock`, requiring
+a supported macOS or Linux native binding and local filesystem. Each direct
+managed command inherits the held descriptor, maintaining exclusion after wrapper
+death while that command lives. This does not supervise arbitrary descendants.
+Closing the last held descriptor releases ownership. The empty `run.lock` stays
+in place; never delete or replace it to unlock a run.
+
+Before first upgrading from the existence-only wrapper, stop old scheduled/manual
+writers and establish that their outstanding commands have exited. A nonempty
+legacy lock reports `legacy-backup-lock`; preserve it under another private
+evidence filename only after writer quiescence. Keep the journal, status and all
+archives. Recognized old creation/archive checkpoints are retired on the next
+admitted run without discarding receipts. Installation performs no live cutover.
+
+Interrupted staging or hidden `.pending-*` files and completed orphaned archives
+are neither guessed nor deleted here. To deliberately select one exact completed
+archive instead of capturing fresh state, use the explicit operator override:
 
 ```sh
 bun scripts/backup-drive-task.js --operator --pilot --resume-archive .agent-system/backups/EXACT-ARCHIVE.tar.gz
@@ -110,6 +128,8 @@ private state, and release history are separate.
 Backup orchestration adapts
 [EMORI PR #113](https://github.com/tanaabased/emori/pull/113) under the same MIT
 license, with smutlord's own identity and destination.
+Interrupted-run retry follows [EMORI PR #123](https://github.com/tanaabased/emori/pull/123),
+with fresh delivery completed before older archive reconciliation.
 
 smutlord uses his own [skull-and-guitar artwork](./assets/README.md): the square
 PNG for agent identity and the circular variant for the README. Local skills
