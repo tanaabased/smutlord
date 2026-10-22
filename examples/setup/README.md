@@ -7,7 +7,8 @@ Cross-agent plugin reuse is covered separately by [shared](../shared/README.md).
 `--yes` consents to enrollment only in this isolated CI profile. V3 derives
 feedback authors from allowed assignment actors and configured reviewers. These
 scenarios verify intake baseline activation and retention, not ongoing polling
-or feedback execution.
+or feedback execution. Automatic cron execution is disabled in the isolated
+profile so registered schedules cannot start model turns during setup checks.
 
 ## Setup
 
@@ -21,6 +22,7 @@ mkdir -p "$HOME/tanaab"
 git clone --no-local "$GITHUB_WORKSPACE" "$HOME/tanaab/smutlord"
 
 # should start the isolated gateway for consented enrollment verification
+openclaw config set cron.enabled false --strict-json
 openclaw-gateway start
 ```
 
@@ -191,7 +193,12 @@ openclaw memory status --agent smutlord --json | jq -e '
 ```bash
 # should leave a converged setup unchanged on repeat installation
 cd "$GITHUB_WORKSPACE"
-openclaw agent-system install --yes --json | tee "${TMPDIR}/setup-reinstall.json"
+set -o pipefail
+openclaw agent-system install --yes --json | tee "${TMPDIR}/setup-reinstall.json" || {
+  install_status=$?
+  openclaw-gateway diagnostics || true
+  exit "$install_status"
+}
 jq -e 'any(.outcomes[]; .component == "codex-plugin" and .code == "codex-plugin-unchanged" and .status == "unchanged")' "${TMPDIR}/setup-reinstall.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "workspace-memory", "canon-checkout", "canon-plugin", "openclaw-config"]' "${TMPDIR}/setup-reinstall.json"
 jq -e 'all(.outcomes[] | select(.component == "setup"); .status == "unchanged") and any(.outcomes[]; .component == "models" and .status == "unchanged") and all(.outcomes[] | select(.component == "models"); .status == "unchanged")' "${TMPDIR}/setup-reinstall.json"
@@ -219,11 +226,4 @@ cmp "${TMPDIR}/codex-config-before.json" "${TMPDIR}/codex-config-repeat.json"
 # should preserve smutlord's clean checkout
 test -z "$(git -C "$GITHUB_WORKSPACE" status --short --untracked-files=all)"
 test -z "$(git -C "$HOME/tanaab/smutlord" status --short --untracked-files=all)"
-```
-
-## Cleanup
-
-```bash
-# should stop the isolated gateway
-openclaw-gateway stop
 ```
