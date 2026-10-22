@@ -10,6 +10,27 @@ agent:
   avatar: assets/icon-large.png
   emoji: 💀🔥
 
+setup-host:
+  file: ./setup-host.yaml
+
+setup-agent:
+  file: ./setup-agent.yaml
+
+environment:
+  op: 3t5psl4lnq2vqfvub3u6pq4tdm
+  set:
+    SMUTLORD_SSH_KEY:
+      from-op: 'op://gwhijlujd334yr67wonpmsrr2y/id_smutkey/private key?ssh-format=openssh'
+  required:
+    - EMAIL
+    - GH_TOKEN
+    - SMUTLORD_SSH_KEY
+    - SMUT_RECALL_KEY
+    - GOG_ACCOUNT
+    - GOG_CREDENTIALS_JSON
+    - GOG_TOKEN_JSON
+    - GOG_KEYRING_PASSWORD
+
 models:
   default:
     model: openai/gpt-6.1-sol
@@ -29,40 +50,6 @@ memory:
     provider: openai
     model: text-embedding-3-small
     api-key: SMUT_RECALL_KEY
-
-backup:
-  output: .agent-system/backups
-  git-ignore: true
-  openclaw-state: required
-  include:
-    - '{MEMORY,DREAMS,BOOTSTRAP}.md'
-    - memory/**
-    - .private/**
-
-automations:
-  - id: backup-drive-nightly
-    enabled: true
-    runtimes: [openclaw]
-    schedule:
-      cron: '0 3 * * *'
-      timezone: America/New_York
-    run: [bun, scripts/backup-drive-task.js]
-    timeout-seconds: 3600
-
-environment:
-  op: 3t5psl4lnq2vqfvub3u6pq4tdm
-  set:
-    SMUTLORD_SSH_KEY:
-      from-op: 'op://gwhijlujd334yr67wonpmsrr2y/id_smutkey/private key?ssh-format=openssh'
-  required:
-    - EMAIL
-    - GH_TOKEN
-    - SMUTLORD_SSH_KEY
-    - SMUT_RECALL_KEY
-    - GOG_ACCOUNT
-    - GOG_CREDENTIALS_JSON
-    - GOG_TOKEN_JSON
-    - GOG_KEYRING_PASSWORD
 
 google:
   account:
@@ -98,44 +85,42 @@ github:
     git-protocol: ssh
     spinner: disabled
     telemetry: disabled
-  notifications:
-    schema-version: 2
-    runtimes:
-      - openclaw
-    interval-minutes: 5
-    allowed-repository-owners:
-      - login: tanaabased
-        node-id: O_kgDODNGy1g
-      - login: pirog
-        node-id: MDQ6VXNlcjcxMzQyNA==
-      - login: lando
-        node-id: MDEyOk9yZ2FuaXphdGlvbjMxNjA1NTg0
-    issue-assignment:
-      mode: plan
-      allowed:
-        - login: pirog
-          node-id: MDQ6VXNlcjcxMzQyNA==
-          operator-owner: true
-        - login: emoriwan
-          node-id: U_kgDOEUqvpg
-        - login: smutlord
-          node-id: MDQ6VXNlcjMxNTk5ODk0
-      feedback:
-        inherit: true
-      pull-request:
-        recipients:
-          - source: assignment-actor
-            roles:
-              - assignee
-          - login: pirog
-            node-id: MDQ6VXNlcjcxMzQyNA==
-            roles:
-              - assignee
-              - reviewer
+  schema-version: 3
+  runtimes:
+    - openclaw
+  allowed-repository-owners:
+    - O_kgDODNGy1g
+    - MDQ6VXNlcjcxMzQyNA==
+    - MDEyOk9yZ2FuaXphdGlvbjMxNjA1NTg0
+  issue-assignment:
+    allowed:
+      - MDQ6VXNlcjcxMzQyNA==
+      - U_kgDOEUqvpg
+      - MDQ6VXNlcjMxNTk5ODk0
+      - U_kgDODUXqww
+    reviewers:
+      - MDQ6VXNlcjcxMzQyNA==
   policy:
     releases: deny
 
-setup-host:
-  file: ./setup-host.yaml
-setup-agent:
-  file: ./setup-agent.yaml
+backup:
+  output: .agent-system/backups
+  git-ignore: true
+  openclaw-state: required
+  include:
+    - '{MEMORY,DREAMS,BOOTSTRAP}.md'
+    - memory/**
+    - .private/**
+
+automations:
+  - id: backup-drive-nightly
+    enabled: true
+    runtimes:
+      - openclaw
+    schedule:
+      cron: '0 3 * * *'
+      timezone: America/New_York
+    run:
+      - bun
+      - scripts/backup-drive-task.js
+    timeout-seconds: 3600
