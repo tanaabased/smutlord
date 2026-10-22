@@ -31,9 +31,10 @@
     "format:check": "bun run --bun prettier . --check --ignore-unknown",
     "format:write": "bun run --bun prettier . --write --ignore-unknown",
     "leia": "bun ./node_modules/.bin/leia",
-    "lint": "bun run lint:eslint && bun run lint:examples && bun run format:check",
+    "lint": "bun run lint:eslint && bun run lint:examples && bun run lint:voice && bun run format:check",
     "lint:eslint": "bun run --bun eslint .",
     "lint:examples": "bun scripts/validate-examples-task.js",
+    "lint:voice": "bun skills/skill-author/scripts/validate-skill.js --skill-dir skills/voice",
     "test": "bun run test:unit",
     "test:unit": "bun --bun mocha \"skills/*/test/**/*.spec.js\" \"lib/*/test/*.spec.js\" \"test/**/*.spec.js\""
   }

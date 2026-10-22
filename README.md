@@ -141,7 +141,6 @@ bun install --frozen-lockfile --ignore-scripts
 bun run lint
 bun run test
 bun skills/skill-author/scripts/validate-skill.js --skill-dir skills/skill-author
-bun skills/skill-author/scripts/validate-skill.js --skill-dir skills/voice
 ```
 
 [Leia examples](./examples/workspace/README.md) run in isolated GitHub-hosted

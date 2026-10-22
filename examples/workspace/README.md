@@ -1,6 +1,18 @@
 # Workspace Registration Example
 
-This scenario verifies workspace registration, identity import, and the local voice-skill contract without configuring a model or starting a Gateway. It does not prove skill loading or model behavior.
+## What this example does
+
+Registers the checked-out repository as smutlord's workspace and imports its
+identity. It checks the resulting registration and configuration and preserves
+the identity file and clean checkout.
+
+## What it doesn't do
+
+It does not configure a model, start a Gateway, or prove runtime skill loading or
+model behavior. Static skill and asset checks belong to the local
+[development checks](../../README.md#development). Installed Canon skill availability belongs to
+[setup](../setup/README.md); credential installation belongs to
+[install](../install/README.md).
 
 ## Setup
 
@@ -31,17 +43,8 @@ grep -F '"avatar": "assets/icon-large.png"' "${TMPDIR}/identity.json"
 # should validate the resulting OpenClaw configuration
 openclaw config validate --json | tr -d '[:space:]' | grep -F '"valid":true'
 
-# should validate the workspace voice skill
-bun "$GITHUB_WORKSPACE/skills/skill-author/scripts/validate-skill.js" --skill-dir "$GITHUB_WORKSPACE/skills/voice"
-
 # should preserve the reviewed identity file byte-for-byte
 cmp -s "${TMPDIR}/IDENTITY.before.md" "$GITHUB_WORKSPACE/IDENTITY.md"
-grep -Fx -- '- Name: smutlord' "$GITHUB_WORKSPACE/IDENTITY.md"
-grep -Fx -- '- Machine ID: smutlord' "$GITHUB_WORKSPACE/IDENTITY.md"
-grep -Fx -- '- Avatar: assets/icon-large.png' "$GITHUB_WORKSPACE/IDENTITY.md"
-test -s "$GITHUB_WORKSPACE/assets/icon-large.png"
-test -s "$GITHUB_WORKSPACE/assets/icon-large-circle.png"
-grep -F '#00c88a' "$GITHUB_WORKSPACE/assets/composer-icon.svg"
 
 # should leave the repository worktree clean
 git -C "$GITHUB_WORKSPACE" diff --exit-code
