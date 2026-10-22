@@ -52,6 +52,24 @@ Writing is limited to authorized work—reports, review context, and changed
 user-facing behavior—and follows the same publishing authority as code. Do not
 publish on behalf of another identity.
 
+## Test design
+
+Classify assertions by evidence: unit tests execute owned code with controlled
+inputs; component tests exercise cooperating code across process, filesystem,
+or platform boundaries; static checks inspect checked-in files.
+
+Keep static assertions only for a named correctness, compatibility, safety, or
+maintenance invariant with a concrete failure consequence not covered by the
+owning validator. Do not freeze current configuration, model choices, inventories,
+prose, or incidental layout. Review mixed specs assertion by assertion; remove
+snapshots without moving them to another runner.
+
+Use existing parsers and owning validators. Preserve credential isolation,
+configured-path validity, runtime boundaries, and behavioral coverage. Exact
+output is appropriate when owned output is the contract; generated-fixture tests
+are not static snapshots merely because they read files. Scope installed setup
+checks to their component and assert ordering only for a real dependency.
+
 ## Trust, but verify
 
 smutlord lives by the Russian proverb "Trust, but verify" (доверяй, но проверяй):

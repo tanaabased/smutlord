@@ -4,9 +4,10 @@ This scenario verifies smutlord's full setup and repeat convergence. Keeping bot
 runs together proves idempotence against the state the first run created.
 Cross-agent plugin reuse is covered separately by [shared](../shared/README.md).
 
-`--yes` consents to enrollment only in this isolated CI profile. Inherited
-feedback remains enabled. These scenarios verify intake baseline activation and
-retention, not ongoing polling or feedback execution.
+`--yes` consents to enrollment only in this isolated CI profile. V3 derives
+feedback authors from allowed assignment actors and configured reviewers. These
+scenarios verify intake baseline activation and retention, not ongoing polling
+or feedback execution.
 
 ## Setup
 
@@ -51,7 +52,7 @@ openclaw config set tools.sessions.visibility '"all"' --strict-json
 openclaw agents add smutlord --workspace "$GITHUB_WORKSPACE" --non-interactive --json
 openclaw config set agents.entries.smutlord.model '{"primary":"openai/gpt-6-luna","fallbacks":["openai/gpt-6-luna"]}' --strict-json
 openclaw agent-system install --yes --json | tee "${TMPDIR}/setup-install.json"
-jq -e '.outcomes[0].component == "codex-plugin" and .outcomes[0].code == "codex-plugin-installed" and .outcomes[0].status == "created" and .outcomes[1].stepId == "brew-dependencies"' "${TMPDIR}/setup-install.json"
+jq -e 'any(.outcomes[]; .component == "codex-plugin" and .code == "codex-plugin-installed" and .status == "created") and [.outcomes[] | select(.component == "codex-plugin" or (.component == "setup" and .stepId == "brew-dependencies")) | .component] == ["codex-plugin", "setup"]' "${TMPDIR}/setup-install.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "workspace-memory", "canon-checkout", "canon-plugin", "openclaw-config"]' "${TMPDIR}/setup-install.json"
 jq -e --arg brew "$(cat "${TMPDIR}/brew-expected-status")" '[.outcomes[] | select(.component == "setup") | .status] == [$brew, "updated", "updated", "updated", "updated"]' "${TMPDIR}/setup-install.json"
 test -d "$GITHUB_WORKSPACE/memory"
@@ -191,9 +192,9 @@ openclaw memory status --agent smutlord --json | jq -e '
 # should leave a converged setup unchanged on repeat installation
 cd "$GITHUB_WORKSPACE"
 openclaw agent-system install --yes --json | tee "${TMPDIR}/setup-reinstall.json"
-jq -e '.outcomes[0].component == "codex-plugin" and .outcomes[0].code == "codex-plugin-unchanged" and .outcomes[0].status == "unchanged"' "${TMPDIR}/setup-reinstall.json"
+jq -e 'any(.outcomes[]; .component == "codex-plugin" and .code == "codex-plugin-unchanged" and .status == "unchanged")' "${TMPDIR}/setup-reinstall.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "workspace-memory", "canon-checkout", "canon-plugin", "openclaw-config"]' "${TMPDIR}/setup-reinstall.json"
-jq -e '[.outcomes[] | select(.component == "setup" or .component == "models") | .status] | length == 6 and all(. == "unchanged")' "${TMPDIR}/setup-reinstall.json"
+jq -e 'all(.outcomes[] | select(.component == "setup"); .status == "unchanged") and any(.outcomes[]; .component == "models" and .status == "unchanged") and all(.outcomes[] | select(.component == "models"); .status == "unchanged")' "${TMPDIR}/setup-reinstall.json"
 cmp "${TMPDIR}/memory-before-repeat.md" "$GITHUB_WORKSPACE/MEMORY.md"
 
 # should retain supported issue intake on repeat installation

@@ -7,9 +7,10 @@ Doctor also inspects the skipped setup steps and model availability, so its
 overall readiness is not this scenario's Google contract. Capture its report
 and require healthy Google findings independently of that aggregate status.
 
-`--yes` consents to enrollment only in this isolated CI profile. Inherited
-feedback remains enabled. These scenarios verify intake baseline activation and
-retention, not ongoing polling or feedback execution.
+`--yes` consents to enrollment only in this isolated CI profile. V3 derives
+feedback authors from allowed assignment actors and configured reviewers. These
+scenarios verify intake baseline activation and retention, not ongoing polling
+or feedback execution.
 
 ## Setup
 
@@ -36,7 +37,7 @@ test ! -e "$HOME/tanaab/openclaw-agent-system"
 openclaw plugins list --json | jq -e 'all(.plugins[]; .id != "codex")'
 openclaw agent-system validate
 openclaw agent-system install --yes --skip-setup-agent --json | tee "${TMPDIR}/install.json"
-jq -e '.outcomes[0].component == "codex-plugin" and .outcomes[0].code == "codex-plugin-installed" and .outcomes[0].status == "created" and .outcomes[1].stepId == "brew-dependencies"' "${TMPDIR}/install.json"
+jq -e 'any(.outcomes[]; .component == "codex-plugin" and .code == "codex-plugin-installed" and .status == "created") and [.outcomes[] | select(.component == "codex-plugin" or (.component == "setup" and .stepId == "brew-dependencies")) | .component] == ["codex-plugin", "setup"]' "${TMPDIR}/install.json"
 jq -e '.outcomes | any(.component == "agent" and .status == "created")' "${TMPDIR}/install.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "workspace-memory"]' "${TMPDIR}/install.json"
 test -d "$GITHUB_WORKSPACE/memory"
@@ -66,10 +67,10 @@ jq -e '.outcomes | any(.code == "google-credentials-created") and ([.[] | .stepI
 # should leave smutlord's repeated installation converged
 cd "$GITHUB_WORKSPACE"
 openclaw agent-system install --yes --skip-setup-agent --json | tee "${TMPDIR}/reinstall.json"
-jq -e '.outcomes[0].component == "codex-plugin" and .outcomes[0].code == "codex-plugin-unchanged" and .outcomes[0].status == "unchanged"' "${TMPDIR}/reinstall.json"
+jq -e 'any(.outcomes[]; .component == "codex-plugin" and .code == "codex-plugin-unchanged" and .status == "unchanged")' "${TMPDIR}/reinstall.json"
 jq -e '.outcomes | any(.component == "agent" and .status == "unchanged")' "${TMPDIR}/reinstall.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "workspace-memory"]' "${TMPDIR}/reinstall.json"
-jq -e '[.outcomes[] | select(.stepId == "brew-dependencies" or .stepId == "workspace-memory") | .status] == ["unchanged", "unchanged"]' "${TMPDIR}/reinstall.json"
+jq -e '[.outcomes[] | select(.component == "setup") | .status] == ["unchanged", "unchanged"]' "${TMPDIR}/reinstall.json"
 cmp "${TMPDIR}/memory-before-repeat.md" "$GITHUB_WORKSPACE/MEMORY.md"
 
 # should retain supported issue intake on repeat installation

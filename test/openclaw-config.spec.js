@@ -100,17 +100,13 @@ describe('lib/setup/openclaw-config', () => {
     assert.deepEqual(withoutCanonSkillDir(['~/tanaab/canon/skills'], canonPath, home), []);
   });
 
-  it('should configure non-model workspace policies', () => {
+  it('should inject the installed vector path without claiming shared config', () => {
     const patch = buildPatch({ tools: { sessions: { visibility: 'all' } } });
-    assert.equal(patch.agents.entries.smutlord.tools.profile, 'coding');
-    assert.equal(patch.agents.entries.smutlord.tools.exec.mode, 'auto');
-    assert.deepEqual(patch.agents.entries.smutlord.tools.alsoAllow, []);
     assert.equal(patch.agents.entries.smutlord.tools.message, undefined);
     assert.equal(
       patch.agents.entries.smutlord.memory.search.store.vector.extensionPath,
       vectorExtensionPath,
     );
-    assert.deepEqual(patch.agents.entries.smutlord.memory.search.sources, ['memory', 'sessions']);
     assert.equal(patch.hooks, undefined);
     assert.equal(patch.skills, undefined);
     assert.equal(patch.tools, undefined);
