@@ -25,8 +25,8 @@ GitHub admission, Google account and credentials, and memory-provider binding de
 [the manifest](./.agent-system/agent.yaml).
 
 Use Agent System with shared Codex prerequisite support; it owns the plugin
-version and installation before setup. Hosted setup CI pins an installable
-revision containing the declared-runtime fix.
+version and installation before setup. Hosted setup CI uses Agent System's
+`main` revision.
 For an existing conflicting plugin, follow [Agent System's upgrade guide](https://github.com/tanaabased/openclaw-agent-system/blob/main/UPGRADING.md).
 
 smutlord's final setup step reconciles [non-model OpenClaw policy](./openclaw.patch.json),
