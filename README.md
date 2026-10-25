@@ -133,8 +133,10 @@ cover intake, scope, verification, voice, and identity.
 
 ## Development
 
-Use Node.js 26.9.0 (selected by [`.node-version`](./.node-version)) and Bun 1.4.2
-for repository tooling. Node.js 24.16.0 and later 24.x releases remain supported.
+Use the Node.js version selected by [`.node-version`](./.node-version) and the
+Bun version declared in [`package.json`](./package.json) for repository tooling.
+Node.js `24.22.1` and later `24.x` releases remain supported; see
+[`engines.node`](./package.json) for the supported ranges.
 
 ```sh
 bun install --frozen-lockfile --ignore-scripts
