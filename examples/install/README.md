@@ -31,6 +31,7 @@ git clone --no-local "$GITHUB_WORKSPACE" "$HOME/tanaab/smutlord"
 
 # should start the isolated gateway for consented enrollment verification
 openclaw config set cron.enabled false --strict-json
+openclaw config set logging.consoleStyle '"json"' --strict-json
 openclaw-gateway start
 ```
 
@@ -38,12 +39,16 @@ openclaw-gateway start
 
 ```bash
 # should validate and install smutlord with host dependencies but without agent setup
+set -euo pipefail
 cd "$GITHUB_WORKSPACE"
 test ! -e "$HOME/tanaab/canon"
 test ! -e "$HOME/tanaab/openclaw-agent-system"
 openclaw plugins list --json | jq -e 'all(.plugins[]; .id != "codex")'
 openclaw agent-system validate
-openclaw agent-system install --yes --skip-setup-agent --json | tee "${TMPDIR}/install.json"
+install_status=0
+openclaw agent-system install --yes --skip-setup-agent --json | tee "${TMPDIR}/install.json" || install_status=$?
+openclaw-gateway diagnostics --debug > "${TMPDIR}/first-install-gateway.log" 2>&1 || true
+test "$install_status" -eq 0
 jq -e 'any(.outcomes[]; .component == "codex-plugin" and .code == "codex-plugin-installed" and .status == "created") and [.outcomes[] | select(.component == "codex-plugin" or (.component == "setup" and .stepId == "brew-dependencies")) | .component] == ["codex-plugin", "setup"]' "${TMPDIR}/install.json"
 jq -e '.outcomes | any(.component == "agent" and .status == "created")' "${TMPDIR}/install.json"
 jq -e '[.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "workspace-memory"]' "${TMPDIR}/install.json"
@@ -72,7 +77,9 @@ jq -e '.outcomes | any(.code == "google-credentials-created") and ([.[] | .stepI
 
 ```bash
 # should leave smutlord's repeated installation converged
+set -euo pipefail
 cd "$GITHUB_WORKSPACE"
+test -f "${TMPDIR}/memory-before-repeat.md"
 openclaw agent-system install --yes --skip-setup-agent --json | tee "${TMPDIR}/reinstall.json"
 jq -e 'any(.outcomes[]; .component == "codex-plugin" and .code == "codex-plugin-unchanged" and .status == "unchanged")' "${TMPDIR}/reinstall.json"
 jq -e '.outcomes | any(.component == "agent" and .status == "unchanged")' "${TMPDIR}/reinstall.json"
