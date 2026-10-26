@@ -1,11 +1,9 @@
 # Artwork
 
-`icon-large.png` is the enhanced 512-pixel square skull/guitar avatar.
-`icon-large-circle.png` is its matching circular variant with transparent corners.
-The enhanced artwork was reconstructed with AI and changes some fine details of
-the supplied original. The avatar kit and masters remain local in
-`.scratch/smutlord-avatar-kit/`.
+Skull, guitar, no face reveal. `icon-large.png` is enhanced 512-pixel square
+avatar; `icon-large-circle.png` is matching circular version with transparent
+corners. AI reconstruction changed some fine details from supplied original.
+Avatar kit and masters stay local in `.scratch/smutlord-avatar-kit/`.
 
-`composer-icon.svg` adapts EMORI's geometric composer mark with a green
-(`#00c88a`) border and an S. Skills share this mark and the square PNG; standalone
-exports bundle both assets.
+`composer-icon.svg` adapts EMORI's geometric mark: green (`#00c88a`) border,
+letter S. Skills share this mark and square PNG; standalone exports bundle both.

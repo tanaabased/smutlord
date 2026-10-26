@@ -5,14 +5,14 @@
 ### New Features
 
 - Added explicit Google account and credential bindings through `GOG_ACCOUNT`. [#31](https://github.com/tanaabased/smutlord/pull/31)
-- Added private workspace memory initialization that preserves existing notes. [#18](https://github.com/tanaabased/smutlord/pull/18)
+- Added private memory initialization. Existing notes stay intact. [#18](https://github.com/tanaabased/smutlord/pull/18)
 - Added `smutlord`'s identity and Cyrillic-first voice palette. [#9](https://github.com/tanaabased/smutlord/pull/9) [#16](https://github.com/tanaabased/smutlord/pull/16)
 - Added verified Drive backups, nightly scheduling, and recoverable delivery. [#33](https://github.com/tanaabased/smutlord/pull/33) [#54](https://github.com/tanaabased/smutlord/pull/54)
 - Configured isolated 1Password, GitHub, SSH signing, and memory credential sources. [#9](https://github.com/tanaabased/smutlord/pull/9)
 
 ### Improvements
 
-- Allowed bounded Bugs, Tasks, and Features while retaining escalation for larger work. [#22](https://github.com/tanaabased/smutlord/pull/22)
+- Allowed bounded Bugs, Tasks, and Features. Larger work still requires direction. [#22](https://github.com/tanaabased/smutlord/pull/22)
 - Delegated shared Codex installation and model configuration to Agent System. [#9](https://github.com/tanaabased/smutlord/pull/9) [#28](https://github.com/tanaabased/smutlord/pull/28)
 - Migrated GitHub workflows to Agent System's v3 configuration and default stages. [#42](https://github.com/tanaabased/smutlord/pull/42) [#55](https://github.com/tanaabased/smutlord/pull/55)
 - Removed automatic `imessage` setup and the `imsg` dependency. [#9](https://github.com/tanaabased/smutlord/pull/9)
@@ -22,7 +22,7 @@
 ### Bug Fixes
 
 - Fixed interrupted backups blocking fresh captures. [#41](https://github.com/tanaabased/smutlord/pull/41)
-- Fixed setup diagnostics misreporting output-buffer and permission failures as unavailable commands.
+- Fixed setup errors blaming missing commands when output buffer filled or execution permission was denied.
 - Preserved shared host memory and Workshop settings during setup. [#31](https://github.com/tanaabased/smutlord/pull/31)
 
 ### Notes

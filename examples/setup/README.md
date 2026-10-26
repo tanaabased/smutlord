@@ -2,18 +2,18 @@
 
 ## What this example does
 
-Runs smutlord's full setup once in an isolated OpenClaw profile. It checks an
-eligible Canon skill, agent configuration, reported memory settings, and
-preservation of host preferences and clean checkouts.
+Run `smutlord`'s full setup once in isolated OpenClaw profile. Check eligible
+Canon skill, agent configuration, and reported memory settings. Host preferences
+and clean checkouts must stay intact.
 
 `--yes` consents to enrollment only in this isolated CI profile. Automatic cron
-execution is disabled so registered schedules cannot start model turns during
+execution stays disabled so registered schedules cannot start model turns during
 setup checks.
 
 ## What it doesn't do
 
-It does not repeat installation, execute skills or model turns, or test memory
-indexing and recall. Credential and intake lifecycle checks belong to
+No repeat installation, skill execution, model turns, or memory indexing and
+recall checks here. Credential and intake lifecycle checks belong to
 [install](../install/README.md); shared plugin reuse belongs to
 [shared](../shared/README.md).
 

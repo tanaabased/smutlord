@@ -2,17 +2,17 @@
 
 ## What this example does
 
-Registers the checked-out repository as smutlord's workspace and imports its
-identity. It checks the resulting registration and configuration and preserves
-the identity file and clean checkout.
+Register checked-out repository as `smutlord`'s workspace and import identity.
+Check resulting registration and configuration. Identity file and clean checkout
+must survive untouched.
 
 ## What it doesn't do
 
-It does not configure a model, start a Gateway, or prove runtime skill loading or
-model behavior. Static skill and asset checks belong to the local
-[development checks](../../README.md#development). Installed Canon skill availability belongs to
-[setup](../setup/README.md); credential installation belongs to
-[install](../install/README.md).
+Registration is not proof agent can run. This example configures no model,
+starts no Gateway, and does not prove runtime skill loading or model behavior.
+Static skill and asset checks belong to [development checks](../../README.md#development).
+Installed Canon skill availability belongs to [setup](../setup/README.md);
+credentials belong to [install](../install/README.md).
 
 ## Setup
 

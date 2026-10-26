@@ -1,34 +1,35 @@
 # Advanced
 
-helpful commands for `smutlord`'s installed workspace. for initial setup, use the
+Commands for installed `smutlord` workspace. For initial setup, use
 [README quickstart](./README.md#quickstart).
 
 ## Command cheat sheet
 
-run individual commands as needed from the installed checkout.
+Choose command you need and run it from installed checkout. This is cheat sheet,
+not script to run from top to bottom.
 
 ```sh
-# validate the manifest without applying changes.
+# Validate manifest without applying changes.
 openclaw agent-system validate
 
-# apply configuration changes and run setup.
-# apply openclaw.patch.json through this installer, not directly.
+# Apply configuration changes and run setup.
+# Apply openclaw.patch.json through this installer, not directly.
 openclaw agent-system install --yes
 
-# inspect readiness and drift without applying repairs.
+# Inspect readiness and drift. No repairs applied.
 openclaw agent-system doctor
 
-# reconcile configured components while skipping all setup checks and tasks.
-# this does not establish full setup readiness.
+# Reconcile configured components; skip all setup checks and tasks.
+# Skipped checks do not prove setup is ready.
 openclaw agent-system install --skip-setup
 
-# confirm the agent's GitHub identity.
+# Confirm agent's GitHub identity.
 openclaw agent-system tool gh -- api user --jq .login
 
-# inspect configured automations and installed schedules.
+# Inspect configured automations and installed schedules.
 openclaw agent-system automations list
 
-# inspect recent nightly backup execution and delivery results.
+# Inspect recent nightly backup execution and delivery results.
 openclaw agent-system automations runs backup-agent-nightly --limit 10
 ```
 

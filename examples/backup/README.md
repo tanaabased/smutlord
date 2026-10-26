@@ -1,18 +1,18 @@
-# smutlord Recovery
+# `smutlord` Recovery
 
 ## What this example does
 
-Creates and verifies a backup from a disposable workspace with smutlord's manifest,
-identity, synthetic private continuity, and an agent database. It restores into
-staging and checks recovered content, excluded paths, and preservation of source
-data and agent registrations.
+Create and verify backup from disposable workspace with `smutlord`'s manifest,
+identity, synthetic private files, and agent database. Restore into staging.
+Check recovered content and excluded paths; source data and agent registrations
+must remain intact. Trust, but verify.
 
 ## What it doesn't do
 
-It does not start or activate a runtime, replace a live workspace, or exercise
-scheduled backups, remote uploads, or retention pruning. It does not establish
-that a restored agent can run. [Setup](../setup/README.md) covers fresh
-installation and configuration, not activation of a restored agent.
+No runtime activation, live workspace replacement, scheduled backups, remote
+uploads, or retention pruning. Restored files do not prove restored agent can
+run. [Setup](../setup/README.md) covers fresh installation and configuration,
+not activation of restored agent.
 
 ## Setup
 

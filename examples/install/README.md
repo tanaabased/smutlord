@@ -2,21 +2,21 @@
 
 ## What this example does
 
-Installs and reconciles smutlord's checked-out workspace in an isolated OpenClaw
-profile using his declared credentials. It runs host dependency setup, verifies
-managed Git and GitHub identity and Google account readiness, and checks intake
-activation. A repeat installation checks convergence, credential and intake
-retention, and preservation of private memory.
+Install `smutlord`'s checked-out workspace in isolated OpenClaw profile using
+his declared credentials. Run host dependency setup, verify managed Git and
+GitHub identity, check Google account readiness and intake activation. Install
+again and check convergence. Credentials and intake must stay in place; private
+memory must survive.
 
 `--yes` consents to enrollment only in this isolated CI profile. Automatic cron
-execution is disabled so installed schedules cannot run during these checks.
+execution stays disabled so installed schedules cannot run during checks.
 
 ## What it doesn't do
 
-It skips agent setup, which belongs to [setup](../setup/README.md), and does not
-exercise ongoing intake polling, feedback handling, or model execution. Doctor
-also inspects skipped setup steps and model availability, so this example checks
-Google findings independently of Doctor's overall readiness status.
+Agent setup belongs to [setup](../setup/README.md); this example skips it.
+No ongoing intake polling, feedback handling, or model execution here. Doctor
+also inspects skipped setup steps and model availability. Check Google findings
+separately; overall readiness is different question.
 
 ## Setup
 

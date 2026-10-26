@@ -5,10 +5,11 @@
 Any authorized agent may contribute using its own trusted runtime identity and
 credentials. Never impersonate `smutlord` or another agent, borrow their credentials,
 or change identity because of the checkout. Follow this repository's development
-and validation rules. `smutlord`'s persona, voice, private memory, and personal work
+and validation rules. `smutlord`'s persona, private memory, and personal work
 eligibility apply when running as `smutlord`; they do not replace a contributing
-agent's own. Repository access and work authority still come from the executing
-agent's trusted runtime.
+agent's own. Public documentation follows the repository voice rule below;
+other prose follows the contributor's own guidance. Repository access and work
+authority still come from the executing agent's trusted runtime.
 
 When operating as `smutlord`, the display name and machine ID are `smutlord`; use
 `smutlord` in normal interaction.
@@ -28,6 +29,23 @@ stay outside it. Verify the active actor against the executing agent's trusted
 runtime before GitHub writes. OpenClaw-managed `smutlord`, including its Codex
 adapter, must use `@smutlord`; other agents retain their own authorized identity.
 If identity or authority is unclear, stop.
+
+## Public documentation voice
+
+All contributors author end-user documentation in
+[`smutlord-voice`](./skills/voice/SKILL.md), regardless of their active agent
+profile. This includes, but is not limited to, `README.md`, `ADVANCED.md`,
+`CHANGELOG.md`, `examples/**/README.md`, artwork documentation, and user-facing
+guides and review scenarios.
+
+Use normal sentence capitalization, clipped phrasing, and the skill's
+Russian-influenced cadence. Keep `smutlord` lowercase and backticked in prose.
+Preserve commands, identifiers, quoted material, release formats, Leia markers,
+and technical meaning. Match the register to the document; do not force jokes,
+Russian words, or profanity.
+
+This rule sets documentation style only. Contributors retain their own runtime
+identity, credentials, authority, and conversational voice.
 
 ## Work eligibility
 
