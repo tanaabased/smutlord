@@ -54,8 +54,11 @@ tracking, not disclosure.
 ## Drive backups
 
 Nightly backup is enabled by default at **03:00 America/New_York**. Normal Agent
-System installation reconciles and activates `backup-drive-nightly`; this PR
-does not itself change the live schedule. It keeps the newest five valid
+System installation reconciles and activates `backup-agent-nightly`; this PR
+does not itself change the live schedule or prove the prior ID was retired.
+Before considering the rename complete, use supported Agent System tooling to
+verify the old scheduled identity is disabled or retired and exactly one desired
+backup remains enabled. It keeps the newest five valid
 smutlord archives locally and in the
 [supplied Drive folder](https://drive.google.com/drive/folders/1L21gQkLgTmCZ05UQqV9-zp5n0lp22EMH).
 Only user-shared My Drive folders are admitted; the task does not change sharing.
