@@ -53,48 +53,54 @@ tracking, not disclosure.
 
 ## Drive backups
 
-Nightly backup is enabled by default at **03:00 America/New_York**. Normal Agent
-System installation reconciles and activates `backup-agent-nightly`; this PR
-does not itself change the live schedule or prove the prior ID was retired.
-Before considering the rename complete, use supported Agent System tooling to
-verify the old scheduled identity is disabled or retired and exactly one desired
-backup remains enabled. It keeps the newest five valid
-smutlord archives locally and in the
-[supplied Drive folder](https://drive.google.com/drive/folders/1L21gQkLgTmCZ05UQqV9-zp5n0lp22EMH).
-Only user-shared My Drive folders are admitted; the task does not change sharing.
+Nightly backup runs at **03:00 America/New_York** through `backup-agent-nightly`.
+It captures a fresh archive with required OpenClaw agent state, uploads it to the
+[supplied private My Drive folder](https://drive.google.com/drive/folders/1L21gQkLgTmCZ05UQqV9-zp5n0lp22EMH),
+compares the remote size and checksums, and records delivery before cleanup.
+Use an Agent System installation whose
+[`backup create` verifies before publishing](https://github.com/tanaabased/openclaw-agent-system/blob/main/agent/backup-service.ts).
+The nightly wrapper does not download or reverify that archive. Workspace and
+database capture are not an atomic snapshot.
 
-From the installed smutlord checkout, pilot without pruning:
+Cleanup attempts the existing five-backup local policy and keeps five new
+`smutlord-nightly-*` owned Drive uploads. Legacy remote files and unrelated files
+are preserved, not adopted or synchronized. A cleanup error reports
+`delivered: true` with `retention: "deferred"`; storage can exceed five copies.
+An upload or integrity failure still exits nonzero and never starts cleanup.
+
+From the installed smutlord checkout, an explicitly authorized operator can pilot
+without either local or remote pruning:
 
 ```sh
 cd /Users/emori/tanaab/smutlord
 bun scripts/backup-drive-task.js --operator --pilot
 ```
 
-The task checks the selected agent, default backup destination and required
-OpenClaw database capture, creates a backup, runs `backup verify` on the exact
-archive before uploading, checks remote IDs, parent, size and checksums, then
-downloads and verifies the new archive before reconciling older copies. Pilot success prints
-`"status":"piloted"`; it applies no local or remote pruning.
+Pilot success prints `"status":"piloted"`. Omit `--pilot` only when intentionally
+authorizing retention too. The scheduled command omits `--operator` and requires
+the automation runner's active-agent binding, with no host-credential fallback.
+A manual pass does not prove unattended execution. Installing this code does not
+itself validate a live scheduled run.
 
-Omit `--pilot` to exercise the full retention command manually. After recovery
-verification, it previews and applies supported local pruning and trashes only
-verified owned excess Drive IDs. Unrelated files remain untouched. Workspace and
-database capture are not an atomic snapshot.
+Private delivery evidence lives in ignored `.private/backup-drive/delivery.json`
+and `delivery-status.json`. Existing `journal.json`, `status.json`, and archives
+are preserved during transition; they do not gate fresh nightly delivery. Normal
+post-delivery local retention can still remove eligible excess local archives.
+An uncertain upload is not retried automatically. A later ordinary invocation
+captures new state and preserves superseded intent in `uncertain-*.json`.
+Never publish these records or archive contents.
 
-The scheduled command omits `--operator` and requires the automation runner's
-active-agent binding, with no host-credential fallback. A manual operator pass
-does not prove unattended execution. After installation, reconcile twice with
-Agent System and check that the second sync changes nothing. Issue completion
-still requires an actual scheduled occurrence and saved schedule readback.
+To select one exact completed archive instead of capturing fresh state:
 
-Each ordinary invocation captures current state afresh, including after a failed
-creation or lost return. Private receipts and sanitized status live in ignored
-`.private/backup-drive/`; never publish that journal or archive contents. Older
-uncertain uploads are reconciled by exact identity and integrity, never replayed
-because a listing is empty. Missing, unverified or unuploaded older archives defer
-cleanup, not the fresh backup. Successful fresh verification can report
-`retention: "deferred"` with a sanitized reason; local and Drive storage can exceed
-five copies until resolved. Failure of the fresh backup still exits nonzero.
+```sh
+bun scripts/backup-drive-task.js --operator --pilot --resume-archive .agent-system/backups/EXACT-ARCHIVE.tar.gz
+```
+
+Explicit resume verifies that archive and checks its exact delivery evidence. It
+can confirm an accepted upload whose reply was lost, but an empty listing never
+authorizes replay of a pending upload. Preserve uncertain evidence for
+investigation; do not clear it to force another upload. Interrupted staging and
+hidden `.pending-*` files are not selected or deleted by this wrapper.
 
 The workflow uses a nonblocking kernel `flock` through `@lickle/lock`, requiring
 a supported macOS or Linux native binding and local filesystem. Each direct
@@ -107,19 +113,7 @@ Before first upgrading from the existence-only wrapper, stop old scheduled/manua
 writers and establish that their outstanding commands have exited. A nonempty
 legacy lock reports `legacy-backup-lock`; preserve it under another private
 evidence filename only after writer quiescence. Keep the journal, status and all
-archives. Recognized old creation/archive checkpoints are retired on the next
-admitted run without discarding receipts. Installation performs no live cutover.
-
-Interrupted staging or hidden `.pending-*` files and completed orphaned archives
-are neither guessed nor deleted here. To deliberately select one exact completed
-archive instead of capturing fresh state, use the explicit operator override:
-
-```sh
-bun scripts/backup-drive-task.js --operator --pilot --resume-archive .agent-system/backups/EXACT-ARCHIVE.tar.gz
-```
-
-Missing or changed remote receipts need investigation. Do not clear
-`uploadPending` merely because a listing is empty.
+archives. Installation performs no live cutover.
 
 ## Source and artwork
 
@@ -131,8 +125,6 @@ private state, and release history are separate.
 Backup orchestration adapts
 [EMORI PR #113](https://github.com/tanaabased/emori/pull/113) under the same MIT
 license, with smutlord's own identity and destination.
-Interrupted-run retry follows [EMORI PR #123](https://github.com/tanaabased/emori/pull/123),
-with fresh delivery completed before older archive reconciliation.
 
 smutlord uses his own [skull-and-guitar artwork](./assets/README.md): the square
 PNG for agent identity and the circular variant for the README. Local skills

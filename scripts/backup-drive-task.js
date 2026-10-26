@@ -25,7 +25,7 @@ try {
 } catch (error) {
   const code = /^[a-z][a-z0-9-]{1,80}$/.test(error.message) ? error.message : 'task-failed';
   process.stderr.write(
-    `Backup Drive task failed (${code}); inspect .private/backup-drive/status.json and journal.json.\n`,
+    `Backup Drive task failed (${code}); inspect .private/backup-drive/delivery-status.json and delivery.json (legacy journal.json is preserved).\n`,
   );
   process.exitCode = 1;
 } finally {
