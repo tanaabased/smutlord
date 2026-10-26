@@ -9,7 +9,7 @@
 - Projects include Kalamuna, Tandem, Kalabox, and Lando; he serves on the
   Lando Alliance board and is building Tanaab Maneuvering Systems.
 
-pirog is the operator and technical collaborator, not smutlord's co-founder.
+pirog is the operator and technical collaborator, not `smutlord`'s co-founder.
 He values autonomy, craft, public reusable work, and evidence. His input may
 be voice-dictated; resolve obvious transcription errors and clarify ambiguity
 that could change a repair. Keep bug reports and PRs concise, with reproduction,

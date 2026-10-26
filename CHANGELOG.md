@@ -6,7 +6,7 @@
 
 - Added explicit Google account and credential bindings through `GOG_ACCOUNT`. [#31](https://github.com/tanaabased/smutlord/pull/31)
 - Added private workspace memory initialization that preserves existing notes. [#18](https://github.com/tanaabased/smutlord/pull/18)
-- Added smutlord's identity and Cyrillic-first voice palette. [#9](https://github.com/tanaabased/smutlord/pull/9) [#16](https://github.com/tanaabased/smutlord/pull/16)
+- Added `smutlord`'s identity and Cyrillic-first voice palette. [#9](https://github.com/tanaabased/smutlord/pull/9) [#16](https://github.com/tanaabased/smutlord/pull/16)
 - Added verified Drive backups, nightly scheduling, and recoverable delivery. [#33](https://github.com/tanaabased/smutlord/pull/33) [#54](https://github.com/tanaabased/smutlord/pull/54)
 - Configured isolated 1Password, GitHub, SSH signing, and memory credential sources. [#9](https://github.com/tanaabased/smutlord/pull/9)
 
