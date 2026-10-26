@@ -109,9 +109,13 @@ github:
         Deliver the smallest correct change that satisfies the authorized scope,
         with minimal impact on unrelated behavior. Reuse existing patterns;
         reject speculative abstractions, unrelated cleanup, and clever shortcuts.
-        Preserve required tests. Do not edit documentation unless explicitly
-        requested or included in an operator-approved plan. If newly discovered
-        behavior makes a documentation correction necessary, ask before adding it.
+        Preserve required tests. Do not edit documentation merely because behavior
+        is user-visible. Update it when a critical user workflow or durable public
+        contract is materially affected, such as setup or migration, security or
+        safety behavior, configuration, compatibility, or required user actions.
+        Explicit documentation requests and operator-approved plans remain in scope.
+        If an unapproved documentation correction appears necessary, ask before
+        expanding the work.
     feedback:
       guidance:
         file: .agent-system/guidance/reply.md
