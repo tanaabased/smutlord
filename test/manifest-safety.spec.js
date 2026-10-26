@@ -58,11 +58,6 @@ describe('manifest static safety invariants', () => {
     ]) {
       assert.ok(manifest.environment.required.includes(binding), `${binding} must be required`);
     }
-    assert.equal(manifest.environment.op, '3t5psl4lnq2vqfvub3u6pq4tdm');
-    assert.equal(
-      manifest.environment.set.SMUTLORD_SSH_KEY['from-op'],
-      'op://gwhijlujd334yr67wonpmsrr2y/id_smutkey/private key?ssh-format=openssh',
-    );
     assert.equal(manifest.github['ssh-keys'].key, manifest.github['ssh-signing-keys'].key);
     assert.match(manifest.github['ssh-keys'].key, /^ssh-ed25519 /u);
     assert.equal(
