@@ -1,4 +1,4 @@
-# smutlord
+# `smutlord`
 
 <p align="center">
   <img src="./assets/icon-large-circle.png" alt="smutlord" width="180" />
@@ -10,53 +10,30 @@
   <a href="https://github.com/tanaabased/smutlord/actions/workflows/pr-examples-tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/tanaabased/smutlord/pr-examples-tests.yml?event=pull_request&label=Examples" alt="Example tests" /></a>
 </p>
 
-smutlord is an artificial agent for bounded Bugs, Tasks, and Features. Within
-his allowed repositories, he takes work assessed at size 5 or below, verifies
-the change, and submits a reviewable PR. Explicit special-project exceptions
-are defined in [AGENTS.md](./AGENTS.md).
-Trust, but verify; enthusiasm is not a test result.
+`smutlord` is an artificial agent for bounded bugs, tasks, and features, with a
+Russian voice, late-’80s hair-metal attitude, and a soft heart. he makes the
+smallest defensible change, verifies it, and delivers a reviewable PR.
 
-This is his public [OpenClaw](https://openclaw.ai) workspace.
-[Agent System](https://github.com/tanaabased/openclaw-agent-system) handles his
-identity, tool credentials, and GitHub work intake.
+**trust, but verify.**
 
-## Overview
-
-- Agent System has [model and effort profiles](./.agent-system/agent.yaml) for
-  low, medium, and high task complexity. A small task needn't become a research
-  fellowship.
-- GitHub assignments run under his own agent identity, in managed Git worktrees.
-  Who did the work should be easy to establish.
+this is his public [OpenClaw](https://openclaw.ai) workspace, managed through
+[Agent System](https://github.com/tanaabased/openclaw-agent-system).
 
 ## Prerequisites
 
-1. Provision the Mac with [Agentbox](https://github.com/tanaabased/agentbox#quickstart).
-2. Update OpenClaw to the version declared in
-   [`devDependencies.openclaw`](./package.json). Agentbox's bundled version may
-   be older than smutlord's tested baseline.
-3. Install [Agent System](https://github.com/tanaabased/openclaw-agent-system#installation)
-   with shared Codex prerequisite support into that OpenClaw environment;
-   Agentbox does not install it yet.
-4. Give smutlord's 1Password service account access to the
-   [required environment values](./.agent-system/agent.yaml) in his manifest.
-
-Homebrew, Bun, and Node/npm must be available to the runtime user; use the
-Bun and Node versions declared in [`package.json`](./package.json). smutlord's install
-handles his additional [`Brewfile`](./Brewfile) dependencies automatically.
-
-In smutlord's 1Password environment, set `GOG_ACCOUNT` to his Google account email,
-which differs from his main `EMAIL`. Supply base64-encoded OAuth client and token
-JSON in `GOG_CREDENTIALS_JSON` and `GOG_TOKEN_JSON`, plus `GOG_KEYRING_PASSWORD`.
-The token must authorize the `GOG_ACCOUNT` account; installation requires that
-variable and does not fall back to `EMAIL`. See Agent System's
-[Google onboarding](https://github.com/tanaabased/openclaw-agent-system/blob/main/tools/google/README.md#per-agent-onboarding)
-if those credentials still need consent or export.
+1. provision the Mac with [Agentbox](https://github.com/tanaabased/agentbox#quickstart)
+   and install [Agent System](https://github.com/tanaabased/openclaw-agent-system#installation).
+2. use the dependencies and versions declared in [package.json](./package.json),
+   [.bun-version](./.bun-version), and [.node-version](./.node-version).
+3. configure the environment sources and required variables in
+   [agent.yaml](./.agent-system/agent.yaml), following Agent System's
+   [credential setup](https://github.com/tanaabased/openclaw-agent-system/blob/main/CLI.md#credential-storage)
+   and [Google onboarding](https://github.com/tanaabased/openclaw-agent-system/blob/main/tools/google/README.md#per-agent-onboarding).
 
 ## Quickstart
 
-Run as the OpenClaw runtime user on the Agentbox Mac, with smutlord's 1Password
-service account token ready. Keep Agent System commands in this checkout so
-that they find his manifest.
+run as the OpenClaw user with `smutlord`'s 1Password service account token ready.
+keep Agent System commands in this checkout.
 
 ```sh
 mkdir -p ~/tanaab
@@ -66,7 +43,7 @@ cd ~/tanaab/smutlord
 # install the workspace's locked dependencies, including the backup runner.
 bun install --frozen-lockfile --ignore-scripts
 
-# use smutlord's managed SSH identity for subsequent repository work.
+# use the agent's managed SSH identity for subsequent repository work.
 git remote set-url origin git@github.com:tanaabased/smutlord.git
 
 # store the 1Password service account token at the masked prompt.
@@ -76,7 +53,7 @@ openclaw agent-system credentials set op
 openclaw agent-system validate
 openclaw agent-system install --yes
 
-# authorize smutlord to use the selected provider profile.
+# authorize the agent to use the selected provider profile.
 # NOTE: adapt Tanaab's OpenAI example to your provider/account and model configuration.
 openclaw models auth login --device-code --agent smutlord --profile-id openai:smutlord
 openclaw models auth order set --agent smutlord openai:smutlord
@@ -86,61 +63,46 @@ openclaw agent-system doctor
 openclaw agent-system tool gh -- api user --jq .login
 ```
 
-Agent System provisions the shared Codex plugin before setup. Installation then
-runs the host setup in
-[`.agent-system/setup-host.yaml`](./.agent-system/setup-host.yaml) before
-reconciling managed tools, then runs the agent setup in
-[`.agent-system/setup-agent.yaml`](./.agent-system/setup-agent.yaml):
+for later configuration changes and readiness checks, see the
+[Advanced cheat sheet](./ADVANCED.md#command-cheat-sheet).
 
-| Step                | Effect                                                                          |
-| ------------------- | ------------------------------------------------------------------------------- |
-| `brew-dependencies` | Installs Brewfile dependencies and the platform-specific SQLite vector package. |
-| `canon-checkout`    | Clones Canon when absent and preserves existing checkouts.                      |
-| `canon-plugin`      | Links Canon's `tanaab` plugin and exposes its shared skills.                    |
-| `openclaw-config`   | Reconciles smutlord's execution and memory policy.                              |
+## Usage
 
-Finish [manual onboarding](./ADVANCED.md#manual-onboarding) for Codex/OpenAI
-sign-in. Installation does not complete account consent. For later changes, see
-[reconciliation](./ADVANCED.md#reconciliation).
+configure issue assigners (`github.issue-assignment.allowed`) and permitted
+repository owners (`github.allowed-repository-owners`) in
+[agent.yaml](./.agent-system/agent.yaml), following Agent System's
+[GitHub workflow configuration](https://github.com/tanaabased/openclaw-agent-system/blob/main/MANIFEST.md#github-workflows).
+rerun [installation](./ADVANCED.md#command-cheat-sheet) to apply changes, then
+have an approved assigner assign an [eligible issue](./AGENTS.md#work-eligibility)
+to `@smutlord`.
 
-## Configuration
+## Config
 
-| File                                                                 | Purpose                                                                                                                            |
-| -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| [`.agent-system/agent.yaml`](./.agent-system/agent.yaml)             | Identity, model and effort profiles, environment sources, managed Git, GitHub, Google, assignment admission, and setup references. |
-| [`.agent-system/setup-host.yaml`](./.agent-system/setup-host.yaml)   | Host dependency check and apply command, run before managed-tool reconciliation.                                                   |
-| [`.agent-system/setup-agent.yaml`](./.agent-system/setup-agent.yaml) | Ordered agent-aware setup checks and apply commands.                                                                               |
-| [`ADVANCED.md`](./ADVANCED.md)                                       | Manual onboarding, reconciliation, configuration ownership, and private continuity.                                                |
-| [`IDENTITY.md`](./IDENTITY.md)                                       | Public identity metadata.                                                                                                          |
-| [`SOUL.md`](./SOUL.md)                                               | Work remit, character, and voice.                                                                                                  |
-| [`AGENTS.md`](./AGENTS.md)                                           | Operating and execution guidance.                                                                                                  |
-| [`USER.md`](./USER.md)                                               | Context about smutlord's operator.                                                                                                 |
-| [`HEARTBEAT.md`](./HEARTBEAT.md)                                     | Inactive heartbeat instructions; no recurring chores.                                                                              |
-
-See Agent System's
-[manifest reference](https://github.com/tanaabased/openclaw-agent-system/blob/main/MANIFEST.md)
-for manifest options. Private memory stays in ignored workspace files; machine
-configuration, credentials, channel state, and transcripts stay outside this
-repository.
+| Files                                                                                             | Purpose                                                       |
+| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| [agent.yaml](./.agent-system/agent.yaml)                                                          | agent configuration and environment bindings.                 |
+| [host setup](./.agent-system/setup-host.yaml) and [agent setup](./.agent-system/setup-agent.yaml) | installation tasks.                                           |
+| [OpenClaw policy](./openclaw.patch.json)                                                          | execution and memory settings, applied through the installer. |
+| [IDENTITY.md](./IDENTITY.md), [SOUL.md](./SOUL.md), and [AGENTS.md](./AGENTS.md)                  | identity, personality, and work eligibility.                  |
 
 ## Skills
 
-- [`smutlord-skill-author`](./skills/skill-author/SKILL.md) creates and checks
-  smutlord-local skills.
-- [`smutlord-voice`](./skills/voice/SKILL.md) gives his work prose its
-  Russian-influenced cadence and [sourced phrase palette](./skills/voice/references/README.md).
+| Skill                                                     | Purpose                                                                                       |
+| --------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| [`smutlord-skill-author`](./skills/skill-author/SKILL.md) | creates and checks local skills.                                                              |
+| [`smutlord-voice`](./skills/voice/SKILL.md)               | Russian-influenced prose and a [sourced phrase palette](./skills/voice/references/README.md). |
+| [Tanaab plugin](https://github.com/tanaabased/canon)      | shared workflows.                                                                             |
 
-Shared `tanaab-*` workflows come from the
-[`tanaab` plugin](https://github.com/tanaabased/canon). His judgment and character
-are set out in `SOUL.md`; [behavior scenarios](./references/behavior-scenarios.md)
-cover intake, scope, verification, voice, and identity.
+## Automations
+
+| Automation             | Schedule                      | Purpose                                                                                       |
+| ---------------------- | ----------------------------- | --------------------------------------------------------------------------------------------- |
+| `backup-agent-nightly` | daily, 03:00 America/New_York | backs up workspace and agent state to Google Drive, verifies delivery, and applies retention. |
+
+configured in [agent.yaml](./.agent-system/agent.yaml); inspect installed jobs and
+run history with the [Advanced commands](./ADVANCED.md#command-cheat-sheet).
 
 ## Development
-
-Use the Node.js version selected by [`.node-version`](./.node-version) and the
-Bun version declared in [`package.json`](./package.json) for repository tooling.
-Node.js `24.22.1` and later `24.x` releases remain supported; see
-[`engines.node`](./package.json) for the supported ranges.
 
 ```sh
 bun install --frozen-lockfile --ignore-scripts
@@ -149,13 +111,7 @@ bun run test
 bun skills/skill-author/scripts/validate-skill.js --skill-dir skills/skill-author
 ```
 
-[Leia examples](./examples/workspace/README.md) run in isolated GitHub-hosted
-OpenClaw profiles: workspace registration, installation, full setup, shared
-plugin reuse, and backup recovery. Install and setup use `SMUTLORDKEY` as
-`OP_SERVICE_ACCOUNT_TOKEN`; Agent System resolves the manifest's 1Password
-sources. Workspace, shared, and backup scenarios need no live credentials.
-OpenClaw setup selects a compatible Node.js runtime for the examples.
-Run operational scenarios in CI; local unit and skill checks need no credentials.
+operational examples run in [CI](./.github/workflows/pr-examples-tests.yml).
 
 ## Issues, Questions and Support
 
@@ -171,7 +127,7 @@ sales pitch.
 
 ## Maintainers
 
-- [@smutlord](https://github.com/smutlord)
+- [`@smutlord`](https://github.com/smutlord)
 - [@pirog](https://github.com/pirog)
 
 ## Contributors
