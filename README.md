@@ -40,7 +40,8 @@ identity, tool credentials, and GitHub work intake.
 4. Give smutlord's 1Password service account access to the
    [required environment values](./.agent-system/agent.yaml) in his manifest.
 
-Homebrew and Node/npm must be available to the runtime user. smutlord's install
+Homebrew, Bun, and Node/npm must be available to the runtime user; use the
+Bun and Node versions declared in [`package.json`](./package.json). smutlord's install
 handles his additional [`Brewfile`](./Brewfile) dependencies automatically.
 
 In smutlord's 1Password environment, set `GOG_ACCOUNT` to his Google account email,
@@ -61,6 +62,9 @@ that they find his manifest.
 mkdir -p ~/tanaab
 git clone https://github.com/tanaabased/smutlord.git ~/tanaab/smutlord
 cd ~/tanaab/smutlord
+
+# install the workspace's locked dependencies, including the backup runner.
+bun install --frozen-lockfile --ignore-scripts
 
 # use smutlord's managed SSH identity for subsequent repository work.
 git remote set-url origin git@github.com:tanaabased/smutlord.git
