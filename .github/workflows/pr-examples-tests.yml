@@ -42,7 +42,7 @@ jobs:
         shell: bash
         env:
           NO_COLOR: '1'
-          OP_SERVICE_ACCOUNT_TOKEN: ${{ (matrix.example == 'install' || matrix.example == 'setup') && secrets.SMUTLORDKEY || '' }}
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.SMUTLORDKEY }}
           TMPDIR: ${{ github.workspace }}/examples/${{ matrix.example }}/.tmp
         run: |
           mkdir -p "$TMPDIR"
