@@ -2,16 +2,16 @@
 
 ## What this example does
 
-Uses two small, disposable agent manifests in one isolated OpenClaw profile to
-verify shared Codex plugin reuse. Installing the second agent must preserve the
-plugin receipt, plugin configuration, and first agent. Repeating that installation
-checks convergence and preserves both agents.
+Two agents, one shared Codex plugin. Use disposable manifests in isolated
+OpenClaw profile. Install second agent without disturbing first agent, plugin
+receipt, or plugin configuration. Repeat installation and check convergence;
+both agents must remain intact.
 
 ## What it doesn't do
 
-It skips workspace setup and needs no credentials or smutlord's host dependencies.
-It does not exercise model execution. Smutlord's full setup belongs to
-[setup](../setup/README.md); credential and intake lifecycle checks belong to
+Skip workspace setup. No credentials or `smutlord`'s host dependencies needed;
+model execution is outside this example. Full setup belongs to
+[setup](../setup/README.md); credentials and intake lifecycle belong to
 [install](../install/README.md).
 
 ## Setup

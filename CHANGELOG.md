@@ -2,9 +2,31 @@
 
 ## {{ UNRELEASED_VERSION }} - [{{ UNRELEASED_DATE }}]({{ UNRELEASED_LINK }})
 
-- Added smutlord's narrow bug-fixing identity and voice. [#9](https://github.com/tanaabased/smutlord/pull/9)
+### New Features
+
+- Added explicit Google account and credential bindings through `GOG_ACCOUNT`. [#31](https://github.com/tanaabased/smutlord/pull/31)
+- Added private memory initialization. Existing notes stay intact. [#18](https://github.com/tanaabased/smutlord/pull/18)
+- Added `smutlord`'s identity and Cyrillic-first voice palette. [#9](https://github.com/tanaabased/smutlord/pull/9) [#16](https://github.com/tanaabased/smutlord/pull/16)
+- Added verified Drive backups, nightly scheduling, and recoverable delivery. [#33](https://github.com/tanaabased/smutlord/pull/33) [#54](https://github.com/tanaabased/smutlord/pull/54)
 - Configured isolated 1Password, GitHub, SSH signing, and memory credential sources. [#9](https://github.com/tanaabased/smutlord/pull/9)
-- Delegated the shared Codex plugin prerequisite to Agent System. [#9](https://github.com/tanaabased/smutlord/pull/9)
-- Fixed GPT-6 reconciliation to retire legacy model admissions and preserve explicit operator additions. [#9](https://github.com/tanaabased/smutlord/pull/9)
+
+### Improvements
+
+- Allowed bounded Bugs, Tasks, and Features. Larger work still requires direction. [#22](https://github.com/tanaabased/smutlord/pull/22)
+- Delegated shared Codex installation and model configuration to Agent System. [#9](https://github.com/tanaabased/smutlord/pull/9) [#28](https://github.com/tanaabased/smutlord/pull/28)
+- Migrated GitHub workflows to Agent System's v3 configuration and default stages. [#42](https://github.com/tanaabased/smutlord/pull/42) [#55](https://github.com/tanaabased/smutlord/pull/55)
 - Removed automatic `imessage` setup and the `imsg` dependency. [#9](https://github.com/tanaabased/smutlord/pull/9)
+- Renamed the nightly backup automation to `backup-agent-nightly`. [#52](https://github.com/tanaabased/smutlord/pull/52)
+- Updated the workspace baseline to Node `26.12.1` and OpenClaw `2026.10.6`. [#50](https://github.com/tanaabased/smutlord/pull/50)
+
+### Bug Fixes
+
+- Fixed interrupted backups blocking fresh captures. [#41](https://github.com/tanaabased/smutlord/pull/41)
+- Fixed setup errors blaming missing commands when output buffer filled or execution permission was denied.
+- Preserved shared host memory and Workshop settings during setup. [#31](https://github.com/tanaabased/smutlord/pull/31)
+
+### Notes
+
+- Documented agent-specific model authorization. [#15](https://github.com/tanaabased/smutlord/pull/15)
+- Documented locked workspace dependency installation.
 - Seeded public workspace tooling from [EMORI commit `789df21b4aba17ddce56bffff64112f910aea85e`](https://github.com/tanaabased/emori/commit/789df21b4aba17ddce56bffff64112f910aea85e).
