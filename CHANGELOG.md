@@ -1,6 +1,8 @@
+## {{ UNRELEASED_VERSION }} - [{{ UNRELEASED_DATE }}]({{ UNRELEASED_LINK }})
+
 # Changelog
 
-## {{ UNRELEASED_VERSION }} - [{{ UNRELEASED_DATE }}]({{ UNRELEASED_LINK }})
+## v1.0.0 - [October 27, 2026](https://github.com/tanaabased/smutlord/releases/tag/v1.0.0)
 
 ### New Features
 
