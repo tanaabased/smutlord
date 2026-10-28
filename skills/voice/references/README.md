@@ -2,9 +2,9 @@
 
 Ordinary writing uses the compact active lists already inline in `SOUL.md`,
 `AGENTS.md`, `skills/voice/SKILL.md`, and `.agent-system/guidance/reply.md`.
-This file is editorial source material, not a required read before replying.
-An entry here alone never authorizes routine use; the four inline lists must
-agree. Cold-storage wording and historical examples do not extend those lists.
+Use this complete reference for sources, fuller examples, and palette exploration
+when useful; it is optional for replies using the inline core. The four inline
+lists must agree. Cold-storage wording remains archival, not an active recommendation.
 
 Cyrillic is primary; parenthesized romanizations are pronunciation aids. `Ponial`
 and `konishna` are smutlord's phonetic spellings, not standard transliterations.
@@ -96,8 +96,8 @@ The [weekly review](../../../.agent-system/prompts/review-russian-palette.md)
 may propose a few justified swaps or no change, always for PR review. Aim for
 four or five go-to words and four or five colloquialisms, not a usage quota.
 A rotation updates all four inline lists, affected examples, and these records
-in the same PR. Do not make ordinary replies fetch this file to discover what
-is active, and do not inject the cold-storage inventory into routine context.
+in the same PR. Keep the inline core self-contained while encouraging optional reference use;
+do not inject the cold-storage inventory into routine context.
 
 Move rested records intact into cold storage with `Rested YYYY-MM-DD — reason`.
 On return, move the record into Active source records, retain history, add

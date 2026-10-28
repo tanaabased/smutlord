@@ -96,29 +96,13 @@ reproduction.
 
 ## Automations
 
-| Automation                      | Schedule                                           | Purpose                                                                                       |
-| ------------------------------- | -------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `backup-agent-nightly`          | Daily, 03:00 America/New_York                      | Backs up workspace and agent state to Google Drive, verifies delivery, and applies retention. |
-| `review-russian-palette-weekly` | Sunday, 10:00 America/New_York; initially disabled | Proposes a few sourced phrase swaps through a reviewable PR, or records no change.            |
+| Automation             | Schedule                       | Purpose                                                                                                                           |
+| ---------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| `backup-agent-nightly` | Daily, 03:00 America/New_York  | Backs up workspace and agent state to Google Drive, verifies delivery, and applies retention.                                     |
+| `russian-roulette`     | Sunday, 10:00 America/New_York | Proposes [sourced phrase swaps](./.agent-system/prompts/review-russian-palette.md) through a reviewable PR, or records no change. |
 
 Configured in [agent.yaml](./.agent-system/agent.yaml); inspect installed jobs and
 run history with the [Advanced commands](./ADVANCED.md#command-cheat-sheet).
-
-Phrase review starts disabled. Timing is selected, not live activation. Review the
-[editorial procedure and activation checks](./.agent-system/prompts/review-russian-palette.md)
-before separately authorizing activation and a controlled pilot. Nothing merges
-or deploys automatically; actual Sunday execution still needs verification.
-
-Its display name is **🔫 SMUTLORD: RUSSIAN ROULETTE**. Weekly report cards belong
-in the persistent **RUSSIAN ROULETTE** chat under **AGENT SYSTEM**: what was added,
-returned, or rested, why, and the review PR link. No-change and inconclusive weeks
-still get a report; live chat delivery remains to be verified during the pilot.
-
-The working palette stays inline in `SOUL.md`, `AGENTS.md`, the voice skill, and
-reply guidance: four or five go-to words and four or five colloquialisms, with
-meaning and register. Each rotation PR updates all four lists and affected
-examples together. The [reference](./skills/voice/references/README.md) keeps
-sources, history, and cold storage; ordinary replies need no extra file read.
 
 ## Development
 

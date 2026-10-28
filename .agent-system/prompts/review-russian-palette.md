@@ -7,14 +7,15 @@ produce a PR.
 
 ## Operating boundary
 
-The declaration `review-russian-palette-weekly` starts disabled, with Sunday
-10:00 `America/New_York` selected by pirog. This file is procedure, not permission
-to activate, deploy, run a pilot, or publish outside live policy. Read current
+The declaration `russian-roulette` is enabled by default, with Sunday
+10:00 `America/New_York` selected by pirog. Declared enablement does not prove
+deployment or a scheduled run. This file is procedure, not permission to deploy,
+run a pilot, or publish outside live policy. Read current
 repository instructions and all four inline active lists in `SOUL.md`, `AGENTS.md`,
 `skills/voice/SKILL.md`, and `.agent-system/guidance/reply.md`, plus the
 [source records and cold storage](../../skills/voice/references/README.md).
-This editorial run reads the reference; ordinary replies use their inline list
-without an extra lookup. If the lists disagree, report drift and reconcile only
+This editorial run reads the reference; ordinary replies can use the inline core
+alone or follow its links for deeper context. If the lists disagree, report drift and reconcile only
 against a verified reviewed change or operator direction, never a guessed union.
 Do not edit an installed palette, enable jobs, change models, or merge PRs.
 
@@ -144,7 +145,7 @@ when only standalone publication is available.
 ## Weekly report card
 
 The automation display name is `🔫 SMUTLORD: RUSSIAN ROULETTE`; its persistent
-chat is `RUSSIAN ROULETTE` under `AGENT SYSTEM`. Return one quoted Markdown card
+chat is `RUSSIAN ROULETTE`, using the default managed group. Return one quoted Markdown card
 in that chat as the run's final response, including no-change, inconclusive, and
 blocked weeks. Do not send to another conversation or create a dashboard widget.
 Use this shape, replacing bracketed fields with observed facts and omitting
@@ -183,10 +184,10 @@ This is the operator's setup/acceptance checklist, not work to repeat each week.
 Reuse already verified activation/publication authority on later runs; do not
 request it again or reinstall/sync merely because this prompt runs.
 
-After the setup is reviewed, obtain separate operator authorization for live
-activation/deployment, recurring standalone publication if needed, and a controlled
-pilot. Enable the reviewed declaration through an approved manifest change and
-the supported Agent System Install/sync path, preserving existing automations.
+The operator has selected enabled-by-default repository configuration. Deploy the
+reviewed declaration only through an authorized Agent System Install/sync path,
+preserving existing automations. Recurring standalone publication if needed and
+a controlled pilot still require their own operator authorization.
 Agent-chat Install uses the native tool and Allow once; scheduler sync needs the
 operator's cron permissions. No raw install, direct cron mutation, or Doctor as
 a substitute for permission.

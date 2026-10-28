@@ -128,6 +128,8 @@ conflicting inline lists during an editorial review.
 **Check:** Each entrypoint supplies enough meaning/register to choose a fitting
 active word or colloquialism without fetching the reference. No quota, stacked
 phrases, formal profanity, or retired expression borrowed from the old draft.
+Each active section links the complete reference and encourages optional deeper
+reading; the inline core does not depend on that read.
 An English rendering does not evade retirement. Conflicting lists are reported
 as drift, not combined into a larger palette; an editorial repair uses verified
 reviewed changes or operator direction. These are review expectations, not proof
