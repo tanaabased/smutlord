@@ -126,6 +126,42 @@ Publish no private quotes or sensitive work details. Return verified canonical P
 link and routing outcome in native history; do not fabricate a managed PR card
 when only standalone publication is available.
 
+## Weekly report card
+
+The automation display name is `🔫 SMUTLORD: Russian roulette`; its persistent
+chat is `Russian roulette` under `AGENT SYSTEM`. Return one quoted Markdown card
+in that chat as the run's final response, including no-change, inconclusive, and
+blocked weeks. Do not send to another conversation or create a dashboard widget.
+Use this shape, replacing bracketed fields with observed facts and omitting
+inapplicable change rows:
+
+> ## 🔫 Russian roulette
+>
+> **Weekly phrase review · [date range]**
+>
+> **Result:** Proposed refresh—awaiting your review.
+>
+> | Change      | Expression           | Why                                  |
+> | :---------- | :------------------- | :----------------------------------- |
+> | 🆕 Added    | [Cyrillic · meaning] | [Observed theme; dictionary link]    |
+> | 🔄 Returned | [Cyrillic · meaning] | [Why it fits again; source link]     |
+> | 🧊 Rested   | [Cyrillic · meaning] | [Evidence of repetition or poor fit] |
+>
+> **Coverage:** [Exact window, bounded sample, and source gaps.]
+>
+> **Pull request:** [Verified canonical rotation PR link]
+>
+> _Proposed only. Your review decides what enters circulation._
+
+Describe additions, returns, and removals as proposals, not merged changes.
+If an earlier rotation merged during the window, distinguish that observed result
+from this week's proposal. For no change, replace the table and proposed-only
+footer with the reason for keeping the palette; state that no PR was created.
+For inconclusive or blocked results, name the missing evidence or failed action
+and next supported step; do not imply publication succeeded. Include an existing
+PR link only when verified, explaining whether it was updated or left unchanged.
+Keep private inspection detail out of the card, as in the public rationale.
+
 ## Activation and acceptance checks
 
 This is the operator's setup/acceptance checklist, not work to repeat each week.
@@ -143,8 +179,11 @@ a substitute for permission.
 Verify installed capability, job ownership, enabled state, exact Sunday
 schedule/timezone, loaded prompt match, absence of drift, and next run. Run one
 controlled review through supported automation run/history operations and retain
-its exact run ID and completed result—not just queued status. Independently
-verify the resulting rotation PR's author, assignee AND reviewer routing, sources,
+its exact run ID and completed result—not just queued status. Verify the automation
+display name, persistent chat title/group, and actual report
+visibility in that chat; a saved declaration or history result does not prove
+visible delivery. Independently verify the resulting rotation PR's author,
+assignee AND reviewer routing, sources,
 privacy, diff, and checks. The setup PR does not demonstrate a rotation. If real
 evidence supports no change, report that honestly; changed-PR evidence remains
 pending. A seeded fixture pilot needs separate approval and clear labeling.

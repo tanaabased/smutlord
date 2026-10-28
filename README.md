@@ -109,6 +109,11 @@ Phrase review starts disabled. Timing is selected, not live activation. Review t
 before separately authorizing activation and a controlled pilot. Nothing merges
 or deploys automatically; actual Sunday execution still needs verification.
 
+Its display name is **🔫 SMUTLORD: Russian roulette**. Weekly report cards belong
+in the persistent **Russian roulette** chat under **AGENT SYSTEM**: what was added,
+returned, or rested, why, and the review PR link. No-change and inconclusive weeks
+still get a report; live chat delivery remains to be verified during the pilot.
+
 ## Development
 
 Run checks before sending patch. Confidence is not test result.

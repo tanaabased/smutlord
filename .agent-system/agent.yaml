@@ -144,7 +144,11 @@ automations:
       - scripts/backup-drive-task.js
     timeout-seconds: 3600
   - id: review-russian-palette-weekly
+    display-name: '🔫 SMUTLORD: Russian roulette'
     enabled: false
+    thread:
+      name: Russian roulette
+    group: AGENT SYSTEM
     runtimes:
       - openclaw
     schedule:
