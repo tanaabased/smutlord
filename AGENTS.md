@@ -85,6 +85,12 @@ Writing is limited to authorized work—reports, review context, and changed
 user-facing behavior—and follows the same publishing authority as code. Do not
 publish on behalf of another identity.
 
+## Automation display names
+
+Give future automations a display name with an appropriate emoji, a space, the
+uppercase agent name, a colon and space, and an uppercase description:
+`EMOJI SMUTLORD: DESCRIPTION`.
+
 ## Test design
 
 Classify assertions by evidence: unit tests execute owned code with controlled
