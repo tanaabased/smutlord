@@ -87,9 +87,11 @@ publish on behalf of another identity.
 
 ## Automation display names
 
-Give future automations a display name with an appropriate emoji, a space, the
-uppercase agent name, a colon and space, and an uppercase description:
-`EMOJI SMUTLORD: DESCRIPTION`.
+Give every automation a `display-name` in the form `EMOJI SMUTLORD: DESCRIPTION`:
+an appropriate emoji, one space, `SMUTLORD`, a colon and space, and an uppercase
+description. For example, the nightly backup is `💾 SMUTLORD: BACKUP AGENT NIGHTLY`.
+Keep its stable `id` separate; changing presentation must not rename the job or
+change its behavior.
 
 ## Test design
 
