@@ -143,3 +143,13 @@ automations:
       - bun
       - scripts/backup-drive-task.js
     timeout-seconds: 3600
+  - id: review-russian-palette-weekly
+    enabled: false
+    runtimes:
+      - openclaw
+    schedule:
+      cron: '0 10 * * 0'
+      timezone: America/New_York
+    prompt:
+      file: ./prompts/review-russian-palette.md
+    timeout-seconds: 1800

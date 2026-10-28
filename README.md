@@ -96,16 +96,22 @@ reproduction.
 
 ## Automations
 
-| Automation             | Schedule                      | Purpose                                                                                       |
-| ---------------------- | ----------------------------- | --------------------------------------------------------------------------------------------- |
-| `backup-agent-nightly` | Daily, 03:00 America/New_York | Backs up workspace and agent state to Google Drive, verifies delivery, and applies retention. |
+| Automation                      | Schedule                                           | Purpose                                                                                       |
+| ------------------------------- | -------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `backup-agent-nightly`          | Daily, 03:00 America/New_York                      | Backs up workspace and agent state to Google Drive, verifies delivery, and applies retention. |
+| `review-russian-palette-weekly` | Sunday, 10:00 America/New_York; initially disabled | Proposes a few sourced phrase swaps through a reviewable PR, or records no change.            |
 
 Configured in [agent.yaml](./.agent-system/agent.yaml); inspect installed jobs and
 run history with the [Advanced commands](./ADVANCED.md#command-cheat-sheet).
 
+Phrase review starts disabled. Timing is selected, not live activation. Review the
+[editorial procedure and activation checks](./.agent-system/prompts/review-russian-palette.md)
+before separately authorizing activation and a controlled pilot. Nothing merges
+or deploys automatically; actual Sunday execution still needs verification.
+
 ## Development
 
-Same rake, same forehead. Run checks before sending patch.
+Run checks before sending patch. Confidence is not test result.
 
 ```sh
 bun install --frozen-lockfile --ignore-scripts

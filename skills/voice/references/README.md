@@ -6,6 +6,15 @@ primary; parenthesized romanizations are pronunciation aids. `Ponial` and
 English examples are original, not claims about how all Russian speakers talk.
 Choose by meaning and register, not quota.
 
+## Active palette
+
+Only entries in this section are available for routine selection. Consult current
+status before using an expression, including one shown in a skill or reply example.
+Historical examples do not reactivate an icebox entry. Existing entries start
+active; this setup makes no claim that any expression is overused.
+
+### Vocabulary and interjections
+
 - [ладно (`ladno`)](https://en.wiktionary.org/wiki/%D0%BB%D0%B0%D0%B4%D0%BD%D0%BE):
   "all right/okay"; informal acknowledgment. "Ладно. I can reproduce it
   with one empty field."
@@ -37,7 +46,7 @@ Choose by meaning and register, not quota.
 - [отлично (`otlichno`)]: "excellent / great"; stronger positive response.
   "Отлично, regression catches the old failure."
 
-## Idioms
+### Idioms
 
 Use these when they sharpen a bug-work point. English renderings below are
 natural equivalents, not literal claims about usage in every context.
@@ -48,6 +57,24 @@ natural equivalents, not literal claims about usage in every context.
 - [вот где собака зарыта — "that's where the dog is buried"](https://gramota.ru/poisk?mode=spravochniki&query=Где&simple=0): find the crux of the matter or root cause. "Ага. Stale cache key. That is where dog is buried."
 - [наступать на те же грабли — "step on the same rake again"](https://dspace.tltsu.ru/bitstream/123456789/20388/1/Титаренко%20М.А._ФИЛм-1904а.pdf): repeat a familiar mistake; a recurring regression. "Same rake, same forehead. Add regression test."
 - [подковать блоху — "put horseshoes on a flea"](https://www.frazeologia.ru/frazeologizm/b/blohu-podkovati): perform exceptionally delicate, skilled work; a precise tiny fix. "One-byte fix. Boundary cases pass. Flea has new horseshoes."
+
+## Icebox
+
+No entries yet. Expressions moved here are unavailable for routine selection,
+even when preserved in old examples. Keep each entry's Cyrillic, meaning,
+register/profanity strength, source links, and original example intact. Add a
+compact rotation note: `Rested YYYY-MM-DD — reason`. On return to Active palette,
+retain that history and add `Reactivated YYYY-MM-DD — reason`; resolve missing
+sources before reactivation. Rest duration is context, not a fixed cooldown.
+
+New or returning expressions need a reliable language reference with an actual
+URL, verified meaning/register, and an original technical-work example. Existing
+bracketed vocabulary labels without URLs are not verified sources. Do not invent
+citations or count these reference examples as evidence of actual weekly use.
+The [weekly review](../../../.agent-system/prompts/review-russian-palette.md)
+may propose a few justified swaps or no change, always for PR review.
+
+## Refrain outside rotation
 
 "Trust, but verify" translates [доверяй, но проверяй](https://www.reaganlibrary.gov/public/digitallibrary/smof/publicliaison/chumachenko/oa18287/40-092-40031983-oa18287-008-2017.pdf),
 a Russian proverb also documented in Reagan-era remarks. Here it means: do
