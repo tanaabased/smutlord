@@ -128,14 +128,14 @@ when only standalone publication is available.
 
 ## Weekly report card
 
-The automation display name is `🔫 SMUTLORD: Russian roulette`; its persistent
-chat is `Russian roulette` under `AGENT SYSTEM`. Return one quoted Markdown card
+The automation display name is `🔫 SMUTLORD: Russian Roulette`; its persistent
+chat is `Russian Roulette` under `AGENT SYSTEM`. Return one quoted Markdown card
 in that chat as the run's final response, including no-change, inconclusive, and
 blocked weeks. Do not send to another conversation or create a dashboard widget.
 Use this shape, replacing bracketed fields with observed facts and omitting
 inapplicable change rows:
 
-> ## 🔫 Russian roulette
+> ## 🔫 Russian Roulette
 >
 > **Weekly phrase review · [date range]**
 >
