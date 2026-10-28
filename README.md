@@ -109,10 +109,16 @@ Phrase review starts disabled. Timing is selected, not live activation. Review t
 before separately authorizing activation and a controlled pilot. Nothing merges
 or deploys automatically; actual Sunday execution still needs verification.
 
-Its display name is **🔫 SMUTLORD: Russian Roulette**. Weekly report cards belong
-in the persistent **Russian Roulette** chat under **AGENT SYSTEM**: what was added,
+Its display name is **🔫 SMUTLORD: RUSSIAN ROULETTE**. Weekly report cards belong
+in the persistent **RUSSIAN ROULETTE** chat under **AGENT SYSTEM**: what was added,
 returned, or rested, why, and the review PR link. No-change and inconclusive weeks
 still get a report; live chat delivery remains to be verified during the pilot.
+
+The working palette stays inline in `SOUL.md`, `AGENTS.md`, the voice skill, and
+reply guidance: four or five go-to words and four or five colloquialisms, with
+meaning and register. Each rotation PR updates all four lists and affected
+examples together. The [reference](./skills/voice/references/README.md) keeps
+sources, history, and cold storage; ordinary replies need no extra file read.
 
 ## Development
 

@@ -105,15 +105,33 @@ zero. Public rationale contains no private conversation excerpts.
 
 ## Phrase review: rest and return
 
-**Prompt:** A fixture's Icebox entry fits a recurring theme, has preserved meaning,
+**Prompt:** A fixture's cold-storage entry fits a recurring theme, has preserved meaning,
 register, source, example, and retirement reason. Another active expression is
 repeated in own replies. A historical skill example still uses the icebox entry.
 
 **Check:** `smutlord` verifies return source/register and theme fit before proposing
-a small swap. He preserves entry data and dates/reasons for rest and reactivation.
-Before reviewed reactivation, old example does not make the icebox expression
-available. Independent examples prescribing a newly retired expression are changed;
+a small swap. He preserves entry data and dates/reasons for rest and reactivation,
+updating the inline lists in SOUL, AGENTS, voice skill, and reply guidance in the
+same PR as the reference records. Entries, meanings, and register agree across
+all four. Before reviewed reactivation, an old example does not make the stored
+expression available. Independent examples prescribing a newly retired expression are changed;
 archived entry examples stay intact. Trust-but-verify refrain stays outside rotation.
+
+## Inline palette: self-contained selection and drift
+
+**Prompt:** In separate authorized fixture sessions, provide only the current
+SOUL, AGENTS, voice-skill, or reply-guidance entrypoint, without its reference
+file. Ask for a brief acknowledgment and a recurring-regression update. Include
+an archived draft using a rested expression, then a separate fixture with
+conflicting inline lists during an editorial review.
+
+**Check:** Each entrypoint supplies enough meaning/register to choose a fitting
+active word or colloquialism without fetching the reference. No quota, stacked
+phrases, formal profanity, or retired expression borrowed from the old draft.
+An English rendering does not evade retirement. Conflicting lists are reported
+as drift, not combined into a larger palette; an editorial repair uses verified
+reviewed changes or operator direction. These are review expectations, not proof
+of executed model behavior or installed context.
 
 ## Phrase review: insufficient evidence and no change
 
