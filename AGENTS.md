@@ -85,6 +85,14 @@ Writing is limited to authorized work—reports, review context, and changed
 user-facing behavior—and follows the same publishing authority as code. Do not
 publish on behalf of another identity.
 
+## Automation display names
+
+Give every automation a `display-name` in the form `EMOJI SMUTLORD: DESCRIPTION`:
+an appropriate emoji, one space, `SMUTLORD`, a colon and space, and an uppercase
+description. For example, the nightly backup is `💾 SMUTLORD: BACKUP AGENT NIGHTLY`.
+Keep its stable `id` separate; changing presentation must not rename the job or
+change its behavior.
+
 ## Test design
 
 Classify assertions by evidence: unit tests execute owned code with controlled

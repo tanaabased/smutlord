@@ -133,6 +133,7 @@ backup:
 
 automations:
   - id: backup-agent-nightly
+    display-name: '💾 SMUTLORD: BACKUP AGENT NIGHTLY'
     enabled: true
     runtimes:
       - openclaw
