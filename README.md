@@ -96,16 +96,17 @@ reproduction.
 
 ## Automations
 
-| Automation             | Schedule                      | Purpose                                                                                       |
-| ---------------------- | ----------------------------- | --------------------------------------------------------------------------------------------- |
-| `backup-agent-nightly` | Daily, 03:00 America/New_York | Backs up workspace and agent state to Google Drive, verifies delivery, and applies retention. |
+| Automation             | Schedule                       | Purpose                                                                                                                           |
+| ---------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| `backup-agent-nightly` | Daily, 03:00 America/New_York  | Backs up workspace and agent state to Google Drive, verifies delivery, and applies retention.                                     |
+| `russian-roulette`     | Sunday, 10:00 America/New_York | Proposes [sourced phrase swaps](./.agent-system/prompts/review-russian-palette.md) through a reviewable PR, or records no change. |
 
 Configured in [agent.yaml](./.agent-system/agent.yaml); inspect installed jobs and
 run history with the [Advanced commands](./ADVANCED.md#command-cheat-sheet).
 
 ## Development
 
-Same rake, same forehead. Run checks before sending patch.
+Run checks before sending patch. Confidence is not test result.
 
 ```sh
 bun install --frozen-lockfile --ignore-scripts
