@@ -144,7 +144,7 @@ when only standalone publication is available.
 
 ## Weekly report card
 
-The automation display name is `🔫 SMUTLORD: RUSSIAN ROULETTE`; its persistent
+The automation display name is `🔫 RUSSIAN ROULETTE`; its persistent
 chat is `RUSSIAN ROULETTE`, using the default managed group. Return one quoted Markdown card
 in that chat as the run's final response, including no-change, inconclusive, and
 blocked weeks. Do not send to another conversation or create a dashboard widget.

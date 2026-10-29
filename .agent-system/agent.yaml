@@ -144,7 +144,7 @@ automations:
       - scripts/backup-drive-task.js
     timeout-seconds: 3600
   - id: russian-roulette
-    display-name: '🔫 SMUTLORD: RUSSIAN ROULETTE'
+    display-name: '🔫 RUSSIAN ROULETTE'
     enabled: true
     thread:
       name: RUSSIAN ROULETTE
