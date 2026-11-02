@@ -89,7 +89,10 @@ github:
   schema-version: 3
   runtimes:
     - openclaw
-  routing: ['tanaabased/*', 'pirog/*', 'lando/*']
+  routing:
+    - 'tanaabased/*'
+    - 'pirog/me'
+    - 'lando/*'
   issue-assignment:
     allowed:
       - MDQ6VXNlcjcxMzQyNA==
