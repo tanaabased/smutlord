@@ -119,6 +119,21 @@ github:
     feedback:
       guidance:
         file: .agent-system/guidance/reply.md
+  project-pickup:
+    coordinator:
+      runtime: openclaw
+      instance-id: 30a4f5c2-5a40-4027-aa24-0bbbd9f34bba
+    schedule:
+      cron: '0 3 * * *'
+    window-minutes: 120
+    selection:
+      guidance:
+        file: .agent-system/guidance/project-pickup.md
+    projects:
+      - repository: tanaabased/openclaw-agent-system
+        milestone:
+          number: 11
+          policy: only
   policy:
     releases: deny
 
