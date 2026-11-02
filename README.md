@@ -69,7 +69,7 @@ For configuration changes and readiness checks, use
 ## Usage
 
 Configure issue assigners (`github.issue-assignment.allowed`) and permitted
-repository owners (`github.allowed-repository-owners`) in
+repositories (`github.routing`) in
 [agent.yaml](./.agent-system/agent.yaml), following Agent System's
 [GitHub workflow configuration](https://github.com/tanaabased/openclaw-agent-system/blob/main/MANIFEST.md#github-workflows).
 Rerun [installation](./ADVANCED.md#command-cheat-sheet) to apply changes, then

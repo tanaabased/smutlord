@@ -89,10 +89,7 @@ github:
   schema-version: 3
   runtimes:
     - openclaw
-  allowed-repository-owners:
-    - O_kgDODNGy1g
-    - MDQ6VXNlcjcxMzQyNA==
-    - MDEyOk9yZ2FuaXphdGlvbjMxNjA1NTg0
+  routing: ['tanaabased/*', 'pirog/*', 'lando/*']
   issue-assignment:
     allowed:
       - MDQ6VXNlcjcxMzQyNA==
