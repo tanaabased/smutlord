@@ -120,9 +120,6 @@ github:
       guidance:
         file: .agent-system/guidance/reply.md
   project-pickup:
-    start: '03:00'
-    window: '2h'
-    scans: 8
     projects:
       - repository: tanaabased/openclaw-agent-system
         milestone:
