@@ -120,12 +120,6 @@ github:
       guidance:
         file: .agent-system/guidance/reply.md
   project-pickup:
-    schedule:
-      cron: '0 3 * * *'
-    window-minutes: 120
-    selection:
-      guidance:
-        file: .agent-system/guidance/project-pickup.md
     projects:
       - repository: tanaabased/openclaw-agent-system
         milestone:
