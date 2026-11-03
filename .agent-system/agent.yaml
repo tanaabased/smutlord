@@ -120,9 +120,6 @@ github:
       guidance:
         file: .agent-system/guidance/reply.md
   project-pickup:
-    coordinator:
-      runtime: openclaw
-      instance-id: 30a4f5c2-5a40-4027-aa24-0bbbd9f34bba
     schedule:
       cron: '0 3 * * *'
     window-minutes: 120

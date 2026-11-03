@@ -20,4 +20,4 @@ Keep human review and merge authority unchanged; release remains denied.
 Give the selection rationale and actionable obstacles through the existing
 PROJECT PICKUP reporting flow. Keep unchanged observations quiet. Guidance
 informs selection judgment; it grants no authority to change settings, issue
-metadata, eligibility limits, or the active coordinator.
+metadata, eligibility limits, repository routing, or retained claim ownership.
