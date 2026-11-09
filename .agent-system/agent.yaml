@@ -119,11 +119,11 @@ github:
     feedback:
       guidance:
         file: .agent-system/guidance/reply.md
-  project-pickup:
+  issue-pickup:
     projects:
       - repository: tanaabased/openclaw-agent-system
         milestone:
-          number: 11
+          number: 14
           policy: only
   policy:
     releases: deny
