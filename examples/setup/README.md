@@ -14,7 +14,7 @@ setup checks.
 
 No repeat installation, skill execution, model turns, or memory indexing and
 recall checks here. Credential and intake lifecycle checks belong to
-[install](../install/README.md); shared plugin reuse belongs to
+[Agent System](https://github.com/tanaabased/openclaw-agent-system/tree/main/examples/os-install-online); shared plugin reuse belongs to
 [shared](../shared/README.md).
 
 ## Setup

@@ -12,7 +12,7 @@ Registration is not proof agent can run. This example configures no model,
 starts no Gateway, and does not prove runtime skill loading or model behavior.
 Static skill and asset checks belong to [development checks](../../README.md#development).
 Installed Canon skill availability belongs to [setup](../setup/README.md);
-credentials belong to [install](../install/README.md).
+credentials belong to [Agent System](https://github.com/tanaabased/openclaw-agent-system).
 
 ## Setup
 
