@@ -4,7 +4,6 @@ import { readdirSync, statSync } from 'node:fs';
 import { homebrewEnvironment, sqliteVectorPackage } from '../lib/setup/brew-dependencies.js';
 import {
   canonPluginInspectionHealthy,
-  canonSkillInspectionHealthy,
   configPathUnset,
 } from '../lib/setup/canon-plugin.js';
 import { pluginInspectionHealthy } from '../lib/setup/plugin.js';
@@ -64,17 +63,13 @@ describe('setup helper', () => {
     );
   });
 
-  it('should require Canon to be linked with its accepted skill surface', () => {
+  it('should accept an enabled Canon plugin with any accepted skills', () => {
     const canon = '/Users/smutlord/tanaab/canon';
     assert.equal(
       canonPluginInspectionHealthy(
         {
           plugin: { id: 'tanaab', enabled: true, status: 'loaded', rootDir: canon },
-          install: {
-            source: 'path',
-            sourcePath: canon,
-            acceptedSurface: { skills: ['./skills'] },
-          },
+          install: { acceptedSurface: { skills: ['./renamed-skills'] } },
         },
         canon,
       ),
@@ -84,31 +79,31 @@ describe('setup helper', () => {
       canonPluginInspectionHealthy(
         {
           plugin: { id: 'tanaab', enabled: true, status: 'loaded', rootDir: canon },
-          install: { source: 'path', sourcePath: canon, acceptedSurface: { skills: [] } },
+          install: { acceptedSurface: { skills: [] } },
         },
         canon,
       ),
       false,
     );
-  });
-
-  it('should require representative Canon skills from the plugin-managed index', () => {
+    assert.equal(canonPluginInspectionHealthy(null, canon), false);
     assert.equal(
-      canonSkillInspectionHealthy({
-        name: 'tanaab-project-optimizer',
-        eligible: true,
-        disabled: false,
-        filePath: '/tmp/openclaw/plugin-skills/project-optimizer/SKILL.md',
-      }),
-      true,
+      canonPluginInspectionHealthy(
+        {
+          plugin: { id: 'tanaab', enabled: false, status: 'disabled', rootDir: canon },
+          install: { acceptedSurface: { skills: ['./skills'] } },
+        },
+        canon,
+      ),
+      false,
     );
     assert.equal(
-      canonSkillInspectionHealthy({
-        name: 'tanaab-project-optimizer',
-        eligible: true,
-        disabled: false,
-        filePath: '/Users/smutlord/tanaab/canon/skills/project-optimizer/SKILL.md',
-      }),
+      canonPluginInspectionHealthy(
+        {
+          plugin: { id: 'tanaab', enabled: true, status: 'error', rootDir: canon },
+          install: { acceptedSurface: { skills: ['./skills'] } },
+        },
+        canon,
+      ),
       false,
     );
   });

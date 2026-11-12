@@ -2,8 +2,8 @@
 
 ## What this example does
 
-Run `smutlord`'s full setup once in isolated OpenClaw profile. Check eligible
-Canon skill, agent configuration, and reported memory settings. Host preferences
+Run `smutlord`'s full setup once in isolated OpenClaw profile. Check the Canon
+plugin, agent configuration, and reported memory settings. Host preferences
 and clean checkouts must stay intact.
 
 `--yes` consents to enrollment only in this isolated CI profile. Automatic cron
@@ -63,13 +63,12 @@ jq -e '
 test -d "$GITHUB_WORKSPACE/memory"
 test -f "$GITHUB_WORKSPACE/MEMORY.md"
 
-# should expose an eligible canon skill from the shared ssh checkout
+# should load the Canon plugin with a nonempty skill surface from the shared ssh checkout
 git -C "$HOME/tanaab/canon" remote get-url origin | grep -Fx 'git@github.com:tanaabased/canon.git'
-openclaw skills info tanaab-project-optimizer --agent smutlord --json | jq -e '
-  .name == "tanaab-project-optimizer" and
-  .eligible == true and
-  .disabled == false and
-  (.filePath | split("/") | index("plugin-skills")) != null
+openclaw plugins inspect tanaab --runtime --json | jq -e '
+  .plugin.id == "tanaab" and
+  .plugin.enabled == true and
+  (.install.acceptedSurface.skills | length) > 0
 '
 
 # should configure smutlord's model execution and private memory policy
