@@ -2,10 +2,7 @@ import assert from 'node:assert/strict';
 import { readdirSync, statSync } from 'node:fs';
 
 import { homebrewEnvironment, sqliteVectorPackage } from '../lib/setup/brew-dependencies.js';
-import {
-  canonPluginInspectionHealthy,
-  configPathUnset,
-} from '../lib/setup/canon-plugin.js';
+import { canonPluginInspectionHealthy, configPathUnset } from '../lib/setup/canon-plugin.js';
 import { pluginInspectionHealthy } from '../lib/setup/plugin.js';
 
 describe('setup helper', () => {
