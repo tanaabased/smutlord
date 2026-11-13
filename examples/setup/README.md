@@ -3,7 +3,7 @@
 ## What this example does
 
 Run `smutlord`'s full setup once in isolated OpenClaw profile. Check the Canon
-plugin, agent configuration, and reported memory settings. Host preferences
+plugin, agent configuration, and desired memory settings. Host preferences
 and clean checkouts must stay intact.
 
 `--yes` consents to enrollment only in this isolated CI profile. Automatic cron
@@ -88,7 +88,7 @@ openclaw config get agents.entries.smutlord --json | jq -e '
   .memory.search.experimental.sessionMemory == true
 '
 
-# should report memory and session sources with the installed vector extension
+# should configure memory and session sources with the installed vector extension
 case "$(uname -m)" in
   arm64) SQLITE_VECTOR_PACKAGE="sqlite-vec-darwin-arm64" ;;
   x86_64) SQLITE_VECTOR_PACKAGE="sqlite-vec-darwin-x64" ;;
@@ -96,13 +96,11 @@ case "$(uname -m)" in
 esac
 EXPECTED_VECTOR_EXTENSION="$(npm root --global)/${SQLITE_VECTOR_PACKAGE}/vec0.dylib"
 test -f "$EXPECTED_VECTOR_EXTENSION"
-openclaw memory status --agent smutlord --json | jq -e \
+openclaw config get agents.entries.smutlord.memory.search --json | jq -e \
   --arg extension "$EXPECTED_VECTOR_EXTENSION" \
-  'map(select(.agentId == "smutlord")) |
-   length == 1 and
-   .[0].status.vector.enabled == true and
-   .[0].status.vector.extensionPath == $extension and
-   .[0].status.sources == ["memory", "sessions"]'
+  '.store.vector.enabled == true and
+   .store.vector.extensionPath == $extension and
+   .sources == ["memory", "sessions"]'
 
 # should preserve the host's hook and workshop preferences
 openclaw config get hooks.internal.entries.session-memory.enabled --json | jq -e '. == true'
