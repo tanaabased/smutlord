@@ -2,8 +2,9 @@
 
 ## What this example does
 
-Run `smutlord`'s full setup once in isolated OpenClaw profile. Check the Canon
-plugin, agent configuration, and reported memory settings. Host preferences
+Run `smutlord`'s full setup twice in isolated OpenClaw profile. Check the Canon
+plugin, manifest-declared models, execution policy, and desired memory settings.
+Second installation must converge without configuration drift. Host preferences
 and clean checkouts must stay intact.
 
 `--yes` consents to enrollment only in this isolated CI profile. Automatic cron
@@ -12,10 +13,13 @@ setup checks.
 
 ## What it doesn't do
 
-No repeat installation, skill execution, model turns, or memory indexing and
-recall checks here. Credential and intake lifecycle checks belong to
+No skill execution, model turns, or memory indexing and recall checks here.
+Credential and intake lifecycle checks belong to
 [Agent System](https://github.com/tanaabased/openclaw-agent-system/tree/main/examples/os-install-online); shared plugin reuse belongs to
 [shared](../shared/README.md).
+Setup and model expectations come from the manifest; unrelated setup steps
+need not stay in a particular order. Online memory health belongs to Doctor,
+not a `memory status` probe against the running Gateway.
 
 ## Setup
 
@@ -27,6 +31,18 @@ openclaw agent-system credentials set op --from-env
 # should prepare smutlord's checked-out workspace
 mkdir -p "$HOME/tanaab"
 git clone --no-local "$GITHUB_WORKSPACE" "$HOME/tanaab/smutlord"
+
+# should read expected setup and model declarations from the workspace
+cd "$GITHUB_WORKSPACE"
+bun --eval '
+  import { readFileSync } from "node:fs";
+  import { resolve } from "node:path";
+  const directory = resolve(".agent-system");
+  const yaml = (file) => Bun.YAML.parse(readFileSync(file, "utf8"));
+  const manifest = yaml(resolve(directory, "agent.yaml"));
+  const setup = ["setup-host", "setup-agent"].flatMap((key) => yaml(resolve(directory, manifest[key].file)).steps.map(({ id }) => id));
+  console.log(JSON.stringify({ setup, models: manifest.models, runtime: manifest.agent.runtime }));
+' > "${TMPDIR}/setup-expected.json"
 
 # should start the isolated gateway for consented enrollment verification
 openclaw config set cron.enabled false --strict-json
@@ -44,7 +60,7 @@ openclaw config set skills.workshop.autonomous.mode '"off"' --strict-json
 ## Testing
 
 ```bash
-# should complete all declared setup tasks with codex available before host setup
+# should complete installation without blocked or unattempted work
 cd "$GITHUB_WORKSPACE"
 set -o pipefail
 openclaw agent-system install --yes --json | tee "${TMPDIR}/setup-install.json" || {
@@ -54,12 +70,26 @@ openclaw agent-system install --yes --json | tee "${TMPDIR}/setup-install.json" 
 }
 jq -e '
   .agentId == "smutlord" and
-  (has("blocked") | not) and (has("unattempted") | not) and
-  any(.outcomes[]; .component == "codex-plugin" and .code == "codex-plugin-installed" and .status == "created") and
-  [.outcomes[] | select(.component == "codex-plugin" or (.component == "setup" and .stepId == "brew-dependencies")) | .component] == ["codex-plugin", "setup"] and
-  [.outcomes[] | select(.component == "setup") | .stepId] == ["brew-dependencies", "workspace-memory", "canon-checkout", "canon-plugin", "openclaw-config"] and
+  .blocked == null and ((.unattempted // []) | length == 0)
+' "${TMPDIR}/setup-install.json"
+
+# should complete every manifest-declared setup step
+jq -e --slurpfile expected "${TMPDIR}/setup-expected.json" '
+  .outcomes as $outcomes |
+  all($expected[0].setup[]; . as $stepId |
+    any($outcomes[]; .component == "setup" and .stepId == $stepId)) and
   all(.outcomes[] | select(.component == "setup"); .status == "updated" or .status == "unchanged")
 ' "${TMPDIR}/setup-install.json"
+
+# should install the codex prerequisite before running host setup
+jq -e '
+  (.outcomes | to_entries) as $outcomes |
+  ([$outcomes[] | select(.value.component == "codex-plugin" and .value.code == "codex-plugin-installed" and .value.status == "created") | .key] | first) as $plugin |
+  ([$outcomes[] | select(.value.component == "setup") | .key] | first) as $setup |
+  $plugin != null and $setup != null and $plugin < $setup
+' "${TMPDIR}/setup-install.json"
+
+# should create the private workspace memory files
 test -d "$GITHUB_WORKSPACE/memory"
 test -f "$GITHUB_WORKSPACE/MEMORY.md"
 
@@ -71,24 +101,33 @@ openclaw plugins inspect tanaab --runtime --json | jq -e '
   (.install.acceptedSurface.skills | length) > 0
 '
 
-# should configure smutlord's model execution and private memory policy
-openclaw config get agents.entries.smutlord --json | jq -e '
-  .model.primary == "openai/gpt-6.1-sol" and
-  .thinkingDefault == "high" and
-  .models["openai/gpt-6.1-sol"].agentRuntime.id == "codex" and
-  .models["openai/gpt-6-luna"].agentRuntime.id == "codex" and
-  .tools.profile == "coding" and
-  .tools.exec.mode == "auto" and
-  (.tools.alsoAllow | index("agent_system_git")) != null and
-  (.tools.alsoAllow | index("agent_system_github")) != null and
-  (.tools.alsoAllow | index("agent_system_google")) != null and
-  (.tools.exec.pathPrepend | length) > 0 and
-  .memory.search.rememberAcrossConversations == true and
-  .memory.search.sources == ["memory", "sessions"] and
-  .memory.search.experimental.sessionMemory == true
+# should bind manifest-declared models and default effort to their runtime
+openclaw config get agents.entries.smutlord --json | jq -e --slurpfile expected "${TMPDIR}/setup-expected.json" '
+  . as $agent |
+  .model.primary == $expected[0].models.default.model and
+  .thinkingDefault == $expected[0].models.default.effort and
+  ([$expected[0].models[] | .model] | unique |
+    all(.[]; . as $model | $agent.models[$model].agentRuntime.id == $expected[0].runtime))
 '
 
-# should report memory and session sources with the installed vector extension
+# should configure smutlord's execution policy and managed tools
+openclaw config get agents.entries.smutlord.tools --json | jq -e '
+  .profile == "coding" and
+  .exec.mode == "auto" and
+  (.alsoAllow | index("agent_system_git")) != null and
+  (.alsoAllow | index("agent_system_github")) != null and
+  (.alsoAllow | index("agent_system_google")) != null and
+  (.exec.pathPrepend | length) > 0
+'
+
+# should configure private same-agent memory and session recall
+openclaw config get agents.entries.smutlord.memory.search --json | jq -e '
+  .rememberAcrossConversations == true and
+  .sources == ["memory", "sessions"] and
+  .experimental.sessionMemory == true
+'
+
+# should configure the installed vector extension
 case "$(uname -m)" in
   arm64) SQLITE_VECTOR_PACKAGE="sqlite-vec-darwin-arm64" ;;
   x86_64) SQLITE_VECTOR_PACKAGE="sqlite-vec-darwin-x64" ;;
@@ -96,17 +135,39 @@ case "$(uname -m)" in
 esac
 EXPECTED_VECTOR_EXTENSION="$(npm root --global)/${SQLITE_VECTOR_PACKAGE}/vec0.dylib"
 test -f "$EXPECTED_VECTOR_EXTENSION"
-openclaw memory status --agent smutlord --json | jq -e \
+openclaw config get agents.entries.smutlord.memory.search.store.vector --json | jq -e \
   --arg extension "$EXPECTED_VECTOR_EXTENSION" \
-  'map(select(.agentId == "smutlord")) |
-   length == 1 and
-   .[0].status.vector.enabled == true and
-   .[0].status.vector.extensionPath == $extension and
-   .[0].status.sources == ["memory", "sessions"]'
+  '.enabled == true and .extensionPath == $extension'
 
-# should preserve the host's hook and workshop preferences
+# should preserve the host's memory hook preference
 openclaw config get hooks.internal.entries.session-memory.enabled --json | jq -e '. == true'
+
+# should preserve the host's workshop preference
 openclaw config get skills.workshop.autonomous.mode --json | jq -e '. == "off"'
+
+# should complete repeat installation
+cd "$GITHUB_WORKSPACE"
+set -euo pipefail
+for section in agents hooks skills tools; do
+  openclaw config get "$section" --json | jq -S . > "${TMPDIR}/${section}-before.json"
+done
+openclaw agent-system install --yes --json | tee "${TMPDIR}/setup-reinstall.json"
+
+# should leave all declared setup steps satisfied on repeat installation
+jq -e --slurpfile expected "${TMPDIR}/setup-expected.json" '
+  .agentId == "smutlord" and
+  .blocked == null and ((.unattempted // []) | length == 0) and
+  (.outcomes as $outcomes |
+    all($expected[0].setup[]; . as $stepId |
+      any($outcomes[]; .component == "setup" and .stepId == $stepId))) and
+  all(.outcomes[] | select(.component == "setup"); .status == "unchanged")
+' "${TMPDIR}/setup-reinstall.json"
+
+# should preserve installed policy across repeat reconciliation
+for section in agents hooks skills tools; do
+  openclaw config get "$section" --json | jq -S . > "${TMPDIR}/${section}-after.json"
+  cmp "${TMPDIR}/${section}-before.json" "${TMPDIR}/${section}-after.json"
+done
 
 # should preserve smutlord's clean checkouts
 test -z "$(git -C "$GITHUB_WORKSPACE" status --short --untracked-files=all)"

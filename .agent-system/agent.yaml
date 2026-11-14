@@ -163,9 +163,8 @@ automations:
       cron: '0 3 * * *'
       timezone: America/New_York
     run:
-      - bun
-      - scripts/backup-drive-task.js
-      - --report
+      - bash
+      - scripts/backup-drive-task.sh
     group: REPORTS
     thread:
       id: backups
