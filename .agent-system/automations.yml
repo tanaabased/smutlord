@@ -1,0 +1,31 @@
+defaults: &reporting
+  runtimes:
+    - openclaw
+  group: REPORTS
+  model: low
+
+automations:
+  - <<: *reporting
+    id: update-agent
+    display-name: '⬇️ UPDATE AGENT'
+    thread:
+      id: updates
+      name: UPDATES
+    schedule:
+      cron: '30 23 * * *'
+    run:
+      - bun
+      - scripts/update-agent-task.js
+
+  - <<: *reporting
+    id: backup-agent-nightly
+    display-name: '💾 BACKUP AGENT NIGHTLY'
+    thread:
+      id: backups
+      name: BACKUPS
+    schedule:
+      cron: '0 3 * * *'
+      timezone: America/New_York
+    run:
+      - bash
+      - scripts/backup-drive-task.sh

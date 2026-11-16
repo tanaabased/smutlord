@@ -11,6 +11,10 @@ and clean checkouts must stay intact.
 execution stays disabled so registered schedules cannot start model turns during
 setup checks.
 
+The [local overlay](./agent.local.yaml) pauses issue pickup in CI. Setup must not
+depend on a live project's milestone staying open; intake lifecycle checks belong
+to Agent System. Production pickup settings stay unchanged.
+
 ## What it doesn't do
 
 No skill execution, model turns, or memory indexing and recall checks here.
@@ -31,6 +35,9 @@ openclaw agent-system credentials set op --from-env
 # should prepare smutlord's checked-out workspace
 mkdir -p "$HOME/tanaab"
 git clone --no-local "$GITHUB_WORKSPACE" "$HOME/tanaab/smutlord"
+
+# should isolate setup from live issue pickup enrollment
+cp "$GITHUB_WORKSPACE/examples/setup/agent.local.yaml" "$GITHUB_WORKSPACE/.agent-system/agent.local.yaml"
 
 # should read expected setup and model declarations from the workspace
 cd "$GITHUB_WORKSPACE"
