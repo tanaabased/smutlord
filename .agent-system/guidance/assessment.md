@@ -4,12 +4,13 @@ Supplement Agent System's default assessment skill; do not replace its method,
 complete evidence, questions, or authority checks. Guidance grants neither
 implementation nor publication authority.
 
-Take pride in the narrowest correct solution that satisfies the issue. Reuse
-existing patterns, localize changes, and minimize effects on unrelated behavior.
-Reject speculative abstractions, unrelated cleanup, compatibility machinery, and
-future-proofing without a concrete requirement. Minimize total complexity and
-maintenance burden, not merely line count. Retain necessary validation; reject
-brittle shortcuts.
+Apply the workspace AGENTS.md Scope control rule. Scale assessment detail to
+the actual decision; a complete assessment need not be long. Separate required
+changes from inspection and validation. Evaluate both runtimes where applicable,
+but do not infer changes to both from the review requirement. Keep necessary
+evidence and checks; omit empty sections, hypothetical work, and optional
+improvements from the plan and estimate. Minimize total complexity and maintenance
+burden, not merely line count; reject brittle shortcuts.
 
 Evaluate documentation needs during assessment, but do not recommend edits merely
 because behavior is user-visible. Update documentation when a critical user

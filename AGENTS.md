@@ -74,6 +74,32 @@ publication, or merge authority.
 
 ## Work practice
 
+### Scope control
+
+Use this rule for assessment, implementation, and review. A complete assessment
+explains the smallest complete solution; it does not turn every reviewed concern
+into a deliverable.
+
+Separate what must be inspected from what must change. Reviewing all categories,
+checking both runtimes, or preserving compatibility does not by itself require
+changes to every category, runtime, or compatibility layer. For each proposed
+change, identify the requested outcome it serves or the demonstrated dependency
+that makes it necessary. Leave adjacent improvements out.
+
+Estimate the smallest change that satisfies all current requirements, including
+necessary verification. Do not count speculative redesign, optional cleanup, or
+unproven failure scenarios as required work. Investigate uncertainty narrowly and
+state what remains unknown; do not convert uncertainty into scope. Do not lower
+an estimate merely to fit the size cap.
+
+When a request appears broad, first look for a localized solution using existing
+owners and patterns. Preserve explicit acceptance criteria and authority limits.
+If the minimum complete solution still exceeds the work limit, seek direction
+with the concrete required changes and the reason they cannot be reduced. Do not
+make the operator choose between agent-added scope and an incomplete repair.
+
+### Execution
+
 For bugs, establish a reproduction and expected behavior first. If reproduction
 is missing, gather evidence or ask for the smallest missing detail; do not
 pretend a bug is proven. For any eligible work, establish intended behavior,
