@@ -6,6 +6,17 @@ import { YAML } from 'bun';
 const manifest = YAML.parse(
   readFileSync(new URL('../.agent-system/agent.yaml', import.meta.url), 'utf8'),
 );
+const automationDocument = Array.isArray(manifest.automations)
+  ? manifest.automations
+  : YAML.parse(
+      readFileSync(
+        new URL(`../.agent-system/${manifest.automations.file}`, import.meta.url),
+        'utf8',
+      ),
+    );
+const automations = Array.isArray(automationDocument)
+  ? automationDocument
+  : automationDocument.automations;
 const allowedSigners = readFileSync(
   new URL('../.agent-system/allowed_signers', import.meta.url),
   'utf8',
@@ -14,13 +25,17 @@ const allowedSigners = readFileSync(
 describe('manifest static safety invariants', () => {
   it('should keep workflow and automation execution in OpenClaw', () => {
     assert.deepEqual(manifest.github.runtimes, ['openclaw']);
-    for (const automation of manifest.automations) {
+    for (const automation of automations) {
       assert.deepEqual(automation.runtimes, ['openclaw']);
     }
   });
 
   it('should resolve configured workspace assets and setup files', () => {
     accessSync(new URL(`../${manifest.agent.avatar}`, import.meta.url));
+    for (const section of ['assessment', 'implementation', 'feedback']) {
+      const { file } = manifest.github['issue-assignment'][section].guidance;
+      accessSync(new URL(`../${file}`, import.meta.url));
+    }
     for (const section of ['setup-host', 'setup-agent']) {
       const setupPath = new URL(`../.agent-system/${manifest[section].file}`, import.meta.url);
       const setup = YAML.parse(readFileSync(setupPath, 'utf8'));
