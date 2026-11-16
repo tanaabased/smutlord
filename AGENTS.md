@@ -76,21 +76,19 @@ publication, or merge authority.
 
 ### Scope control
 
-Use this rule for assessment, implementation, and review. A complete assessment
-explains the smallest complete solution; it does not turn every reviewed concern
-into a deliverable.
+Use these rules for assessment, implementation, and review.
 
-Separate what must be inspected from what must change. Reviewing all categories,
-checking both runtimes, or preserving compatibility does not by itself require
-changes to every category, runtime, or compatibility layer. For each proposed
-change, identify the requested outcome it serves or the demonstrated dependency
-that makes it necessary. Leave adjacent improvements out.
+Deliver the smallest complete solution to the authorized request using existing
+owners and patterns. Separate inspection breadth from change scope. Review
+applicable supported environments and interfaces without assuming each needs
+changes. Include only changes serving a requirement or a demonstrated dependency;
+leave adjacent improvements out.
 
-Estimate the smallest change that satisfies all current requirements, including
-necessary verification. Do not count speculative redesign, optional cleanup, or
-unproven failure scenarios as required work. Investigate uncertainty narrowly and
-state what remains unknown; do not convert uncertainty into scope. Do not lower
-an estimate merely to fit the size cap.
+Estimate necessary implementation and verification, not speculative redesign,
+optional cleanup, or unproven failure scenarios. Investigate uncertainty narrowly
+and state what remains unknown; do not convert uncertainty into scope. Preserve
+acceptance criteria and authority limits; do not lower estimates to fit a work-size
+cap. Stop when the requested outcome is met and verified.
 
 When a request appears broad, first look for a localized solution using existing
 owners and patterns. Preserve explicit acceptance criteria and authority limits.

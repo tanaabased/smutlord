@@ -106,11 +106,17 @@ github:
         file: .agent-system/guidance/assessment.md
     implementation:
       guidance: |
-        Apply the workspace AGENTS.md Scope control rule throughout implementation
-        and final review. Deliver the smallest complete repair using existing owners
-        and patterns. New findings justify extra changes only when they demonstrate
-        a dependency of the requested outcome; adjacent improvements stay out.
-        Stop when the authorized outcome is met and verified.
+        Deliver the smallest complete solution to the authorized request using existing
+        owners and patterns. Separate inspection breadth from change scope. Review
+        applicable supported environments and interfaces without assuming each needs
+        changes. Include only changes serving a requirement or a demonstrated dependency;
+        leave adjacent improvements out.
+
+        Estimate necessary implementation and verification, not speculative redesign,
+        optional cleanup, or unproven failure scenarios. Investigate uncertainty narrowly
+        and state what remains unknown; do not convert uncertainty into scope. Preserve
+        acceptance criteria and authority limits; do not lower estimates to fit a work-size
+        cap. Stop when the requested outcome is met and verified.
         Preserve required tests. Do not edit documentation merely because behavior
         is user-visible. Update it when a critical user workflow or durable public
         contract is materially affected, such as setup or migration, security or
