@@ -22,7 +22,7 @@ automations:
     display-name: '💾 BACKUP AGENT'
     thread:
       id: backups
-      name: '💾 BACKUP AGENT'
+      name: BACKUPS
     schedule:
       cron: '0 3 * * *'
       timezone: America/New_York

@@ -102,9 +102,6 @@ reproduction.
 
 Configured in [agent.yaml](./.agent-system/agent.yaml); inspect installed jobs and
 run history with the [Advanced commands](./ADVANCED.md#command-cheat-sheet).
-The same backup supports manual invocation; see
-[backup ID migration](./ADVANCED.md#backup-id-migration) before applying the rename
-to an existing installation.
 
 ## Development
 
