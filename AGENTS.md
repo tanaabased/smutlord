@@ -114,8 +114,8 @@ publish on behalf of another identity.
 Give every automation a `display-name` in the form `EMOJI DESCRIPTION`: an
 appropriate emoji, one space, and the uppercase name of the thing, without an
 agent-name prefix or colon. Use the same form for associated thread titles
-where this workspace controls them. For example, the nightly backup is
-`💾 BACKUP AGENT NIGHTLY`. Keep its stable `id` separate; changing presentation
+where this workspace controls them. For example, the backup is
+`💾 BACKUP AGENT`. Keep its stable `id` separate; changing presentation
 must not rename the job or change its behavior.
 
 ## Test design
