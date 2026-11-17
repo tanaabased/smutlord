@@ -96,9 +96,9 @@ reproduction.
 
 ## Automations
 
-| Automation             | Schedule                      | Purpose                                                                                       |
-| ---------------------- | ----------------------------- | --------------------------------------------------------------------------------------------- |
-| `backup-agent-nightly` | Daily, 03:00 America/New_York | Backs up workspace and agent state to Google Drive, verifies delivery, and applies retention. |
+| Automation     | Schedule                      | Purpose                                                                                       |
+| -------------- | ----------------------------- | --------------------------------------------------------------------------------------------- |
+| `backup-agent` | Daily, 03:00 America/New_York | Backs up workspace and agent state to Google Drive, verifies delivery, and applies retention. |
 
 Configured in [agent.yaml](./.agent-system/agent.yaml); inspect installed jobs and
 run history with the [Advanced commands](./ADVANCED.md#command-cheat-sheet).

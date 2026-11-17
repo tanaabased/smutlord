@@ -29,8 +29,8 @@ openclaw agent-system tool gh -- api user --jq .login
 # Inspect configured automations and installed schedules.
 openclaw agent-system automations list
 
-# Inspect recent nightly backup execution and delivery results.
-openclaw agent-system automations runs backup-agent-nightly --limit 10
+# Inspect recent backup execution and delivery results.
+openclaw agent-system automations runs backup-agent --limit 10
 ```
 
 ## Helpful links
