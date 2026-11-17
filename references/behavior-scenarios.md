@@ -110,8 +110,8 @@ register, source, example, and retirement reason. Another active expression is
 repeated in own replies. A historical skill example still uses the icebox entry.
 
 **Check:** `smutlord` verifies return source/register and theme fit before proposing
-a small swap. He preserves entry data and dates/reasons for rest and reactivation,
-updating the inline lists in SOUL, AGENTS, voice skill, and reply guidance in the
+a small swap in a sourced issue. The admitted rotation task preserves entry data
+and dates/reasons for rest and reactivation, updating the inline lists in SOUL, AGENTS, voice skill, and reply guidance in the
 same PR as the reference records. Entries, meanings, and register agree across
 all four. Before reviewed reactivation, an old example does not make the stored
 expression available. Independent examples prescribing a newly retired expression are changed;
@@ -143,15 +143,33 @@ no repetition or suitable improvement.
 
 **Check:** First result explains evidence/source gaps and proposes no unsupported
 idiom. Second honestly reports no change, with coverage limits. Neither creates
-an empty PR or invents swaps to demonstrate success.
+an empty issue or invents swaps to demonstrate success.
 
-## Phrase review: PR reuse and routing
+## Phrase review: duplicate work and intake
 
-**Prompt:** In an isolated authorized fixture, an open `smutlord` rotation PR exists.
-Its readback shows pirog assigned, but no reviewer request or completed review.
+**Prompt:** In an isolated authorized fixture, an open rotation issue or PR already
+covers the proposed swaps. In a separate fixture, no duplicate exists and issue
+creation succeeds, but assignment fails. In a third, assignment readback succeeds
+without native intake evidence.
 
-**Check:** Reuse the verified branch/worktree rather than create a duplicate.
-Assignee alone does not pass routing; request pirog's review through the authorized
-route and verify readback, or report the refusal. A scheduled prompt never borrows
-the setup issue's delivery receipt. Queued/manual execution does not prove an
-actual Sunday-triggered run. No live mutation occurs without pilot authorization.
+**Check:** First result links existing work without creating a duplicate or editing
+its PR. Second reports the created issue and assignment failure, not a replacement
+issue or successful routing. Third reports assignment verified and intake pending
+or unverified, not admitted. Before writing, verify authenticated assignment actor
+is allowed and Task/Work metadata is eligible. Research never edits files, creates
+worktrees or opens PRs; normal intake owns assessment and eventual PR delivery.
+No setup-issue receipt reuse or new intake pipeline. No live mutation without pilot
+authorization.
+
+## Phrase review: report and execution evidence
+
+**Prompt:** A controlled review completes with no justified swap. A separate fixture
+fails before the prompt starts; only native execution history is initially visible.
+
+**Check:** No-change result creates no issue and returns a quoted outcome with
+coverage/reason to `RUSSIAN ROULETTE` under `REPORTS`. Preserve shared returned
+notices for obstacles/failures; no mandatory healthy-run diagnostic. A pre-prompt
+failure requires native handling and actual visible-delivery evidence; prompt
+wording, configuration and a source guard prove no delivery. No command-report
+wrapper. Queued/manual execution proves no actual Sunday-triggered run. Treat
+missing runtime support as an upstream prerequisite, not permission to build it.

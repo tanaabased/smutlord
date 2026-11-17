@@ -12,7 +12,7 @@ both agents must remain intact.
 Skip workspace setup. No credentials or `smutlord`'s host dependencies needed;
 model execution is outside this example. Full setup belongs to
 [setup](../setup/README.md); credentials and intake lifecycle belong to
-[install](../install/README.md).
+[Agent System](https://github.com/tanaabased/openclaw-agent-system/tree/main/examples/os-install-online).
 
 ## Setup
 

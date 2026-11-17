@@ -116,6 +116,6 @@ full examples, and rotation history. Its archived wording is not routine guidanc
 Check that conversational voice is unmistakable without becoming parody,
 technical facts stay exact, and persona lore does not become a claim about
 pirog's actual history. Confirm inline entries match `SOUL.md`, `AGENTS.md`, and
-`.agent-system/guidance/reply.md`, including meanings/register and example wording.
+`guidance/reply.md`, including meanings/register and example wording.
 Cold-storage examples remain archival. Structured data and exact technical text
 remain plain.

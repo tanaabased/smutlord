@@ -2,8 +2,8 @@
 
 Review `smutlord`'s recent work, not a usage quota. Keep recognizable Russian
 influence without repeating stale expressions. Propose a small, sourced editorial
-change through human PR review—or report no change. Never manufacture swaps to
-produce a PR.
+issue for normal intake—or report no change. Normal intake owns assessment,
+implementation, validation, and PR delivery. Never manufacture weekly swaps.
 
 ## Operating boundary
 
@@ -12,7 +12,7 @@ The declaration `russian-roulette` is enabled by default, with Sunday
 deployment or a scheduled run. This file is procedure, not permission to deploy,
 run a pilot, or publish outside live policy. Read current
 repository instructions and all four inline active lists in `SOUL.md`, `AGENTS.md`,
-`skills/voice/SKILL.md`, and `.agent-system/guidance/reply.md`, plus the
+`skills/voice/SKILL.md`, and `guidance/reply.md`, plus the
 [source records and cold storage](../../skills/voice/references/README.md).
 This editorial run reads the reference; ordinary replies can use the inline core
 alone or follow its links for deeper context. If the lists disagree, report drift and reconcile only
@@ -71,146 +71,146 @@ Do not invent idioms, copy dictionary examples, or claim unavailable sources
 were verified. For returning expressions, preserve prior meaning/source/example,
 resolve missing or invalid citations, and explain fit to this week's themes.
 
-Move retired source records intact into cold storage with
-`Rested YYYY-MM-DD — reason`. On return, move the record into Active source records,
-retain rotation history, and add `Reactivated YYYY-MM-DD — reason`. In the same PR,
-remove or add the expression in all four inline lists and adjust their examples.
-Cold-storage entries remain unavailable for routine selection until reviewed
-reactivation updates every inline copy; archived examples never override that boundary.
-Preserve voice, audience/profanity limits, technical clarity, identity/lore
-boundaries, and the trust-but-verify refrain outside routine rotation.
+## Create an issue, not a rotation PR
 
-## Prepare a single reviewable change
+This scheduled review researches and proposes work. Do not create a worktree,
+edit files, commit, open/update a PR, or use the setup issue's delivery context.
+Do not mutate installed configuration, run intake manually, or create another
+intake pipeline. Normal intake must admit the rotation issue before assessment
+and implementation begin under that issue's own authority.
 
-If no change is justified, record the bounded result and limitations in native
-run history; create no empty PR. If access is inadequate, report that limitation
-and the missing prerequisite rather than pretending a representative review ran.
+If no change is justified, create no issue. If evidence or required sources are
+inadequate, report an inconclusive review and missing prerequisites rather than
+pretending a representative review ran.
 
-Before mutation, look for an open `smutlord`-authored phrase rotation PR in
-`tanaabased/smutlord`. Identify it by its editorial purpose and palette diff, not
-author alone; the infrastructure setup PR is not a rotation PR. If one exists,
-verify its head/base and ownership, reuse its managed branch/worktree, and update
-its brief rationale rather than opening another. Multiple plausible PRs,
-unrelated dirty work, conflicting edits, or ambiguous ownership require a
-recoverable stop, not a guessed write. Use native overlap controls, no new lock
-service. Recheck for an outstanding PR immediately before creation.
-
-Make changes in an isolated managed checkout. Every proposed rotation updates
-the compact active lists in `SOUL.md`, `AGENTS.md`, `skills/voice/SKILL.md`, and
-`.agent-system/guidance/reply.md` together with source records/cold storage in the
-reference. Keep the four lists identical in entries, meanings, register, and
-availability; this small duplication makes each entrypoint self-contained.
-Read back and compare all four complete blocks before committing. Audit their
-examples, `README.md`, and other phrase pointers for retired wording, including
-English idiom renderings. Preserve original examples as archival entry data,
-but replace any independent recommendation that keeps a retired expression in
-circulation. Do not add a generator or runtime include hook. Limit identity-file
-edits to the active palette and affected examples; preserve all other identity,
-eligibility, authority, and trust-but-verify rules.
-
-Run `bun run lint:voice`, `bun run lint`, and `bun run test` for the changed
-checkout, then inspect the full diff and public rationale for private material.
-Record actual results and blocked checks; authored behavior scenarios are not
-executed model tests. Do not run hosted OpenClaw/Leia scenarios locally without
-explicit authorization.
-
-## Publish only through an authorized route
-
-Prefer Agent System delivery/PR-card workflow when a genuinely verified task
-context is supplied. A generic scheduled prompt has no admitted-issue delivery
-receipt by default. Never borrow the infrastructure issue's receipt, forge one,
-or create weekly issues just to obtain delivery.
-
-Otherwise, use the standalone managed Git/GitHub PR route only when the operator
-has explicitly authorized recurring editorial publication at activation. This
-file does not grant that authorization. Native refusal stops the affected
-action; report the exact missing capability or owner action, without bypass.
-
-Create/update a reviewable PR under `@smutlord` against the intended repository
-base. Set `@pirog` as both assignee and requested reviewer. Read back canonical
-URL, author, head/base, assignees, and review requests before reporting routing
-success. Assignee is not evidence of reviewer request. For an existing PR with
-review already supplied, report the observed review state and whether another
-request is needed; do not claim a missing request exists. On uncertain writes,
-read/reconcile existing PR state before retrying; never blindly repeat creation.
-Never auto-merge, enable auto-merge, or deploy unreviewed palette changes.
-
-Keep rationale brief: what moved, why repetition/themes support it, safe bounded
-coverage and gaps, sources for additions/returns, confirmation that all four
-inline lists and affected examples agree, checks run, and remaining limits.
-Publish no private quotes or sensitive work details. Return verified canonical PR
-link and routing outcome in native history; do not fabricate a managed PR card
-when only standalone publication is available.
+1. Search `tanaabased/smutlord` for an open phrase-rotation issue or PR, including
+   work not authored by `smutlord`. Identify it by editorial purpose and proposed
+   replacements, not author or title alone; this setup PR is not a rotation.
+   Read candidate bodies, relevant discussion and diffs. Follow pagination.
+   If equivalent work exists, report its verified canonical link and status;
+   do not duplicate it or edit its PR. Conflicting proposals, multiple plausible
+   owners, unavailable duplicate searches, or uncertain writes require a report,
+   not guessed creation. Recheck immediately before creating an issue.
+2. Use the installed `tanaab-task-author` skill and current repository schema to
+   prepare a bounded Task with supported Work size 1, 2, 3, or 5. Assess actual
+   work and validation, not the desired label. If the smallest complete rotation
+   exceeds eligibility or cannot be estimated, report the missing decision; do
+   not lower its size to fit. Keep project/schema metadata within live policy.
+3. Include the exact evidence window, safe sample coverage and gaps, proposed
+   expressions in Cyrillic, meanings/register, original technical-work examples,
+   verified language-source links, intended replacements and why each fits.
+   Preserve privacy: no private quotes, sensitive identifiers, or session exports.
+   Include completion criteria for matching entries/meanings/register in all four
+   inline palettes (`SOUL.md`, `AGENTS.md`, `skills/voice/SKILL.md`, and
+   `guidance/reply.md`) and the source reference. Retired records move intact to
+   cold storage with dated reasons; returns preserve history and receive a dated
+   reactivation reason. Update affected independent examples/pointers, not archived
+   entry examples. Preserve all other voice, identity, audience and authority rules,
+   including trust-but-verify outside routine rotation. Require focused checks,
+   diff/privacy review, and normal reviewable PR delivery with human review;
+   never automatic merge or deployment.
+4. Before creation/assignment, verify managed actor `@smutlord`, repository routing,
+   issue eligibility and that the authenticated assignment actor is currently
+   admitted by `github.issue-assignment.allowed`. Self-assignment is not an
+   exemption. Missing authority or capability stops the affected action; do not
+   broaden permissions, borrow credentials or use an alternate route.
+5. Create the issue through the supported managed GitHub/task-author workflow
+   without bundled relationship mutations. After creation, use a separate supported
+   managed assignment operation to assign it to `@smutlord`. Read back canonical URL, body, type/Work metadata,
+   assignee and actual assignment outcome. On uncertain creation or assignment,
+   reconcile the original effect before retrying; do not blindly create again.
+   If creation succeeded but assignment failed, report the existing issue and
+   exact missing step rather than creating a replacement.
+6. Check available native intake evidence without launching work yourself or
+   waiting beyond the review budget. Assignment alone proves no admission. Report
+   observed admitted/declined/blocked status only with native evidence; otherwise
+   state assignment verified, intake pending or unverified. The admitted task owns
+   assessment, code editing, validation and PR delivery, including the configured
+   assignee/reviewer routing. This run must not perform those steps itself.
 
 ## Weekly report card
 
 The automation display name is `🔫 RUSSIAN ROULETTE`; its persistent
-chat is `RUSSIAN ROULETTE`, using the default managed group. Return one quoted Markdown card
-in that chat as the run's final response, including no-change, inconclusive, and
+chat is `RUSSIAN ROULETTE` under `REPORTS`. Return one quoted Markdown outcome
+card there as the run's final response, including no-change, inconclusive and
 blocked weeks. Do not send to another conversation or create a dashboard widget.
-Use this shape, replacing bracketed fields with observed facts and omitting
-inapplicable change rows:
+Use observed facts, omitting inapplicable rows:
 
 > ## 🔫 RUSSIAN ROULETTE
 >
 > **Weekly phrase review · [date range]**
 >
-> **Result:** Proposed refresh—awaiting your review.
+> **Result:** [Issue created / existing proposal / no change / inconclusive / blocked]
 >
-> | Change      | Expression           | Why                                  |
-> | :---------- | :------------------- | :----------------------------------- |
-> | 🆕 Added    | [Cyrillic · meaning] | [Observed theme; dictionary link]    |
-> | 🔄 Returned | [Cyrillic · meaning] | [Why it fits again; source link]     |
-> | 🧊 Rested   | [Cyrillic · meaning] | [Evidence of repetition or poor fit] |
+> | Proposal          | Expression · meaning/register    | Replacement and reason       |
+> | :---------------- | :------------------------------- | :--------------------------- |
+> | [Add/return/rest] | [Cyrillic; verified source link] | [Proposed swap and evidence] |
 >
-> **Coverage:** [Exact window, bounded sample, and source gaps.]
+> **Coverage:** [Exact window, bounded sample, caps and source gaps.]
 >
-> **Pull request:** [Verified canonical rotation PR link]
+> **Issue:** [Verified canonical issue link, when present]
 >
-> _Proposed only. Your review decides what enters circulation._
+> **Assignee:** [Verified readback or failed/unverified assignment]
+>
+> **Intake:** [Observed native status; otherwise pending/unverified]
+>
+> _Proposed only. Normal intake owns the work; human PR review decides what enters circulation._
 
-Describe additions, returns, and removals as proposals, not merged changes.
-If an earlier rotation merged during the window, distinguish that observed result
-from this week's proposal. For no change, replace the table and proposed-only
-footer with the reason for keeping the palette; state that no PR was created.
-For inconclusive or blocked results, name the missing evidence or failed action
-and next supported step; do not imply publication succeeded. Include an existing
-PR link only when verified, explaining whether it was updated or left unchanged.
-Keep private inspection detail out of the card, as in the public rationale.
+Describe additions, returns and removals as proposals, not merged changes.
+Distinguish any previously merged rotation from this week's proposal. For an
+existing proposal, link the verified issue/PR and state no duplicate was created.
+For no change, omit proposal/routing rows, give the evidence-backed reason and
+state no issue was created. For inconclusive or blocked results, name missing
+evidence or failed action and next supported step. Keep partial success visible:
+a created issue is not a verified assignment, and assignment is not intake.
+
+Reuse shared Agent System warning/error/debug conventions and preserve native
+returned notice cards. Show warnings for actionable obstacles or uncertain
+outcomes, errors for failed operations, and useful private debug only when the
+existing debug setting enables it. No compulsory diagnostics on healthy runs;
+never expose secrets or raw diagnostics. The structured command-report JSON
+contract is not a prompt API: do not add a command wrapper for card formatting.
 
 ## Activation and acceptance checks
 
 This is the operator's setup/acceptance checklist, not work to repeat each week.
-Reuse already verified activation/publication authority on later runs; do not
-request it again or reinstall/sync merely because this prompt runs.
+Reuse verified recurring issue-publication authority on later runs; do not
+reinstall/sync or ask again merely because the prompt runs.
 
-The operator has selected enabled-by-default repository configuration. Deploy the
-reviewed declaration only through an authorized Agent System Install/sync path,
-preserving existing automations. Recurring standalone publication if needed and
-a controlled pilot still require their own operator authorization.
-Agent-chat Install uses the native tool and Allow once; scheduler sync needs the
-operator's cron permissions. No raw install, direct cron mutation, or Doctor as
-a substitute for permission.
+The repository declaration defaults to enabled when `enabled` is omitted. That
+is not evidence of installed or running state. Deploy reviewed configuration only
+through an authorized Agent System Install/sync path, preserving existing jobs.
+A controlled pilot still requires separate authorization. Agent-chat Install uses
+the native tool and Allow once; scheduler sync needs the operator's cron permission.
+No raw install, direct cron mutation, or Doctor as substitute for permission.
 
-Verify installed capability, job ownership, enabled state, exact Sunday
-schedule/timezone, loaded prompt match, absence of drift, and next run. Run one
-controlled review through supported automation run/history operations and retain
-its exact run ID and completed result—not just queued status. Verify the automation
-display name, persistent chat title/group, and actual report
-visibility in that chat; a saved declaration or history result does not prove
-visible delivery. Verify the reviewed inline lists are actually loaded at their
-chat/skill/reply entrypoints, not merely present in a checkout. Controlled voice
-checks must demonstrate selection without a reference read and exclusion of a
-rested expression even when it appears in historical material; a file-consistency
-check alone does not prove model behavior. Independently verify the resulting rotation PR's author,
-assignee AND reviewer routing, sources,
-privacy, diff, and checks. The setup PR does not demonstrate a rotation. If real
-evidence supports no change, report that honestly; changed-PR evidence remains
-pending. A seeded fixture pilot needs separate approval and clear labeling.
+Verify installed job ownership, enabled state, exact Sunday schedule/timezone,
+timeout, resolved model, loaded prompt, absence of drift, persistent chat/group
+and next run. Validate through the owning schema and file loader, then focused
+repository checks and fresh CI. Static checks do not prove operational behavior.
 
-Then observe an actual Sunday-triggered occurrence: retain scheduled trigger/run
-ID, timestamps, completion, and publication/routing or no-change result. A manual
-run tests payload, not Sunday timing or timezone/DST behavior. Recheck reuse of
-an outstanding PR. Until required controlled-PR and actual scheduled-run evidence
-exist, report partial verification, not issue completion. Missing runtime support
-is an upstream prerequisite, not scope to build a new Agent System feature here.
+Run a controlled review only when authorized, retaining its exact run ID and
+completed result, not just queued status. Verify actual report visibility in the
+persistent chat, including truthful no-change/inconclusive results. Where real
+evidence justifies a rotation, verify canonical issue, sources, type/Work metadata,
+authenticated assignment actor, assignee readback and native intake outcome.
+Confirm subsequent work uses normal issue assessment and PR delivery with human
+review. No forced swaps to obtain changed-issue evidence; a fixture pilot requires
+separate authorization and clear labeling. Check duplicate issue/PR avoidance.
+
+Verify reviewed inline palettes are loaded at their chat/skill/reply entrypoints.
+Controlled voice checks must demonstrate fitting selection without a reference
+read and exclusion of rested expressions in historical material; file agreement
+alone proves neither model behavior nor installed context.
+
+Independently verify native failure handling before the prompt starts: retain
+execution/history evidence and confirm a visible failure report actually reaches
+the intended chat. Prompt wording cannot report an execution that never entered
+the prompt. An inspected guard is not delivery proof. Missing native support is
+an upstream prerequisite, not scope for a wrapper or diagnostic subsystem here.
+
+Then observe an actual Sunday-triggered occurrence, retaining trigger/run ID,
+timestamps, completion and visible outcome. A manual run tests payload, not
+Sunday timing or timezone/DST behavior. Report repository validation, installed
+state, controlled review, native failure delivery and actual Sunday execution
+separately; do not claim issue completion while required evidence is missing.

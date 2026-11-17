@@ -4,7 +4,6 @@ import {
   buildOpenClawConfigPatch,
   configPatchSatisfied,
   loadOpenClawConfigFragment,
-  memoryStatusHealthy,
   sqliteVectorExtensionPath,
   withoutCanonSkillDir,
 } from '../lib/setup/openclaw-config.js';
@@ -172,23 +171,16 @@ describe('lib/setup/openclaw-config', () => {
     assert.equal(configPatchSatisfied(current, patch), false);
   });
 
-  it('should require the configured memory runtime', () => {
-    assert.equal(
-      memoryStatusHealthy(
-        [
-          {
-            agentId: 'smutlord',
-            status: {
-              sources: ['memory', 'sessions'],
-              vector: { enabled: true, extensionPath: vectorExtensionPath },
-            },
-          },
-        ],
-        vectorExtensionPath,
-      ),
-      true,
-    );
-    assert.equal(memoryStatusHealthy([], vectorExtensionPath), false);
+  it('should reject drift in desired vector configuration', () => {
+    const patch = buildPatch();
+    for (const vector of [
+      { enabled: false, extensionPath: vectorExtensionPath },
+      { enabled: true, extensionPath: '/wrong/vec0.dylib' },
+    ]) {
+      const current = structuredClone(patch);
+      current.agents.entries.smutlord.memory.search.store.vector = vector;
+      assert.equal(configPatchSatisfied(current, patch), false);
+    }
   });
 
   it('should reject malformed shared arrays before replacing them', () => {

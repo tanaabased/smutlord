@@ -2,8 +2,10 @@
 
 tap "openclaw/tap", trusted: true
 
+brew "flock"
 brew "gh"
 brew "git"
+brew "jq"
 brew "openclaw/tap/gogcli"
 brew "openssh"
 

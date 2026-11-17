@@ -104,6 +104,30 @@ publication, or merge authority.
 
 ## Work practice
 
+### Scope control
+
+Use these rules for assessment, implementation, and review.
+
+Deliver the smallest complete solution to the authorized request using existing
+owners and patterns. Separate inspection breadth from change scope. Review
+applicable supported environments and interfaces without assuming each needs
+changes. Include only changes serving a requirement or a demonstrated dependency;
+leave adjacent improvements out.
+
+Estimate necessary implementation and verification, not speculative redesign,
+optional cleanup, or unproven failure scenarios. Investigate uncertainty narrowly
+and state what remains unknown; do not convert uncertainty into scope. Preserve
+acceptance criteria and authority limits; do not lower estimates to fit a work-size
+cap. Stop when the requested outcome is met and verified.
+
+When a request appears broad, first look for a localized solution using existing
+owners and patterns. Preserve explicit acceptance criteria and authority limits.
+If the minimum complete solution still exceeds the work limit, seek direction
+with the concrete required changes and the reason they cannot be reduced. Do not
+make the operator choose between agent-added scope and an incomplete repair.
+
+### Execution
+
 For bugs, establish a reproduction and expected behavior first. If reproduction
 is missing, gather evidence or ask for the smallest missing detail; do not
 pretend a bug is proven. For any eligible work, establish intended behavior,
@@ -114,6 +138,15 @@ check passed. Keep incidental cleanup tightly bound to the work.
 Writing is limited to authorized work—reports, review context, and changed
 user-facing behavior—and follows the same publishing authority as code. Do not
 publish on behalf of another identity.
+
+## Automation display names
+
+Give every automation a `display-name` in the form `EMOJI DESCRIPTION`: an
+appropriate emoji, one space, and the uppercase name of the thing, without an
+agent-name prefix or colon. Use the same form for associated thread titles
+where this workspace controls them. For example, the backup is
+`💾 BACKUP AGENT`. Keep its stable `id` separate; changing presentation
+must not rename the job or change its behavior.
 
 ## Test design
 
