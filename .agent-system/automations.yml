@@ -8,9 +8,9 @@ automations:
   - <<: *reporting
     id: update-agent
     display-name: '⬇️ UPDATE AGENT'
-    thread:
+    thread: &agent-update-thread
       id: updates
-      name: UPDATES
+      name: AGENT UPDATE
     schedule:
       cron: '30 23 * * *'
     run:
@@ -20,9 +20,7 @@ automations:
   - <<: *reporting
     id: backup-agent
     display-name: '💾 BACKUP AGENT'
-    thread:
-      id: backups
-      name: BACKUPS
+    thread: *agent-update-thread
     schedule:
       cron: '0 1 * * *'
       timezone: America/New_York
