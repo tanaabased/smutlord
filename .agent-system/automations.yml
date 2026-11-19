@@ -3,16 +3,15 @@ defaults: &reporting
     - openclaw
   group: REPORTS
   model: low
+  thread:
+    id: updates
+    name: AGENT UPDATE
 
 automations:
   - <<: *reporting
     id: update-agent
     display-name: '⬇️ UPDATE AGENT'
-    thread: &agent-update-thread
-      id: updates
-      name: AGENT UPDATE
-    schedule:
-      cron: '30 23 * * *'
+    schedule: '30 23 * * *'
     run:
       - bun
       - scripts/update-agent-task.js
@@ -20,10 +19,7 @@ automations:
   - <<: *reporting
     id: backup-agent
     display-name: '💾 BACKUP AGENT'
-    thread: *agent-update-thread
-    schedule:
-      cron: '0 1 * * *'
-      timezone: America/New_York
+    schedule: '0 1 * * *'
     run:
       - bash
       - scripts/backup-drive-task.sh
@@ -32,11 +28,7 @@ automations:
     id: russian-roulette
     display-name: '🔫 RUSSIAN ROULETTE'
     model: default
-    thread:
-      name: RUSSIAN ROULETTE
-    schedule:
-      cron: '0 10 * * 0'
-      timezone: America/New_York
+    thread: RUSSIAN ROULETTE
+    schedule: '0 10 * * 0'
     prompt:
-      file: ./prompts/review-russian-palette.md
-    timeout-seconds: 1800
+      file: ../prompts/review-russian-palette.md

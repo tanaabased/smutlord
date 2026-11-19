@@ -96,10 +96,12 @@ reproduction.
 
 ## Automations
 
-| Automation         | Schedule                       | Purpose                                                                                                                               |
-| ------------------ | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `backup-agent`     | Daily, 01:00 America/New_York  | Backs up workspace and agent state to Google Drive, verifies delivery, and applies retention.                                         |
-| `russian-roulette` | Sunday, 10:00 America/New_York | Creates a [sourced phrase-rotation issue](./.agent-system/prompts/review-russian-palette.md) for normal intake, or reports no change. |
+| Automation         | Schedule      | Purpose                                                                                                                |
+| ------------------ | ------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `backup-agent`     | Daily, 01:00  | Backs up workspace and agent state to Google Drive, verifies delivery, and applies retention.                          |
+| `russian-roulette` | Sunday, 10:00 | Creates [sourced phrase-rotation issues](./prompts/review-russian-palette.md) for normal intake, or reports no change. |
+
+Schedules use scheduler-local time.
 
 Configured in [automations.yml](./.agent-system/automations.yml), included by
 [agent.yaml](./.agent-system/agent.yaml); inspect installed jobs and

@@ -152,6 +152,10 @@ where this workspace controls them. For example, the backup is
 `💾 BACKUP AGENT`. Keep its stable `id` separate; changing presentation
 must not rename the job or change its behavior.
 
+Keep authored automation prompts in top-level `prompts/` and agent guidance in
+top-level `guidance/`. Keep Agent System declarations in `.agent-system/`, with
+file references relative to their declaring file.
+
 ## Test design
 
 Classify assertions by evidence: unit tests execute owned code with controlled
