@@ -36,13 +36,14 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile --ignore-scripts
       - name: Refresh Homebrew when needed
+        if: matrix.example == 'setup'
         shell: bash
         run: HOMEBREW_NO_AUTO_UPDATE= brew update-if-needed
       - name: Run Leia-backed example
         shell: bash
         env:
           NO_COLOR: '1'
-          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.SMUTLORDKEY }}
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ matrix.example == 'setup' && secrets.SMUTLORDKEY || '' }}
           TMPDIR: ${{ github.workspace }}/examples/${{ matrix.example }}/.tmp
         run: |
           mkdir -p "$TMPDIR"

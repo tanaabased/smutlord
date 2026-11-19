@@ -55,7 +55,6 @@ bun --eval '
 cd "$GITHUB_WORKSPACE"
 test ! -e "$HOME/tanaab/canon"
 openclaw plugins list --json | jq -e 'all(.plugins[]; .id != "codex")'
-openclaw config set skills.load.extraDirs "[\"$HOME/tanaab/canon/skills\"]" --strict-json
 openclaw config set hooks.internal.entries.session-memory.enabled true --strict-json
 openclaw config set skills.workshop.autonomous.mode '"off"' --strict-json
 

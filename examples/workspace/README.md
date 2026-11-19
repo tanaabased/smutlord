@@ -31,22 +31,20 @@ openclaw agents set-identity --agent smutlord --workspace "$GITHUB_WORKSPACE" --
 
 ```bash
 # should report the registered smutlord workspace and reviewed display name
-grep -F '"agentId": "smutlord"' "${TMPDIR}/agent.json"
-grep -F '"name": "smutlord"' "${TMPDIR}/agent.json"
-grep -F "\"workspace\": \"$GITHUB_WORKSPACE\"" "${TMPDIR}/agent.json"
-openclaw agents list --json | grep -F '"id": "smutlord"'
+jq -e --arg workspace "$GITHUB_WORKSPACE" '
+  .agentId == "smutlord" and .name == "smutlord" and .workspace == $workspace
+' "${TMPDIR}/agent.json"
+openclaw agents list --json | jq -e 'any(.[]; .id == "smutlord")'
 
 # should report smutlord identity from the workspace
-grep -F '"name": "smutlord"' "${TMPDIR}/identity.json"
-grep -F '"avatar": "assets/icon-large.png"' "${TMPDIR}/identity.json"
+jq -e '.agentId == "smutlord" and .identity.name == "smutlord" and .identity.avatar == "assets/icon-large.png"' "${TMPDIR}/identity.json"
 
 # should validate the resulting OpenClaw configuration
-openclaw config validate --json | tr -d '[:space:]' | grep -F '"valid":true'
+openclaw config validate --json | jq -e '.valid == true'
 
 # should preserve the reviewed identity file byte-for-byte
 cmp -s "${TMPDIR}/IDENTITY.before.md" "$GITHUB_WORKSPACE/IDENTITY.md"
 
 # should leave the repository worktree clean
-git -C "$GITHUB_WORKSPACE" diff --exit-code
 test -z "$(git -C "$GITHUB_WORKSPACE" status --short --untracked-files=all)"
 ```
