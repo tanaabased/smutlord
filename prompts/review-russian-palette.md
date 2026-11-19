@@ -7,13 +7,13 @@ implementation, validation, and PR delivery. Never manufacture weekly swaps.
 
 ## Operating boundary
 
-The declaration `russian-roulette` is enabled by default, with Sunday
-10:00 `America/New_York` selected by pirog. Declared enablement does not prove
+Job `russian-roulette` defaults to enabled, with Sunday
+10:00 in scheduler-local time. Declared enablement is not proof of
 deployment or a scheduled run. This file is procedure, not permission to deploy,
 run a pilot, or publish outside live policy. Read current
 repository instructions and all four inline active lists in `SOUL.md`, `AGENTS.md`,
 `skills/voice/SKILL.md`, and `guidance/reply.md`, plus the
-[source records and cold storage](../../skills/voice/references/README.md).
+[source records and cold storage](../skills/voice/references/README.md).
 This editorial run reads the reference; ordinary replies can use the inline core
 alone or follow its links for deeper context. If the lists disagree, report drift and reconcile only
 against a verified reviewed change or operator direction, never a guessed union.

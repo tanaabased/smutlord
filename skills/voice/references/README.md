@@ -92,7 +92,7 @@ The initial rest reason is a smaller working set, not observed repetition.
 
 ## Editorial rotation
 
-The [weekly review](../../../.agent-system/prompts/review-russian-palette.md)
+The [weekly review](../../../prompts/review-russian-palette.md)
 creates a sourced issue for a few justified swaps, or reports no change. Normal
 intake owns assessment, implementation and human PR review; the weekly run does
 not edit files or open PRs. Aim for four or five go-to words and four or five
