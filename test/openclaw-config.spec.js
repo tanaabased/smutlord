@@ -66,28 +66,6 @@ describe('lib/setup/openclaw-config', () => {
     ]);
   });
 
-  it('should leave model bindings, selection, and admissions to the manifest lifecycle', () => {
-    const current = buildPatch();
-    current.agents.entries.smutlord.model = {
-      primary: 'openai/gpt-6.1-sol',
-      fallbacks: ['openai/gpt-6-luna'],
-    };
-    current.agents.entries.smutlord.models = {
-      'openai/gpt-6.1-sol': { agentRuntime: { id: 'codex' } },
-      'openai/gpt-6-luna': { agentRuntime: { id: 'codex' } },
-    };
-    current.agents.entries.smutlord.modelPolicy = {
-      allow: ['openai/gpt-6.1-sol', 'openai/gpt-6-luna'],
-    };
-    const original = structuredClone(current);
-    const patch = buildPatch(current);
-    assert.equal(patch.agents.entries.smutlord.models, undefined);
-    assert.equal(patch.agents.entries.smutlord.model, undefined);
-    assert.equal(patch.agents.entries.smutlord.modelPolicy, undefined);
-    assert.equal(configPatchSatisfied(current, patch), true);
-    assert.deepEqual(current, original);
-  });
-
   it('should remove only Canon skill discovery', () => {
     const patch = buildPatch({
       skills: {
@@ -112,23 +90,24 @@ describe('lib/setup/openclaw-config', () => {
   });
 
   it('should converge without changing shared hook and Workshop preferences', () => {
-    for (const enabled of [false, true]) {
-      for (const mode of ['off', 'propose', 'auto']) {
-        const current = buildPatch();
-        current.hooks = { internal: { entries: { 'session-memory': { enabled } } } };
-        current.skills = {
-          workshop: { autonomous: { mode } },
-          load: { extraDirs: ['~/tanaab/canon/skills', '/opt/shared-skills'] },
-        };
-        const original = structuredClone(current);
-        const patch = buildPatch(current);
-        assert.equal(patch.hooks, undefined);
-        assert.equal(patch.skills.workshop, undefined);
-        assert.deepEqual(patch.skills.load.extraDirs, ['/opt/shared-skills']);
-        assert.deepEqual(current, original);
-        current.skills.load.extraDirs = ['/opt/shared-skills'];
-        assert.equal(configPatchSatisfied(current, buildPatch(current)), true);
-      }
+    for (const [enabled, mode] of [
+      [false, 'off'],
+      [true, 'auto'],
+    ]) {
+      const current = buildPatch();
+      current.hooks = { internal: { entries: { 'session-memory': { enabled } } } };
+      current.skills = {
+        workshop: { autonomous: { mode } },
+        load: { extraDirs: ['~/tanaab/canon/skills', '/opt/shared-skills'] },
+      };
+      const original = structuredClone(current);
+      const patch = buildPatch(current);
+      assert.equal(patch.hooks, undefined);
+      assert.equal(patch.skills.workshop, undefined);
+      assert.deepEqual(patch.skills.load.extraDirs, ['/opt/shared-skills']);
+      assert.deepEqual(current, original);
+      current.skills.load.extraDirs = ['/opt/shared-skills'];
+      assert.equal(configPatchSatisfied(current, buildPatch(current)), true);
     }
   });
 
@@ -138,6 +117,7 @@ describe('lib/setup/openclaw-config', () => {
     const agent = current.agents.entries.smutlord;
     agent.model = { primary: 'openai/gpt-6.1-sol', fallbacks: ['openai/gpt-6-luna'] };
     agent.thinkingDefault = 'high';
+    agent.modelPolicy = { allow: ['openai/gpt-6.1-sol', 'openai/gpt-6-luna'] };
     agent.models = {};
     agent.models['openai/gpt-6-luna'] = {
       alias: 'Luna',

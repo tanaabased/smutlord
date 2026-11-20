@@ -51,17 +51,16 @@ bun --eval '
   console.log(JSON.stringify({ setup, models: manifest.models, runtime: manifest.agent.runtime }));
 ' > "${TMPDIR}/setup-expected.json"
 
-# should start the isolated gateway for consented enrollment verification
-openclaw config set cron.enabled false --strict-json
-openclaw-gateway start
-
-# should prepare a fresh setup with existing host preferences
+# should prepare fresh setup with existing host preferences before Gateway starts
 cd "$GITHUB_WORKSPACE"
 test ! -e "$HOME/tanaab/canon"
 openclaw plugins list --json | jq -e 'all(.plugins[]; .id != "codex")'
-openclaw config set skills.load.extraDirs "[\"$HOME/tanaab/canon/skills\"]" --strict-json
 openclaw config set hooks.internal.entries.session-memory.enabled true --strict-json
 openclaw config set skills.workshop.autonomous.mode '"off"' --strict-json
+
+# should start isolated Gateway for consented enrollment verification
+openclaw config set cron.enabled false --strict-json
+openclaw-gateway start
 ```
 
 ## Testing

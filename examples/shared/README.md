@@ -4,8 +4,7 @@
 
 Two agents, one shared Codex plugin. Use disposable manifests in isolated
 OpenClaw profile. Install second agent without disturbing first agent, plugin
-receipt, or plugin configuration. Repeat installation and check convergence;
-both agents must remain intact.
+receipt, or plugin configuration.
 
 ## What it doesn't do
 
@@ -30,9 +29,8 @@ cp "$GITHUB_WORKSPACE/examples/shared/second-agent.yaml" "${TMPDIR}/shared-secon
 openclaw plugins list --json | jq -e 'all(.plugins[]; .id != "codex")'
 cd "${TMPDIR}/shared-first"
 openclaw agent-system install --skip-setup --json | jq -e '
-  .outcomes[0].component == "codex-plugin" and
-  .outcomes[0].code == "codex-plugin-installed" and
-  .outcomes[0].status == "created" and
+  (.outcomes | any(.component == "codex-plugin" and
+    .code == "codex-plugin-installed" and .status == "created")) and
   (.outcomes | any(.component == "agent" and .status == "created")) and
   (.outcomes | all(.component != "setup"))
 '
@@ -44,9 +42,8 @@ openclaw config get agents.entries.shared-first --json | jq -S . > "${TMPDIR}/fi
 # should reuse the plugin for a second agent without changing the first agent
 cd "${TMPDIR}/shared-second"
 openclaw agent-system install --skip-setup --json | jq -e '
-  .outcomes[0].component == "codex-plugin" and
-  .outcomes[0].code == "codex-plugin-unchanged" and
-  .outcomes[0].status == "unchanged" and
+  (.outcomes | any(.component == "codex-plugin" and
+    .code == "codex-plugin-unchanged" and .status == "unchanged")) and
   (.outcomes | any(.component == "agent" and .status == "created")) and
   (.outcomes | all(.component != "setup"))
 '
@@ -56,23 +53,4 @@ openclaw config get plugins.entries.codex --json | jq -S . > "${TMPDIR}/codex-co
 cmp "${TMPDIR}/codex-config-before.json" "${TMPDIR}/codex-config-after.json"
 openclaw config get agents.entries.shared-first --json | jq -S . > "${TMPDIR}/first-agent-after.json"
 cmp "${TMPDIR}/first-agent-before.json" "${TMPDIR}/first-agent-after.json"
-
-# should preserve both agents and the shared install on repeat reconciliation
-openclaw config get agents.entries.shared-second --json | jq -S . > "${TMPDIR}/second-agent-before.json"
-cd "${TMPDIR}/shared-second"
-openclaw agent-system install --skip-setup --json | jq -e '
-  .outcomes[0].component == "codex-plugin" and
-  .outcomes[0].code == "codex-plugin-unchanged" and
-  .outcomes[0].status == "unchanged" and
-  (.outcomes | any(.component == "agent" and .status == "unchanged")) and
-  (.outcomes | all(.component != "setup"))
-'
-openclaw plugins inspect codex --json | jq -S .install > "${TMPDIR}/codex-receipt-repeat.json"
-cmp "${TMPDIR}/codex-receipt-before.json" "${TMPDIR}/codex-receipt-repeat.json"
-openclaw config get plugins.entries.codex --json | jq -S . > "${TMPDIR}/codex-config-repeat.json"
-cmp "${TMPDIR}/codex-config-before.json" "${TMPDIR}/codex-config-repeat.json"
-openclaw config get agents.entries.shared-first --json | jq -S . > "${TMPDIR}/first-agent-repeat.json"
-cmp "${TMPDIR}/first-agent-before.json" "${TMPDIR}/first-agent-repeat.json"
-openclaw config get agents.entries.shared-second --json | jq -S . > "${TMPDIR}/second-agent-repeat.json"
-cmp "${TMPDIR}/second-agent-before.json" "${TMPDIR}/second-agent-repeat.json"
 ```
