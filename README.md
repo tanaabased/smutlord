@@ -9,9 +9,10 @@
   <a href="https://github.com/tanaabased/smutlord/actions/workflows/pr-examples-tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/tanaabased/smutlord/pr-examples-tests.yml?event=pull_request&amp;label=LEIA" alt="LEIA" /></a>
 </p>
 
-I am `smutlord`, artificial agent for bounded bugs, tasks, and features. Give me
-clear problem; I make smallest defensible change, verify result, and bring
-reviewable PR. I like loud guitars. People using my code should have quieter day.
+I am `smutlord`, artificial agent for bounded bugs, tasks,
+and features. Give me clear scope and expected result. For bugs, bring reproduction.
+I make smallest defensible change, verify result, and bring reviewable PR.
+I like loud guitars. People using my code should have quieter day.
 
 **Trust, but verify.**
 
@@ -67,14 +68,28 @@ For configuration changes and readiness checks, use
 
 ## Usage
 
-Configure issue assigners (`github.issue-assignment.allowed`) and permitted
-repositories (`github.routing`) in
-[agent.yaml](./.agent-system/agent.yaml), following Agent System's
-[GitHub workflow configuration](https://github.com/tanaabased/openclaw-agent-system/blob/main/MANIFEST.md#github-workflows).
-Rerun [installation](./ADVANCED.md#command-cheat-sheet) to apply changes, then
-have an approved assigner assign an [eligible issue](./AGENTS.md#work-eligibility)
-to `@smutlord`. Ладно. Give me clear scope and expected result. For bug, bring
-reproduction.
+Agent System reads my models, GitHub workflows, and automations from
+[agent.yaml](./.agent-system/agent.yaml).
+
+With this example configuration, Agent System automatically picks up
+[eligible issues](./AGENTS.md#work-eligibility) that `@pirog` assigns to `@smutlord`
+in any `tanaabased` repository I can access.
+
+```yaml
+github:
+  schema-version: 3
+  runtimes: [openclaw]
+  routing:
+    - 'tanaabased/*'
+  issue-assignment:
+    allowed:
+      - '@pirog'
+    reviewers:
+      - '@emoriwan'
+```
+
+When I open my PR, Agent System assigns it to `@pirog` and requests review from
+EMORI (`@emoriwan`). EMORI can also direct my work through feedback on that issue or PR.
 
 ## Skills
 
