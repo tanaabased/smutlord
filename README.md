@@ -5,9 +5,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/tanaabased/smutlord/actions/workflows/pr-linter.yml"><img src="https://img.shields.io/github/actions/workflow/status/tanaabased/smutlord/pr-linter.yml?event=pull_request&label=Lint" alt="Lint" /></a>
-  <a href="https://github.com/tanaabased/smutlord/actions/workflows/pr-unit-tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/tanaabased/smutlord/pr-unit-tests.yml?event=pull_request&label=Unit%20Tests" alt="Unit tests" /></a>
-  <a href="https://github.com/tanaabased/smutlord/actions/workflows/pr-examples-tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/tanaabased/smutlord/pr-examples-tests.yml?event=pull_request&label=Examples" alt="Example tests" /></a>
+  <a href="https://github.com/tanaabased/smutlord/releases/latest"><img src="https://img.shields.io/github/v/release/tanaabased/smutlord?label=release" alt="Latest release" /></a>
+  <a href="https://github.com/tanaabased/smutlord/actions/workflows/pr-examples-tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/tanaabased/smutlord/pr-examples-tests.yml?event=pull_request&amp;label=LEIA" alt="LEIA" /></a>
 </p>
 
 I am `smutlord`, artificial agent for bounded bugs, tasks, and features. Give me
@@ -77,30 +76,23 @@ have an approved assigner assign an [eligible issue](./AGENTS.md#work-eligibilit
 to `@smutlord`. Ладно. Give me clear scope and expected result. For bug, bring
 reproduction.
 
-## Config
-
-| Files                                                                                             | Purpose                                                 |
-| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| [agent.yaml](./.agent-system/agent.yaml)                                                          | Agent configuration and environment bindings.           |
-| [host setup](./.agent-system/setup-host.yaml) and [agent setup](./.agent-system/setup-agent.yaml) | Installation tasks.                                     |
-| [OpenClaw policy](./openclaw.patch.json)                                                          | Execution and memory settings. Apply through installer. |
-| [IDENTITY.md](./IDENTITY.md), [SOUL.md](./SOUL.md), and [AGENTS.md](./AGENTS.md)                  | Identity, personality, and work eligibility.            |
-
 ## Skills
 
-| Skill                                                     | Purpose                                                                                       |
-| --------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| [`smutlord-skill-author`](./skills/skill-author/SKILL.md) | Creates and checks local skills.                                                              |
-| [`smutlord-voice`](./skills/voice/SKILL.md)               | Russian-influenced prose and a [sourced phrase palette](./skills/voice/references/README.md). |
-| [Tanaab plugin](https://github.com/tanaabased/canon)      | Shared workflows.                                                                             |
+| Skill                                                     | Purpose                                                                                     |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| [`smutlord-skill-author`](./skills/skill-author/SKILL.md) | Creates and checks local skills.                                                            |
+| [`smutlord-voice`](./skills/voice/SKILL.md)               | Russian-influenced prose and [sourced phrase palette](./skills/voice/references/README.md). |
+
+Agent setup links and enables [Canon](https://github.com/tanaabased/canon)'s
+`tanaab` OpenClaw plugin from `~/tanaab/canon` for shared skills.
 
 ## Automations
 
 | Automation         | Schedule      | Purpose                                                                                                                |
 | ------------------ | ------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | `backup-agent`     | Daily, 01:00  | Archives workspace and agent state, uploads to Google Drive, and rotates owned nightly backups.                        |
-| `update-agent`     | Daily, 23:30  | Advances `main`, installs locked dependencies, reconciles Agent System without setup, and runs Doctor.                 |
 | `russian-roulette` | Sunday, 10:00 | Creates [sourced phrase-rotation issues](./prompts/review-russian-palette.md) for normal intake, or reports no change. |
+| `update-agent`     | Daily, 23:30  | Advances `main`, installs locked dependencies, reconciles Agent System without setup, and runs Doctor.                 |
 
 Schedules use scheduler-local time.
 
@@ -109,6 +101,16 @@ Configured in [automations.yml](./.agent-system/automations.yml), included by
 run history with [Advanced commands](./ADVANCED.md#command-cheat-sheet).
 See [backup recovery](./ADVANCED.md#inspect-backup-and-restore-results) and
 [update recovery](./ADVANCED.md#recover-stopped-update-agent-run).
+
+## Config
+
+| Files                                                                                                       | Purpose                                                 |
+| ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| [agent.yaml](./.agent-system/agent.yaml)                                                                    | Agent configuration and environment bindings.           |
+| [AGENTS.md](./AGENTS.md), [IDENTITY.md](./IDENTITY.md), and [SOUL.md](./SOUL.md)                            | Work eligibility, identity, and personality.            |
+| [automations.yml](./.agent-system/automations.yml)                                                          | Job definitions and schedules.                          |
+| [openclaw.patch.json](./openclaw.patch.json)                                                                | Execution and memory settings. Apply through installer. |
+| [setup-agent.yaml](./.agent-system/setup-agent.yaml) and [setup-host.yaml](./.agent-system/setup-host.yaml) | Installation tasks.                                     |
 
 ## Development
 
@@ -131,8 +133,8 @@ Show what happened and what should happen. Reproduction beats sales pitch.
 
 ## Changelog
 
-[CHANGELOG.md](./CHANGELOG.md) records the changes.
-[GitHub releases](https://github.com/tanaabased/smutlord/releases) will list published versions.
+[CHANGELOG.md](./CHANGELOG.md) records changes.
+Find published versions in [GitHub releases](https://github.com/tanaabased/smutlord/releases).
 
 ## Maintainers
 
