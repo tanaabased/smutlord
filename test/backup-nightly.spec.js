@@ -131,6 +131,20 @@ exit(flock($file, LOCK_EX | LOCK_NB) ? 0 : 1);
       assert.match(result.stderr, /delivered; remote retention failed/);
       assert(!(await calls()).some((call) => call[2] === 'delete'));
     });
+  it('should report delivery but refuse rotation when a complete listing omits the upload', async () => {
+    const result = run('list-missing-upload');
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /delivered; remote retention failed/);
+    assert(!(await calls()).some((call) => call[2] === 'delete'));
+  });
+  it('should refuse deletion when the first rotation candidate moved after listing', async () => {
+    const result = run('rotation-moved');
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /delivered; remote retention failed/);
+    const events = await calls();
+    assert(events.some((call) => call[2] === 'get' && call[3] === 'old02'));
+    assert(!events.some((call) => call[2] === 'delete'));
+  });
   it('should retain the shared OS lock in a running child after the shell is killed', async () => {
     const child = spawn('bash', [script], {
       cwd: workspace,
