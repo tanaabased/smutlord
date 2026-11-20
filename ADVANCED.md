@@ -28,10 +28,18 @@ openclaw agent-system tool gh -- api user --jq .login
 
 # Inspect configured automations and installed schedules.
 openclaw agent-system automations list
-
-# Inspect recent backup execution and delivery results.
-openclaw agent-system automations runs backup-agent --limit 10
 ```
+
+## Inspect backup and restore results
+
+Use `openclaw agent-system automations runs backup-agent --limit 10` to inspect
+recent runs. Upload completion means Drive accepted archive contents. Retention
+can still fail after upload; check which stage failed before taking action.
+Failed or unconfirmed uploads leave local nightly archives in place.
+
+Use Agent System backup commands to verify archived contents and restore into staging.
+Staged restore recovers files; it neither replaces your installed workspace nor
+starts agent runtime. See [backup commands](https://github.com/tanaabased/openclaw-agent-system/blob/main/CLI.md#openclaw-agent-system-backup-create).
 
 ## Recover stopped Update Agent run
 
