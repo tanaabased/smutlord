@@ -52,6 +52,8 @@ bun --eval '
 ' > "${TMPDIR}/setup-expected.json"
 
 # should prepare fresh setup with existing host preferences before Gateway starts
+set -euo pipefail
+trap 'printf "Setup fixture preparation failed at line %s; check preceding command output.\n" "$LINENO" >&2' ERR
 cd "$GITHUB_WORKSPACE"
 test ! -e "$HOME/tanaab/canon"
 openclaw plugins list --json | jq -e 'all(.plugins[]; .id != "codex")'
@@ -154,12 +156,18 @@ openclaw config get skills.workshop.autonomous.mode --json | jq -e '. == "off"'
 # should complete repeat installation
 cd "$GITHUB_WORKSPACE"
 set -euo pipefail
+trap 'printf "Repeat setup failed at line %s; check preceding command output.\n" "$LINENO" >&2' ERR
 for section in agents hooks skills tools; do
   openclaw config get "$section" --json | jq -S . > "${TMPDIR}/${section}-before.json"
 done
 openclaw agent-system install --yes --json | tee "${TMPDIR}/setup-reinstall.json"
+touch "${TMPDIR}/setup-reinstall.ok"
 
 # should leave all declared setup steps satisfied on repeat installation
+if ! test -f "${TMPDIR}/setup-reinstall.ok"; then
+  printf 'Repeat setup did not finish; see repeat installation result above.\n' >&2
+  exit 1
+fi
 jq -e --slurpfile expected "${TMPDIR}/setup-expected.json" '
   .agentId == "smutlord" and
   .blocked == null and ((.unattempted // []) | length == 0) and
@@ -170,6 +178,11 @@ jq -e --slurpfile expected "${TMPDIR}/setup-expected.json" '
 ' "${TMPDIR}/setup-reinstall.json"
 
 # should preserve installed policy across repeat reconciliation
+set -euo pipefail
+if ! test -f "${TMPDIR}/setup-reinstall.ok"; then
+  printf 'Cannot compare installed policy; see repeat installation result above.\n' >&2
+  exit 1
+fi
 for section in agents hooks skills tools; do
   openclaw config get "$section" --json | jq -S . > "${TMPDIR}/${section}-after.json"
   cmp "${TMPDIR}/${section}-before.json" "${TMPDIR}/${section}-after.json"

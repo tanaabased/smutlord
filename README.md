@@ -98,14 +98,17 @@ reproduction.
 
 | Automation         | Schedule      | Purpose                                                                                                                |
 | ------------------ | ------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `backup-agent`     | Daily, 01:00  | Backs up workspace and agent state to Google Drive, verifies delivery, and applies retention.                          |
+| `backup-agent`     | Daily, 01:00  | Archives workspace and agent state, uploads to Google Drive, and rotates owned nightly backups.                        |
+| `update-agent`     | Daily, 23:30  | Advances `main`, installs locked dependencies, reconciles Agent System without setup, and runs Doctor.                 |
 | `russian-roulette` | Sunday, 10:00 | Creates [sourced phrase-rotation issues](./prompts/review-russian-palette.md) for normal intake, or reports no change. |
 
 Schedules use scheduler-local time.
 
 Configured in [automations.yml](./.agent-system/automations.yml), included by
 [agent.yaml](./.agent-system/agent.yaml); inspect installed jobs and
-run history with the [Advanced commands](./ADVANCED.md#command-cheat-sheet).
+run history with [Advanced commands](./ADVANCED.md#command-cheat-sheet).
+See [backup recovery](./ADVANCED.md#inspect-backup-and-restore-results) and
+[update recovery](./ADVANCED.md#recover-stopped-update-agent-run).
 
 ## Development
 

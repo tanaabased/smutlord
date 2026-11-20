@@ -50,11 +50,21 @@ if (args[0] === 'agent-system') {
             capabilities: { canAddChildren: true },
             permissions: [{ type: mode === 'public-folder' ? 'anyone' : 'user' }],
           }
-        : file(args[2], args[2].slice(3)),
+        : {
+            ...file(args[2], args[2].slice(3)),
+            ...(mode === 'rotation-moved' ? { parents: ['another-folder'] } : {}),
+          },
   });
 } else if (args[1] === 'ls') {
-  const entries = [file('current')];
-  if (['rotation', 'rotation-paged', 'list-cycle'].includes(mode)) {
+  const entries = mode === 'list-missing-upload' ? [] : [file('current')];
+  const includeHistory = [
+    'rotation',
+    'rotation-paged',
+    'rotation-moved',
+    'list-cycle',
+    'list-missing-upload',
+  ].includes(mode);
+  if (includeHistory) {
     for (const day of ['01', '02', '03', '04', '05', '06']) entries.push(file(`old${day}`, day));
     entries.push({ ...file('manual'), name: 'manual.tar.gz' });
     entries.push({ ...file('invalid-date'), name: nightly.replace('11-13T', '02-31T') });

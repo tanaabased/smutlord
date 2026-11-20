@@ -1,5 +1,27 @@
 ## {{ UNRELEASED_VERSION }} - [{{ UNRELEASED_DATE }}]({{ UNRELEASED_LINK }})
 
+### Features
+
+- Added nightly `update-agent` to advance workspace source, install locked dependencies, reconcile Agent System without setup, and run Doctor. [#77](https://github.com/tanaabased/smutlord/pull/77)
+- Added project issue pickup and migrated scheduling to Agent System scans. [#73](https://github.com/tanaabased/smutlord/pull/73) [#81](https://github.com/tanaabased/smutlord/pull/81)
+
+### Improvements
+
+- Moved nightly `backup-agent` to 01:00 scheduler-local time and retained run reports in persistent chat. [#78](https://github.com/tanaabased/smutlord/pull/78) [#92](https://github.com/tanaabased/smutlord/pull/92) [#93](https://github.com/tanaabased/smutlord/pull/93)
+- Moved weekly phrase review to issue-first proposals instead of direct palette edits. [#63](https://github.com/tanaabased/smutlord/pull/63)
+- Removed local nightly archives after successful Drive upload; failed uploads retain local copies. [#86](https://github.com/tanaabased/smutlord/pull/86)
+- Updated OpenClaw development and hosted test baseline to `2026.11.5`. [#102](https://github.com/tanaabased/smutlord/pull/102)
+- Updated routed models to GPT-6.2 Sol. [#97](https://github.com/tanaabased/smutlord/pull/97)
+
+### Bug Fixes
+
+- Fixed Canon setup health checks to accept installed skill inventory without requiring specific skill names. [#84](https://github.com/tanaabased/smutlord/pull/84)
+
+### Notes
+
+- Clarified Update Agent failure reporting and documented recovery without replaying uncertain changes. [#99](https://github.com/tanaabased/smutlord/pull/99) [#104](https://github.com/tanaabased/smutlord/pull/104)
+- Made article-free English mandatory in `smutlord` voice guidance. [#95](https://github.com/tanaabased/smutlord/pull/95)
+
 # Changelog
 
 ## v1.0.0 - [October 27, 2026](https://github.com/tanaabased/smutlord/releases/tag/v1.0.0)
