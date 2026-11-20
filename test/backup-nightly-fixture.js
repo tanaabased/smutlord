@@ -57,9 +57,14 @@ if (args[0] === 'agent-system') {
   });
 } else if (args[1] === 'ls') {
   const entries = mode === 'list-missing-upload' ? [] : [file('current')];
-  if (
-    ['rotation', 'rotation-paged', 'rotation-moved', 'list-cycle', 'list-missing-upload'].includes(mode)
-  ) {
+  const includeHistory = [
+    'rotation',
+    'rotation-paged',
+    'rotation-moved',
+    'list-cycle',
+    'list-missing-upload',
+  ].includes(mode);
+  if (includeHistory) {
     for (const day of ['01', '02', '03', '04', '05', '06']) entries.push(file(`old${day}`, day));
     entries.push({ ...file('manual'), name: 'manual.tar.gz' });
     entries.push({ ...file('invalid-date'), name: nightly.replace('11-13T', '02-31T') });
