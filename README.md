@@ -78,39 +78,32 @@ reproduction.
 
 ## Skills
 
-| Skill                                                     | Purpose                                                                                     |
+| ID                                                        | Purpose                                                                                     |
 | --------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | [`smutlord-skill-author`](./skills/skill-author/SKILL.md) | Creates and checks local skills.                                                            |
 | [`smutlord-voice`](./skills/voice/SKILL.md)               | Russian-influenced prose and [sourced phrase palette](./skills/voice/references/README.md). |
 
-Agent setup links and enables [Canon](https://github.com/tanaabased/canon)'s
-`tanaab` OpenClaw plugin from `~/tanaab/canon` for shared skills.
+During setup, `smutlord` automatically installs and enables Canon’s `tanaab`
+OpenClaw plugin, making [Canon skills](https://github.com/tanaabased/canon#skills) available.
 
 ## Automations
 
-| Automation         | Schedule      | Purpose                                                                                                                |
-| ------------------ | ------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `backup-agent`     | Daily, 01:00  | Archives workspace and agent state, uploads to Google Drive, and rotates owned nightly backups.                        |
-| `russian-roulette` | Sunday, 10:00 | Creates [sourced phrase-rotation issues](./prompts/review-russian-palette.md) for normal intake, or reports no change. |
-| `update-agent`     | Daily, 23:30  | Advances `main`, installs locked dependencies, reconciles Agent System without setup, and runs Doctor.                 |
-
-Schedules use scheduler-local time.
-
-Configured in [automations.yml](./.agent-system/automations.yml), included by
-[agent.yaml](./.agent-system/agent.yaml); inspect installed jobs and
-run history with [Advanced commands](./ADVANCED.md#command-cheat-sheet).
-See [backup recovery](./ADVANCED.md#inspect-backup-and-restore-results) and
-[update recovery](./ADVANCED.md#recover-stopped-update-agent-run).
+| ID                 | Schedule (scheduler-local time) | Purpose                                                                                                                |
+| ------------------ | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `backup-agent`     | Daily, 01:00                    | Archives workspace and agent state, uploads to Google Drive, and rotates owned nightly backups.                        |
+| `russian-roulette` | Sunday, 10:00                   | Creates [sourced phrase-rotation issues](./prompts/review-russian-palette.md) for normal intake, or reports no change. |
+| `update-agent`     | Daily, 23:30                    | Advances `main`, installs locked dependencies, reconciles Agent System without setup, and runs Doctor.                 |
 
 ## Config
 
-| Files                                                                                                       | Purpose                                                 |
-| ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| [agent.yaml](./.agent-system/agent.yaml)                                                                    | Agent configuration and environment bindings.           |
-| [AGENTS.md](./AGENTS.md), [IDENTITY.md](./IDENTITY.md), and [SOUL.md](./SOUL.md)                            | Work eligibility, identity, and personality.            |
-| [automations.yml](./.agent-system/automations.yml)                                                          | Job definitions and schedules.                          |
-| [openclaw.patch.json](./openclaw.patch.json)                                                                | Execution and memory settings. Apply through installer. |
-| [setup-agent.yaml](./.agent-system/setup-agent.yaml) and [setup-host.yaml](./.agent-system/setup-host.yaml) | Installation tasks.                                     |
+| Path                                                                                                        | Purpose                                                                            |
+| ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| [agent.yaml](./.agent-system/agent.yaml)                                                                    | Agent configuration and environment bindings.                                      |
+| [AGENTS.md](./AGENTS.md), [IDENTITY.md](./IDENTITY.md), and [SOUL.md](./SOUL.md)                            | Work eligibility, identity, and personality.                                       |
+| [automations.yml](./.agent-system/automations.yml)                                                          | Job definitions and schedules.                                                     |
+| [guidance/](./guidance/)                                                                                    | Workspace instructions for issue assessment, implementation, and feedback replies. |
+| [openclaw.patch.json](./openclaw.patch.json)                                                                | Execution and memory settings. Apply through installer.                            |
+| [setup-agent.yaml](./.agent-system/setup-agent.yaml) and [setup-host.yaml](./.agent-system/setup-host.yaml) | Installation tasks.                                                                |
 
 ## Development
 

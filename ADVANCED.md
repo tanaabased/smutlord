@@ -28,46 +28,17 @@ openclaw agent-system tool gh -- api user --jq .login
 
 # Inspect configured automations and installed schedules.
 openclaw agent-system automations list
-```
 
-## Inspect backup and restore results
-
-Use `openclaw agent-system automations runs backup-agent --limit 10` to inspect
-recent runs. Upload completion means Drive accepted archive contents. Retention
-can still fail after upload; check which stage failed before taking action.
-Failed or unconfirmed uploads leave local nightly archives in place.
-
-Use Agent System backup commands to verify archived contents and restore into staging.
-Staged restore recovers files; it neither replaces your installed workspace nor
-starts agent runtime. See [backup commands](https://github.com/tanaabased/openclaw-agent-system/blob/main/CLI.md#openclaw-agent-system-backup-create).
-
-## Recover stopped Update Agent run
-
-Nightly Update Agent advances `main`, installs locked dependencies, reconciles
-Agent System without running setup checks or tasks, and runs Doctor.
-
-From your installed `smutlord` checkout, not from any issue worktree, inspect
-recent runs and read retained results without replaying changes:
-
-```sh
+# Inspect recent backup or update runs.
+openclaw agent-system automations runs backup-agent --limit 10
 openclaw agent-system automations runs update-agent --limit 10
+
+# Read retained update results without replaying changes.
 bun scripts/update-agent-task.js --report-only
-```
 
-If retained results confirm source, dependencies, and install completed, and
-Doctor alone remains blocked, use verification-only after correcting reported
-health problems. Run only within managed execution; direct shell execution lacks
-required authority. Verification requires clean `main` at its recorded commit
-and reruns Doctor without pulling or reinstalling:
-
-```sh
+# After fixing Doctor findings, recheck applied update through managed execution only.
 bun scripts/update-agent-task.js --verify-only
 ```
-
-Without managed verification access, use interactive Doctor to inspect current
-health. This leaves retained update results unchanged. If application is
-uncertain or verification is refused, inspect retained results and checkout.
-Do not replay Update Agent to clear uncertainty.
 
 ## Helpful links
 
