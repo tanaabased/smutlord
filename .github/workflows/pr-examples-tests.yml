@@ -30,18 +30,20 @@ jobs:
         uses: tanaabased/actions/setup-openclaw@v1
         with:
           agent-system: github:tanaabased/openclaw-agent-system#main
+          profile: ci-smutlord-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.example }}
       - name: Set up Bun
         uses: tanaabased/actions/setup-bun@v1
       - name: Install dependencies
         run: bun install --frozen-lockfile --ignore-scripts
       - name: Refresh Homebrew when needed
+        if: matrix.example == 'setup'
         shell: bash
         run: HOMEBREW_NO_AUTO_UPDATE= brew update-if-needed
       - name: Run Leia-backed example
         shell: bash
         env:
           NO_COLOR: '1'
-          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.SMUTLORDKEY }}
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ matrix.example == 'setup' && secrets.SMUTLORDKEY || '' }}
           TMPDIR: ${{ github.workspace }}/examples/${{ matrix.example }}/.tmp
         run: |
           mkdir -p "$TMPDIR"
