@@ -4,22 +4,10 @@ umask 077
 
 [[ $# == 0 ]] || { echo 'Nightly backup accepts no arguments.' >&2; exit 1; }
 : "${AGENT_SYSTEM_GOG:?Run through the managed Agent System automation.}"
-for command in flock jq; do
-  command -v "$command" >/dev/null || { echo "$command missing; run managed setup before activating nightly backup." >&2; exit 1; }
-done
+command -v jq >/dev/null || { echo 'jq missing; run managed setup before activating nightly backup.' >&2; exit 1; }
 folder=1L21gQkLgTmCZ05UQqV9-zp5n0lp22EMH
 stage=create
 delivered=false
-for directory in .private .private/backup-drive; do
-  [[ ! -L $directory ]]
-  mkdir -p "$directory"
-  chmod 700 "$directory"
-done
-lock=.private/backup-drive/run.lock
-[[ ! -L $lock && ! -s $lock && ( ! -e $lock || -f $lock ) ]]
-# Children inherit this descriptor, preserving updater/backup exclusion after parent death.
-exec 9>> "$lock"
-flock -n 9 || { echo 'Backup locked by another backup or updater.' >&2; exit 1; }
 finish() {
   result=$?
   trap - EXIT
