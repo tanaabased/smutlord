@@ -1,7 +1,6 @@
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
-import openBackupStorage from '../lib/backup/storage.js';
-import { spawn, spawnSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import {
   mkdtemp,
   mkdir,
@@ -12,7 +11,6 @@ import {
   writeFile,
   realpath,
 } from 'node:fs/promises';
-import { once } from 'node:events';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -34,17 +32,6 @@ describe('scripts/backup-drive-task', () => {
     await mkdir(output);
     await mkdir(join(workspace, '.agent-system'));
     await mkdir(join(workspace, 'bin'));
-    // macOS has no stock flock CLI. This fixture locks the inherited descriptor
-    // with the real OS primitive; owning-command integration stays operational acceptance.
-    await writeFile(
-      join(workspace, 'bin', 'flock'),
-      `#!/usr/bin/perl
-use Fcntl qw(LOCK_EX LOCK_NB);
-open my $file, '>&=9' or die "missing inherited descriptor";
-exit(flock($file, LOCK_EX | LOCK_NB) ? 0 : 1);
-`,
-      { mode: 0o755 },
-    );
     for (const name of ['openclaw', 'gog']) {
       await writeFile(
         join(workspace, 'bin', name),
@@ -145,59 +132,12 @@ exit(flock($file, LOCK_EX | LOCK_NB) ? 0 : 1);
     assert(events.some((call) => call[2] === 'get' && call[3] === 'old02'));
     assert(!events.some((call) => call[2] === 'delete'));
   });
-  it('should retain the shared OS lock in a running child after the shell is killed', async () => {
-    const child = spawn('bash', [script], {
-      cwd: workspace,
-      env: {
-        ...process.env,
-        PATH: `${workspace}/bin:${process.env.PATH}`,
-        AGENT_SYSTEM_GOG: join(workspace, 'bin', 'gog'),
-        BACKUP_TEST_MODE: 'hold-create',
-        BACKUP_TEST_UUID: randomUUID(),
-      },
-    });
-    child.stdout.resume();
-    child.stderr.resume();
-    const exited = once(child, 'exit');
-    const deadline = Date.now() + 4000;
-    const waitForRelease = async () => {
-      // The orphaned capture must finish before its disposable workspace is removed.
-      while (true) {
-        let storage;
-        try {
-          storage = await openBackupStorage(workspace);
-        } catch (error) {
-          if (!/backup-run-locked/.test(error.message)) throw error;
-          assert(Date.now() < deadline, 'capture child retained lock');
-          await new Promise((resolve) => setTimeout(resolve, 10));
-          continue;
-        }
-        await storage.close();
-        break;
-      }
-    };
-    try {
-      while (!(await readdir(workspace)).includes('ready')) {
-        assert(Date.now() < deadline, 'capture child did not start');
-        await new Promise((resolve) => setTimeout(resolve, 10));
-      }
-      await assert.rejects(openBackupStorage(workspace), /backup-run-locked/);
-      child.kill('SIGKILL');
-      await exited;
-      await assert.rejects(openBackupStorage(workspace), /backup-run-locked/);
-    } finally {
-      await writeFile(join(workspace, 'release'), 'release');
-      child.kill('SIGKILL');
-      await exited;
-      await waitForRelease();
-    }
-  });
-  it('should refuse overlapping or interrupted runs before invoking owning commands', async () => {
-    const storage = await openBackupStorage(workspace);
+  it('should ignore old lock files and report this run', async () => {
+    const directory = join(workspace, '.private', 'backup-drive');
+    await mkdir(directory, { recursive: true });
+    await writeFile(join(directory, 'run.lock'), 'legacy lock');
     const result = run();
-    assert.notEqual(result.status, 0);
-    assert.match(result.stderr, /locked/);
-    await storage.close();
-    await assert.rejects(readFile(join(workspace, 'calls.jsonl')), { code: 'ENOENT' });
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, /delivered/);
   });
 });
