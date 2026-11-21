@@ -10,7 +10,8 @@
 - Moved nightly `backup-agent` to 01:00 scheduler-local time and retained run reports in persistent chat. [#78](https://github.com/tanaabased/smutlord/pull/78) [#92](https://github.com/tanaabased/smutlord/pull/92) [#93](https://github.com/tanaabased/smutlord/pull/93)
 - Moved weekly phrase review to issue-first proposals instead of direct palette edits. [#63](https://github.com/tanaabased/smutlord/pull/63)
 - Removed local nightly archives after successful Drive upload; failed uploads retain local copies. [#86](https://github.com/tanaabased/smutlord/pull/86)
-- Updated OpenClaw development and hosted test baseline to `2026.11.5`. [#102](https://github.com/tanaabased/smutlord/pull/102)
+- Simplified `backup-agent` and `update-agent` so each run reports its own result and old locks or checkpoints no longer block new runs. [#107](https://github.com/tanaabased/smutlord/pull/107)
+- Updated OpenClaw development and hosted test baseline to `2026.11.6`. [#102](https://github.com/tanaabased/smutlord/pull/102) [#106](https://github.com/tanaabased/smutlord/pull/106)
 - Updated routed models to GPT-6.2 Sol. [#97](https://github.com/tanaabased/smutlord/pull/97)
 
 ### Bug Fixes

@@ -16,7 +16,7 @@ openclaw agent-system validate
 # Apply openclaw.patch.json through this installer, not directly.
 openclaw agent-system install --yes
 
-# Inspect readiness and drift. No repairs applied.
+# Check current readiness and drift without applying repairs.
 openclaw agent-system doctor
 
 # Reconcile configured components; skip all setup checks and tasks.
@@ -29,15 +29,9 @@ openclaw agent-system tool gh -- api user --jq .login
 # Inspect configured automations and installed schedules.
 openclaw agent-system automations list
 
-# Inspect recent backup or update runs.
+# Read recent backup and update results without rerunning jobs.
 openclaw agent-system automations runs backup-agent --limit 10
 openclaw agent-system automations runs update-agent --limit 10
-
-# Read retained update results without replaying changes.
-bun scripts/update-agent-task.js --report-only
-
-# After fixing Doctor findings, recheck applied update through managed execution only.
-bun scripts/update-agent-task.js --verify-only
 ```
 
 ## Helpful links
