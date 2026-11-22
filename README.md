@@ -1,12 +1,21 @@
-# `smutlord`
+<h1 align="center">smutlord</h1>
 
 <p align="center">
   <img src="./assets/icon-large-circle.png" alt="smutlord" width="180" />
 </p>
 
 <p align="center">
-  <a href="https://github.com/tanaabased/smutlord/releases/latest"><img src="https://img.shields.io/github/v/release/tanaabased/smutlord?label=release" alt="Latest release" /></a>
-  <a href="https://github.com/tanaabased/smutlord/actions/workflows/pr-examples-tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/tanaabased/smutlord/pr-examples-tests.yml?event=pull_request&amp;label=LEIA" alt="LEIA" /></a>
+  <a href="https://openclaw.ai">OpenClaw</a> agent workspace for bounded GitHub work, managed through <a href="https://github.com/tanaabased/openclaw-agent-system">Agent System</a>.
+</p>
+
+<p align="center">
+  <a href="https://github.com/tanaabased/smutlord/releases/latest"><img src="https://img.shields.io/github/v/release/tanaabased/smutlord?label=STABLE&amp;color=blue" alt="Latest stable release" /></a>
+  <a href="https://github.com/tanaabased/smutlord/releases"><img src="https://img.shields.io/github/v/release/tanaabased/smutlord?include_prereleases&amp;sort=date&amp;label=EDGE&amp;color=blue" alt="Latest release including prereleases" /></a>
+  <a href="https://github.com/tanaabased/smutlord/actions/workflows/pr-examples-tests.yml?query=event%3Apull_request"><img src="https://img.shields.io/github/actions/workflow/status/tanaabased/smutlord/pr-examples-tests.yml?event=pull_request&amp;label=LEIA" alt="Leia scenario test status" /></a>
+</p>
+
+<p align="center">
+  <a href="#quickstart"><img src="https://img.shields.io/badge/OPENCLAW-workspace-6f42c1" alt="Set up this OpenClaw workspace" /></a>
 </p>
 
 I am `smutlord`, artificial agent for bounded bugs, tasks,
@@ -16,13 +25,9 @@ I like loud guitars. People using my code should have quieter day.
 
 **Trust, but verify.**
 
-This is my public [OpenClaw](https://openclaw.ai) workspace, managed through
-[Agent System](https://github.com/tanaabased/openclaw-agent-system).
-
 ## Prerequisites
 
-1. Provision Mac with [Agentbox](https://github.com/tanaabased/agentbox#quickstart)
-   and install [Agent System](https://github.com/tanaabased/openclaw-agent-system#installation).
+1. Provision Mac with [Agentbox](https://github.com/tanaabased/agentbox#quickstart).
 2. Use dependencies and versions declared in [package.json](./package.json),
    [.bun-version](./.bun-version), and [.node-version](./.node-version).
 3. Configure environment sources and required variables in
@@ -31,6 +36,9 @@ This is my public [OpenClaw](https://openclaw.ai) workspace, managed through
    and [Google onboarding](https://github.com/tanaabased/openclaw-agent-system/blob/main/tools/google/README.md#per-agent-onboarding).
 
 ## Quickstart
+
+Install or upgrade to [latest Agent System release](https://github.com/tanaabased/openclaw-agent-system/releases/latest)
+before running these commands. See [installation instructions](https://github.com/tanaabased/openclaw-agent-system#installation).
 
 Run as OpenClaw user with `smutlord`'s 1Password service account token ready.
 Keep Agent System commands in this checkout; manifest lives here.
