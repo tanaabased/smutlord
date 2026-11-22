@@ -1,5 +1,7 @@
 ## {{ UNRELEASED_VERSION }} - [{{ UNRELEASED_DATE }}]({{ UNRELEASED_LINK }})
 
+## v1.1.0 - [November 22, 2026](https://github.com/tanaabased/smutlord/releases/tag/v1.1.0)
+
 ### Features
 
 - Added nightly `update-agent` to advance workspace source, install locked dependencies, reconcile Agent System without setup, and run Doctor. [#77](https://github.com/tanaabased/smutlord/pull/77)
