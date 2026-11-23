@@ -1,16 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import {
-  copyFile,
-  cp,
-  mkdir,
-  mkdtemp,
-  readFile,
-  readdir,
-  rename,
-  rm,
-  writeFile,
-} from 'node:fs/promises';
+import { cp, mkdtemp, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -111,24 +101,14 @@ describe('skills/skill-author', function () {
     });
   }
 
-  it('should reuse shared artwork for workspace skills without copying icons', async () => {
+  it('should bundle portable icons without changing workspace skill folder names', async () => {
     const workspace = path.join(tempDir, 'workspace');
     const skillsDir = path.join(workspace, 'skills');
     const authorDir = path.join(skillsDir, 'skill-author');
-    const assetsDir = path.join(workspace, 'assets');
     await cp(SKILL_DIR, authorDir, { recursive: true });
-    await mkdir(assetsDir);
     await Promise.all([
       writeFile(path.join(workspace, 'AGENTS.md'), '# Workspace\n'),
       writeFile(path.join(workspace, 'IDENTITY.md'), '# Identity\n'),
-      copyFile(
-        path.join(REPO_ROOT, 'assets', 'composer-icon.svg'),
-        path.join(assetsDir, 'composer-icon.svg'),
-      ),
-      copyFile(
-        path.join(REPO_ROOT, 'assets', 'icon-large.png'),
-        path.join(assetsDir, 'icon-large.png'),
-      ),
     ]);
 
     const initialized = runBun(path.join(authorDir, 'scripts', 'init-skill.js'), initArgs({}));
@@ -136,9 +116,8 @@ describe('skills/skill-author', function () {
 
     const skillDir = path.join(skillsDir, 'contract-generic');
     const metadata = await readFile(path.join(skillDir, 'agents', 'openai.yaml'), 'utf8');
-    assert.equal(YAML.parse(metadata).interface.icon_small, '../../assets/composer-icon.svg');
-    assert.equal(YAML.parse(metadata).interface.icon_large, '../../assets/icon-large.png');
-    assert.ok(!(await readdir(skillDir)).includes('assets'));
+    assert.equal(YAML.parse(metadata).interface.icon_small, './assets/icon-small.svg');
+    assert.equal(YAML.parse(metadata).interface.icon_large, './assets/icon-large.png');
 
     const validated = runBun(VALIDATE_SCRIPT, ['--skill-dir', skillDir]);
     assert.equal(validated.status, 0, commandOutput(validated));
@@ -156,11 +135,11 @@ describe('skills/skill-author', function () {
     assert.equal(YAML.parse(metadata).interface.icon_large, './assets/icon-large.png');
     assert.deepEqual(
       await readFile(path.join(movedSkillDir, 'assets', 'icon-small.svg')),
-      await readFile(path.join(REPO_ROOT, 'assets', 'composer-icon.svg')),
+      await readFile(path.join(SKILL_DIR, 'assets', 'skill-icon-preparation.svg')),
     );
     assert.deepEqual(
       await readFile(path.join(movedSkillDir, 'assets', 'icon-large.png')),
-      await readFile(path.join(REPO_ROOT, 'assets', 'icon-large.png')),
+      await readFile(path.join(SKILL_DIR, 'assets', 'icon-large.png')),
     );
 
     const validated = runBun(VALIDATE_SCRIPT, ['--skill-dir', movedSkillDir]);

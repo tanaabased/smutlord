@@ -41,15 +41,15 @@ function normalizeSlug(value) {
   return slug;
 }
 
-function makeOpenAiYaml({ displayName, shortDescription, defaultPrompt, iconSmall, iconLarge }) {
+function makeOpenAiYaml({ displayName, shortDescription, defaultPrompt }) {
   return (
     YAML.stringify(
       {
         interface: {
           display_name: displayName,
           short_description: shortDescription,
-          icon_small: iconSmall,
-          icon_large: iconLarge,
+          icon_small: './assets/icon-small.svg',
+          icon_large: './assets/icon-large.png',
           brand_color: SMUTLORD_SKILL_BRAND_COLOR,
           default_prompt: defaultPrompt,
         },
@@ -139,9 +139,9 @@ export async function initializeSkill(options, { writeSkillFile = writeFile } = 
 
   const tags = [SMUTLORD_SKILL_OWNER, type, categoryTag];
   const validationTargetDir = path.resolve(options.outputDir ?? SKILLS_ROOT_DIR);
-  const usesWorkspaceAssets = validationTargetDir === SKILLS_ROOT_DIR;
+  const isWorkspace = validationTargetDir === SKILLS_ROOT_DIR;
   const pluginRootPath = path.resolve(validationTargetDir, '..', '.codex-plugin', 'plugin.json');
-  const usesUnprefixedFolder = usesWorkspaceAssets || (await pathExists(pluginRootPath));
+  const usesUnprefixedFolder = isWorkspace || (await pathExists(pluginRootPath));
   const folderName = usesUnprefixedFolder ? stripSkillPrefix(skillId) : skillId;
   const skillDir = path.resolve(validationTargetDir, folderName);
   const openclawHomepage = String(
@@ -173,8 +173,6 @@ export async function initializeSkill(options, { writeSkillFile = writeFile } = 
   const openAiContent = makeOpenAiYaml({
     defaultPrompt,
     displayName,
-    iconLarge: usesWorkspaceAssets ? '../../assets/icon-large.png' : './assets/icon-large.png',
-    iconSmall: usesWorkspaceAssets ? '../../assets/composer-icon.svg' : './assets/icon-small.svg',
     shortDescription: makeShortDescription(normalizedDescription),
   });
 
@@ -186,11 +184,9 @@ export async function initializeSkill(options, { writeSkillFile = writeFile } = 
     await mkdir(agentsDir);
     await writeSkillFile(path.join(stagedDir, 'SKILL.md'), skillContent, 'utf8');
     await writeSkillFile(path.join(agentsDir, 'openai.yaml'), openAiContent, 'utf8');
-    if (!usesWorkspaceAssets) {
-      await mkdir(assetsDir);
-      await copyFile(getBundledSmallIconPath(), path.join(assetsDir, 'icon-small.svg'));
-      await copyFile(getBundledLargeIconPath(), path.join(assetsDir, 'icon-large.png'));
-    }
+    await mkdir(assetsDir);
+    await copyFile(getBundledSmallIconPath(), path.join(assetsDir, 'icon-small.svg'));
+    await copyFile(getBundledLargeIconPath(), path.join(assetsDir, 'icon-large.png'));
 
     const result = await validateSkillDir(stagedDir, {
       destinationDir: skillDir,
