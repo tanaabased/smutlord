@@ -112,10 +112,15 @@ github:
         file: guidance/reply.md
   issue-pickup:
     projects:
-      - repository: tanaabased/openclaw-agent-system
-        milestone:
-          number: 14
-          policy: only
+      - repository: tanaabased/smutlord
+        limit: 1
+        milestone: { number: 2, policy: only }
+      - repository: 'tanaabased/*'
+        limit: 2
+        filters: { types: [Bug] }
+        selection:
+          guidance:
+            file: guidance/bug-pickup.md
   policy:
     releases: deny
 
