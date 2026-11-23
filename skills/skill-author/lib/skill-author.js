@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { YAML } from 'bun';
 
 import bundledLargeIconImport from '../assets/icon-large.png';
-import bundledSmallIconImport from '../assets/skill-icon-preparation.svg';
+import bundledSmallIconImport from '../assets/skill-icon-miscellaneous.svg';
 import codingTemplateText from '../templates/coding.md' with { type: 'text' };
 import extractTopLevelSkillHeadings, {
   normalizeTopLevelSkillHeading,

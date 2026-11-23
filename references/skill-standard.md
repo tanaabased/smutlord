@@ -82,22 +82,21 @@ skill-folder/
 
 ### Codex category icons
 
-Use [Tanaab Actions categories and glyph colors](https://github.com/tanaabased/actions/blob/main/AGENTS.md#documentation).
-Use each glyph color for both square border and flame, without Actions' tinted
-circle. Choose by primary job, not by skill name or frontmatter type.
+Choose by primary job, not by skill name, frontmatter type, or workflow stage.
+Reuse [Tanaab Actions glyph colors](https://github.com/tanaabased/actions/blob/main/AGENTS.md#documentation)
+for both square border and flame, but use local categories.
 
-| Category    | Primary job                             | SVG                          | Color     |
-| ----------- | --------------------------------------- | ---------------------------- | --------- |
-| Setup       | Runtime or tool installation            | `skill-icon-setup.svg`       | `#008f64` |
-| Preparation | Authoring, packaging, or release prep   | `skill-icon-preparation.svg` | `#9c1c55` |
-| Testing     | Validation or test support              | `skill-icon-testing.svg`     | `#6f42c1` |
-| Publishing  | Public-facing prose or release delivery | `skill-icon-publishing.svg`  | `#0069b8` |
+| Category      | Primary job                                                               | SVG                            | Color           |
+| ------------- | ------------------------------------------------------------------------- | ------------------------------ | --------------- |
+| Agent         | Maintain agent behavior, voice, or local skills                           | `skill-icon-agent.svg`         | Pink `#9c1c55`  |
+| Code          | Build, test, review, or maintain code, including code-focused GitHub work | `skill-icon-code.svg`          | Blue `#0069b8`  |
+| Miscellaneous | Handle work outside Agent and Code                                        | `skill-icon-miscellaneous.svg` | Green `#008f64` |
 
-Skill Author uses Preparation; Voice uses Publishing for its public-facing
-writing guidance. Copy matching SVG from [Skill Author assets](../skills/skill-author/assets/)
-into your skill's `assets/` and point `interface.icon_small` to that local copy.
-Scaffolds bundle Preparation as `./assets/icon-small.svg`; replace its contents
-with matching variant when needed. Keep `icon_large` pointed at bundled copy of
+Skill Author and Voice both use Agent. Copy matching SVG from
+[Skill Author assets](../skills/skill-author/assets/) into your skill's
+`assets/` and point `interface.icon_small` to that local copy.
+Scaffolds bundle Miscellaneous as `./assets/icon-small.svg`; replace its contents
+for Agent or Code skills. Keep `icon_large` pointed at bundled copy of
 `icon-large.png`. Codex can then find both icons when skills move or ship alone.
 Keep `brand_color` and OpenClaw emoji independent of icon category. Check paths
 with local validator and preview small marks on light and dark backgrounds.

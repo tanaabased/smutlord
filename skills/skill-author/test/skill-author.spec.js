@@ -135,7 +135,7 @@ describe('skills/skill-author', function () {
     assert.equal(YAML.parse(metadata).interface.icon_large, './assets/icon-large.png');
     assert.deepEqual(
       await readFile(path.join(movedSkillDir, 'assets', 'icon-small.svg')),
-      await readFile(path.join(SKILL_DIR, 'assets', 'skill-icon-preparation.svg')),
+      await readFile(path.join(SKILL_DIR, 'assets', 'skill-icon-miscellaneous.svg')),
     );
     assert.deepEqual(
       await readFile(path.join(movedSkillDir, 'assets', 'icon-large.png')),
