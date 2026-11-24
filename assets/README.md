@@ -5,5 +5,6 @@ avatar; `icon-large-circle.png` is matching circular version with transparent
 corners. AI reconstruction changed some fine details from supplied original.
 Avatar kit and masters stay local in `.scratch/smutlord-avatar-kit/`.
 
-`composer-icon.svg` adapts EMORI's geometric mark: green (`#00c88a`) border,
-letter S. Skills share this mark and square PNG; standalone exports bundle both.
+Codex skills bundle copies of `icon-large.png` for large artwork. Their small
+flame marks keep EMORI's geometric border. See [skill icon guidance](../references/skill-standard.md#codex-category-icons)
+for category artwork and palette.
