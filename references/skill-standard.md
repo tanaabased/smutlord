@@ -77,9 +77,29 @@ skill-folder/
 - `[error]` `interface.short_description` must start with `smutlord-based`, the
   prompt must mention `$<machine-id>`, and the brand color must be `#00c88a`.
 - `[error]` Interface icon paths are relative to the skill directory and must
-  resolve. Workspace skills reuse `../../assets/composer-icon.svg` and
-  `../../assets/icon-large.png`; keep only distinct skill-specific artwork in
-  local `assets/`. Standalone exports bundle their icons to remain portable.
+  resolve. See [Codex category icons](#codex-category-icons) for shared artwork
+  and standalone exports.
+
+### Codex category icons
+
+Choose by primary job, not by skill name, frontmatter type, or workflow stage.
+Reuse [Tanaab Actions glyph colors](https://github.com/tanaabased/actions/blob/main/AGENTS.md#documentation)
+for both square border and flame, but use local categories.
+
+| Category      | Primary job                                                               | SVG                            | Color           |
+| ------------- | ------------------------------------------------------------------------- | ------------------------------ | --------------- |
+| Agent         | Maintain agent behavior, voice, or local skills                           | `skill-icon-agent.svg`         | Pink `#9c1c55`  |
+| Code          | Build, test, review, or maintain code, including code-focused GitHub work | `skill-icon-code.svg`          | Blue `#0069b8`  |
+| Miscellaneous | Handle work outside Agent and Code                                        | `skill-icon-miscellaneous.svg` | Green `#008f64` |
+
+Skill Author and Voice both use Agent. Copy matching SVG from
+[Skill Author assets](../skills/skill-author/assets/) into your skill's
+`assets/` and point `interface.icon_small` to that local copy.
+Scaffolds bundle Miscellaneous as `./assets/icon-small.svg`; replace its contents
+for Agent or Code skills. Keep `icon_large` pointed at bundled copy of
+`icon-large.png`. Codex can then find both icons when skills move or ship alone.
+Keep `brand_color` and OpenClaw emoji independent of icon category. Check paths
+with local validator and preview small marks on light and dark backgrounds.
 
 ## Resources and Code
 

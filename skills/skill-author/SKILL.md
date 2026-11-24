@@ -51,8 +51,8 @@ and validator. The standard owns local conventions and the Tanaab boundary.
   smutlord-specific divergence explicit.
 - Keep OpenClaw metadata in `SKILL.md` and Codex interface metadata in
   `agents/openai.yaml`.
-- Reuse workspace icons from `assets/`; bundle copies only for standalone
-  exports. Keep distinct skill-specific artwork with its skill.
+- Choose and bundle artwork by primary role using
+  [Codex category icons](../../references/skill-standard.md#codex-category-icons).
 - Keep coding-skill documentation, testing, optional deployment, and GitHub
   Actions projection aligned with the local template contract.
 - Prefer references and deterministic scripts over repeated doctrine.
@@ -79,9 +79,9 @@ and validator. The standard owns local conventions and the Tanaab boundary.
 2. Read the matching local template when type shape or metadata needs review.
 3. Use [`./scripts/init-skill.js`](./scripts/init-skill.js) for a clean scaffold
    or patch an existing skill narrowly.
-4. Supply a skill-specific OpenClaw emoji, review whether `Optimization`
-   applies to the persistent surface, and decide whether a coding skill has one
-   material deployment mechanism worth retaining.
+4. Confirm Codex icon category and supply skill-specific OpenClaw emoji. Review
+   whether `Optimization` applies to persistent work and whether coding skill
+   needs one material deployment mechanism.
 5. Run [`./scripts/validate-skill.js`](./scripts/validate-skill.js), fix every
    error, and review warnings and manual checks explicitly.
 
