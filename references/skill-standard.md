@@ -84,13 +84,18 @@ skill-folder/
 
 Choose by primary job, not by skill name, frontmatter type, or workflow stage.
 Reuse [Tanaab Actions glyph colors](https://github.com/tanaabased/actions/blob/main/AGENTS.md#documentation)
-for both square border and flame, but use local categories.
+for both square border and skull and crossbones, using local categories.
 
 | Category      | Primary job                                                               | SVG                            | Color           |
 | ------------- | ------------------------------------------------------------------------- | ------------------------------ | --------------- |
 | Agent         | Maintain agent behavior, voice, or local skills                           | `skill-icon-agent.svg`         | Pink `#9c1c55`  |
 | Code          | Build, test, review, or maintain code, including code-focused GitHub work | `skill-icon-code.svg`          | Blue `#0069b8`  |
 | Miscellaneous | Handle work outside Agent and Code                                        | `skill-icon-miscellaneous.svg` | Green `#008f64` |
+
+If none of these categories fits your skill’s primary job, add one to this
+table with unused Tanaab Actions glyph color, using kebab-case for its SVG
+filename: `skill-icon-<category>.svg`. Copy existing artwork in Skill Author
+assets and change only its fill. Keep square border, flame, and large PNG unchanged.
 
 Skill Author and Voice both use Agent. Copy matching SVG from
 [Skill Author assets](../skills/skill-author/assets/) into your skill's
