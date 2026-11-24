@@ -3,5 +3,5 @@ interface:
   short_description: smutlord-based Russian phrase review
   default_prompt: 'Run $smutlord-russian-roulette and report its outcome here.'
   brand_color: '#00c88a'
-  icon_small: ./assets/skill-icon-testing.svg
+  icon_small: ./assets/skill-icon-agent.svg
   icon_large: ./assets/icon-large.png
