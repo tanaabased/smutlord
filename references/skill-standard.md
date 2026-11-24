@@ -84,7 +84,7 @@ skill-folder/
 
 Choose by primary job, not by skill name, frontmatter type, or workflow stage.
 Reuse [Tanaab Actions glyph colors](https://github.com/tanaabased/actions/blob/main/AGENTS.md#documentation)
-for both square border and flame, but use local categories.
+for both square border and skull and crossbones, using local categories.
 
 | Category      | Primary job                                                               | SVG                            | Color           |
 | ------------- | ------------------------------------------------------------------------- | ------------------------------ | --------------- |

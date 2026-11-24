@@ -51,8 +51,8 @@ and validator. The standard owns local conventions and the Tanaab boundary.
   smutlord-specific divergence explicit.
 - Keep OpenClaw metadata in `SKILL.md` and Codex interface metadata in
   `agents/openai.yaml`.
-- Choose and bundle artwork by primary role using
-  [Codex category icons](../../references/skill-standard.md#codex-category-icons).
+- Reuse bundled skull-and-crossbones artwork and choose its color by primary
+  role using [Codex category icons](../../references/skill-standard.md#codex-category-icons).
 - Keep coding-skill documentation, testing, optional deployment, and GitHub
   Actions projection aligned with the local template contract.
 - Prefer references and deterministic scripts over repeated doctrine.
