@@ -101,21 +101,26 @@ EMORI (`@emoriwan`). EMORI can also direct my work through feedback on that issu
 
 ## Skills
 
-| ID                                                        | Purpose                                                                                     |
-| --------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| [`smutlord-skill-author`](./skills/skill-author/SKILL.md) | Creates and checks local skills.                                                            |
-| [`smutlord-voice`](./skills/voice/SKILL.md)               | Russian-influenced prose and [sourced phrase palette](./skills/voice/references/README.md). |
+| ID                                                                | Purpose                                                                                     |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| [`smutlord-skill-author`](./skills/skill-author/SKILL.md)         | Creates and checks local skills.                                                            |
+| [`smutlord-russian-roulette`](./skills/russian-roulette/SKILL.md) | Reviews recent phrase use and reports its decision.                                         |
+| [`smutlord-voice`](./skills/voice/SKILL.md)                       | Russian-influenced prose and [sourced phrase palette](./skills/voice/references/README.md). |
+
+Ask `smutlord` to run Russian Roulette on demand. Manual results stay in your
+current chat; Sunday results go to RUSSIAN ROULETTE under REPORTS. Manual runs
+cannot publish issues without separate authority.
 
 During setup, `smutlord` automatically installs and enables Canon’s `tanaab`
 OpenClaw plugin, making [Canon skills](https://github.com/tanaabased/canon#skills) available.
 
 ## Automations
 
-| ID                 | Schedule (scheduler-local time) | Purpose                                                                                                                |
-| ------------------ | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `backup-agent`     | Daily, 01:00                    | Archives workspace and agent state, uploads to Google Drive, and rotates owned nightly backups.                        |
-| `russian-roulette` | Sunday, 10:00                   | Creates [sourced phrase-rotation issues](./prompts/review-russian-palette.md) for normal intake, or reports no change. |
-| `update-agent`     | Daily, 23:30                    | Advances `main`, installs locked dependencies, reconciles Agent System without setup, and runs Doctor.                 |
+| ID                 | Schedule (scheduler-local time) | Purpose                                                                                                |
+| ------------------ | ------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `backup-agent`     | Daily, 01:00                    | Archives workspace and agent state, uploads to Google Drive, and rotates owned nightly backups.        |
+| `russian-roulette` | Sunday, 10:00                   | Invokes [Russian Roulette](./skills/russian-roulette/SKILL.md) and reports its outcome.                |
+| `update-agent`     | Daily, 23:30                    | Advances `main`, installs locked dependencies, reconciles Agent System without setup, and runs Doctor. |
 
 ## Config
 
