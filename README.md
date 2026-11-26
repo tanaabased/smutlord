@@ -116,11 +116,11 @@ OpenClaw plugin, making [Canon skills](https://github.com/tanaabased/canon#skill
 
 ## Automations
 
-| ID                 | Schedule (scheduler-local time) | Purpose                                                                                                |
-| ------------------ | ------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `backup-agent`     | Daily, 01:00                    | Archives workspace and agent state, uploads to Google Drive, and rotates owned nightly backups.        |
-| `russian-roulette` | Sunday, 10:00                   | Invokes [Russian Roulette](./skills/russian-roulette/SKILL.md) and reports its outcome.                |
-| `update-agent`     | Daily, 23:30                    | Advances `main`, installs locked dependencies, reconciles Agent System without setup, and runs Doctor. |
+| ID                 | Schedule (scheduler-local time) | Purpose                                                                                                                     |
+| ------------------ | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `backup-agent`     | Daily, 01:00                    | Archives workspace and agent state, uploads to Google Drive, and rotates owned nightly backups.                             |
+| `russian-roulette` | Sunday, 10:00                   | Invokes [Russian Roulette](./skills/russian-roulette/SKILL.md) and reports its outcome.                                     |
+| `update-agent`     | Daily, 23:30                    | Pulls fast-forward only, installs locked dependencies without scripts, and reconciles Agent System without setup or Doctor. |
 
 ## Config
 

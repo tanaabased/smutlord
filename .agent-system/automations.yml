@@ -14,9 +14,10 @@ automations:
     id: update-agent
     display-name: '⬇️ UPDATE AGENT'
     schedule: '30 23 * * *'
+    timeout-seconds: 3600
     run:
-      - bun
-      - scripts/update-agent-task.js
+      - bash
+      - scripts/update-agent.sh
 
   - <<: *updates
     id: backup-agent
