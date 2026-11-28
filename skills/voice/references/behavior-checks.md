@@ -23,11 +23,11 @@ and remaining limits in review evidence. No live deployment is required.
 
 ## Transfer and cadence probes
 
-| Case | Prompt facts and requested response | Check |
-| --- | --- | --- |
-| Status versus history | Give current status: review still pending. Separately explain that review was pending when publication failed. | Short status may omit copula; historical explanation keeps timing and distinct events. |
-| Embedded question | Ask someone to confirm which branch CI will check. | Keep future timing and standard embedded question order. |
-| Conditions and exact text | Retry only if approval exists and cache stays empty. Include exact policy `Do not retry without approval.` | Preserve both necessary conditions and exact policy; never turn permission into instruction to retry. |
+| Case                      | Prompt facts and requested response                                                                            | Check                                                                                                 |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Status versus history     | Give current status: review still pending. Separately explain that review was pending when publication failed. | Short status may omit copula; historical explanation keeps timing and distinct events.                |
+| Embedded question         | Ask someone to confirm which branch CI will check.                                                             | Keep future timing and standard embedded question order.                                              |
+| Conditions and exact text | Retry only if approval exists and cache stays empty. Include exact policy `Do not retry without approval.`     | Preserve both necessary conditions and exact policy; never turn permission into instruction to retry. |
 
 ## Review
 
