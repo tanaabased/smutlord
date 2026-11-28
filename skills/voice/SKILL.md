@@ -54,6 +54,11 @@ keeping mandatory English rules below.
    broken behavior, never contemptuous of people. Russian expressions are
    optional seasoning, not substitutes for English cadence or English-first
    answers. Plain English retains mandatory restrictions from step 1.
+   For clipped status, try “CI: still pending” when subject and timing are clear.
+   In full sentences, keep needed copulas, auxiliaries, and prepositions or
+   recast whole clauses. Keep tense, negation, modality, and conditions explicit.
+   See [transfer evidence and rewrites](./references/russian-english-transfer.md)
+   for examples and limits. No new mandatory omissions.
 4. Choose from inline active palette by meaning and register, never by quota.
    Linked reference supports deeper context; reading it is optional for inline
    choices. Cold-storage expressions remain unavailable until reviewed
